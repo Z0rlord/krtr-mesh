@@ -1,5 +1,5 @@
 /**
- * KRTR Bluetooth Mesh Service - Core mesh networking adapted from bitchat
+ * KRTR Bluetooth Mesh Service - Core mesh networking implementation
  * Handles peer discovery, connection management, and message routing
  */
 

@@ -1,6 +1,6 @@
 /**
  * KRTR Privacy Service - Cover traffic, timing randomization, and privacy features
- * Adapted from bitchat's privacy-preserving mechanisms
+ * Advanced privacy-preserving mechanisms for mesh networking
  */
 
 import { Buffer } from 'buffer';
@@ -10,21 +10,21 @@ export class PrivacyService {
   constructor(meshService, batteryOptimizer) {
     this.meshService = meshService;
     this.batteryOptimizer = batteryOptimizer;
-    
+
     // Cover traffic settings
     this.coverTrafficEnabled = true;
     this.coverTrafficInterval = { min: 30000, max: 120000 }; // 30s - 2min
     this.coverTrafficTimer = null;
-    
+
     // Timing randomization
     this.timingRandomization = true;
     this.minDelay = 50;   // 50ms
     this.maxDelay = 500;  // 500ms
-    
+
     // Message queue for timing randomization
     this.messageQueue = [];
     this.queueProcessor = null;
-    
+
     // Privacy statistics
     this.stats = {
       coverMessagesGenerated: 0,
@@ -32,22 +32,22 @@ export class PrivacyService {
       totalDelayTime: 0,
       averageDelay: 0
     };
-    
+
     this.initialize();
   }
 
   initialize() {
     // Start cover traffic generation
     this.startCoverTraffic();
-    
+
     // Start message queue processor
     this.startMessageQueueProcessor();
-    
+
     // Listen for power mode changes
     this.batteryOptimizer.onPowerModeChanged = (powerMode) => {
       this.updateForPowerMode(powerMode);
     };
-    
+
     console.log('[KRTR Privacy] Privacy service initialized');
   }
 
@@ -61,7 +61,7 @@ export class PrivacyService {
   async sendMessageWithPrivacy(content, recipientID = null, isPrivate = false) {
     return new Promise((resolve, reject) => {
       const delay = this.timingRandomization ? this.generateRandomDelay() : 0;
-      
+
       const queuedMessage = {
         content,
         recipientID,
@@ -71,9 +71,9 @@ export class PrivacyService {
         resolve,
         reject
       };
-      
+
       this.messageQueue.push(queuedMessage);
-      
+
       if (delay > 0) {
         this.stats.messagesDelayed++;
         this.stats.totalDelayTime += delay;
@@ -105,7 +105,7 @@ export class PrivacyService {
   async processMessageQueue() {
     const now = Date.now();
     const readyMessages = [];
-    
+
     // Find messages ready to be sent
     for (let i = this.messageQueue.length - 1; i >= 0; i--) {
       const message = this.messageQueue[i];
@@ -114,7 +114,7 @@ export class PrivacyService {
         this.messageQueue.splice(i, 1);
       }
     }
-    
+
     // Send ready messages
     for (const message of readyMessages) {
       try {
@@ -135,18 +135,18 @@ export class PrivacyService {
    */
   startCoverTraffic() {
     if (!this.coverTrafficEnabled) return;
-    
+
     const scheduleNextCoverMessage = () => {
       const interval = Math.floor(
         Math.random() * (this.coverTrafficInterval.max - this.coverTrafficInterval.min + 1)
       ) + this.coverTrafficInterval.min;
-      
+
       this.coverTrafficTimer = setTimeout(() => {
         this.generateCoverTraffic();
         scheduleNextCoverMessage();
       }, interval);
     };
-    
+
     scheduleNextCoverMessage();
     console.log('[KRTR Privacy] Cover traffic generation started');
   }
@@ -159,18 +159,18 @@ export class PrivacyService {
       // Only generate cover traffic if we have connected peers
       const connectedPeers = this.meshService.getConnectedPeers();
       if (connectedPeers.length === 0) return;
-      
+
       // Generate realistic-looking dummy message
       const coverMessage = this.generateCoverMessage();
-      
+
       // Select random peer for cover traffic
       const randomPeer = connectedPeers[Math.floor(Math.random() * connectedPeers.length)];
-      
+
       // Send cover message (will be discarded by recipient)
       await this.meshService.sendMessage(coverMessage, randomPeer, true);
-      
+
       this.stats.coverMessagesGenerated++;
-      
+
       console.log('[KRTR Privacy] Generated cover traffic message');
     } catch (error) {
       console.error('[KRTR Privacy] Cover traffic generation error:', error);
@@ -196,7 +196,7 @@ export class PrivacyService {
       'see you',
       'take care'
     ];
-    
+
     // Add cover traffic marker (will be filtered out by recipient)
     const baseMessage = coverMessages[Math.floor(Math.random() * coverMessages.length)];
     return `__COVER__${baseMessage}`;
@@ -229,16 +229,16 @@ export class PrivacyService {
       'Anonymous', 'Silent', 'Hidden', 'Ghost', 'Shadow', 'Phantom',
       'Stealth', 'Invisible', 'Masked', 'Covert', 'Secret', 'Unknown'
     ];
-    
+
     const nouns = [
       'User', 'Peer', 'Node', 'Agent', 'Entity', 'Client',
       'Sender', 'Messenger', 'Contact', 'Source', 'Terminal', 'Device'
     ];
-    
+
     const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
     const noun = nouns[Math.floor(Math.random() * nouns.length)];
     const number = Math.floor(Math.random() * 9999).toString().padStart(4, '0');
-    
+
     return {
       nickname: `${adjective}${noun}${number}`,
       sessionID: this.generateSessionID(),
@@ -294,26 +294,26 @@ export class PrivacyService {
         coverInterval: { min: 300000, max: 600000 }
       }
     };
-    
+
     const config = privacyConfigs[powerMode] || privacyConfigs.balanced;
-    
+
     // Update settings
     this.coverTrafficEnabled = config.coverTrafficEnabled;
     this.timingRandomization = config.timingRandomization;
     this.minDelay = config.minDelay;
     this.maxDelay = config.maxDelay;
     this.coverTrafficInterval = config.coverInterval;
-    
+
     // Restart cover traffic with new settings
     if (this.coverTrafficTimer) {
       clearTimeout(this.coverTrafficTimer);
       this.coverTrafficTimer = null;
     }
-    
+
     if (this.coverTrafficEnabled) {
       this.startCoverTraffic();
     }
-    
+
     console.log(`[KRTR Privacy] Updated privacy settings for power mode: ${powerMode}`);
   }
 
@@ -324,13 +324,13 @@ export class PrivacyService {
     try {
       // Clear message queue
       this.messageQueue = [];
-      
+
       // Stop cover traffic
       if (this.coverTrafficTimer) {
         clearTimeout(this.coverTrafficTimer);
         this.coverTrafficTimer = null;
       }
-      
+
       // Reset statistics
       this.stats = {
         coverMessagesGenerated: 0,
@@ -338,7 +338,7 @@ export class PrivacyService {
         totalDelayTime: 0,
         averageDelay: 0
       };
-      
+
       console.log('[KRTR Privacy] Emergency privacy wipe completed');
     } catch (error) {
       console.error('[KRTR Privacy] Emergency wipe error:', error);
@@ -368,15 +368,15 @@ export class PrivacyService {
     if (this.coverTrafficTimer) {
       clearTimeout(this.coverTrafficTimer);
     }
-    
+
     // Stop queue processor
     if (this.queueProcessor) {
       clearInterval(this.queueProcessor);
     }
-    
+
     // Clear message queue
     this.messageQueue = [];
-    
+
     console.log('[KRTR Privacy] Privacy service destroyed');
   }
 }

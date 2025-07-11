@@ -227,7 +227,7 @@ npm run format
 - [React Native BLE Documentation](https://github.com/dotintent/react-native-ble-plx)
 - [libsodium Crypto Library](https://libsodium.gitbook.io/doc/)
 - [Bluetooth LE Specifications](https://www.bluetooth.com/specifications/bluetooth-core-specification/)
-- [bitchat Original Project](https://github.com/permissionlesstech/bitchat)
+- [Noir Zero-Knowledge Proofs](https://noir-lang.org/)
 
 ## 🆘 Support
 

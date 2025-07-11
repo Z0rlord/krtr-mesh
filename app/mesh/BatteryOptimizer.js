@@ -1,6 +1,6 @@
 /**
  * KRTR Battery Optimizer - Adaptive power management for mesh networking
- * Adapted from bitchat's battery optimization features
+ * Advanced battery optimization with 4-tier power management
  */
 
 import { DeviceEventEmitter, NativeModules } from 'react-native';
@@ -19,11 +19,11 @@ export class BatteryOptimizer {
     this.batteryLevel = 1.0; // 100%
     this.isCharging = false;
     this.isBackgrounded = false;
-    
+
     // Callbacks
     this.onPowerModeChanged = null;
     this.onBatteryLevelChanged = null;
-    
+
     // Power mode configurations
     this.powerModeConfigs = {
       [PowerMode.PERFORMANCE]: {
@@ -63,7 +63,7 @@ export class BatteryOptimizer {
         compressionThreshold: 50    // bytes
       }
     };
-    
+
     this.initialize();
   }
 
@@ -71,16 +71,16 @@ export class BatteryOptimizer {
     try {
       // Get initial battery state
       await this.updateBatteryState();
-      
+
       // Set up battery monitoring
       this.setupBatteryMonitoring();
-      
+
       // Set up app state monitoring
       this.setupAppStateMonitoring();
-      
+
       // Initial power mode calculation
       this.updatePowerMode();
-      
+
       console.log('[KRTR Battery] Battery optimizer initialized');
     } catch (error) {
       console.error('[KRTR Battery] Initialization error:', error);
@@ -114,20 +114,20 @@ export class BatteryOptimizer {
       (batteryInfo) => {
         const oldLevel = this.batteryLevel;
         const oldCharging = this.isCharging;
-        
+
         this.batteryLevel = batteryInfo.level;
         this.isCharging = batteryInfo.isCharging;
-        
+
         // Check if power mode should change
         if (this.shouldUpdatePowerMode(oldLevel, oldCharging)) {
           this.updatePowerMode();
         }
-        
+
         // Notify callback
         this.onBatteryLevelChanged?.(this.batteryLevel, this.isCharging);
       }
     );
-    
+
     // Check battery periodically as fallback
     this.batteryCheckInterval = setInterval(() => {
       this.updateBatteryState();
@@ -141,7 +141,7 @@ export class BatteryOptimizer {
       (appState) => {
         const wasBackgrounded = this.isBackgrounded;
         this.isBackgrounded = appState === 'background';
-        
+
         if (wasBackgrounded !== this.isBackgrounded) {
           this.updatePowerMode();
         }
@@ -153,7 +153,7 @@ export class BatteryOptimizer {
     // Check if we've crossed battery thresholds
     const oldMode = this.calculatePowerMode(oldLevel, oldCharging, this.isBackgrounded);
     const newMode = this.calculatePowerMode(this.batteryLevel, this.isCharging, this.isBackgrounded);
-    
+
     return oldMode !== newMode;
   }
 
@@ -162,12 +162,12 @@ export class BatteryOptimizer {
     if (isCharging || batteryLevel > 0.6) {
       return isBackgrounded ? PowerMode.BALANCED : PowerMode.PERFORMANCE;
     }
-    
+
     // If backgrounded, always use power saver
     if (isBackgrounded) {
       return batteryLevel > 0.3 ? PowerMode.POWER_SAVER : PowerMode.ULTRA_LOW_POWER;
     }
-    
+
     // Battery-based power modes
     if (batteryLevel > 0.3) {
       return PowerMode.BALANCED;
@@ -180,13 +180,13 @@ export class BatteryOptimizer {
 
   updatePowerMode() {
     const newMode = this.calculatePowerMode(this.batteryLevel, this.isCharging, this.isBackgrounded);
-    
+
     if (newMode !== this.currentPowerMode) {
       const oldMode = this.currentPowerMode;
       this.currentPowerMode = newMode;
-      
+
       console.log(`[KRTR Battery] Power mode changed: ${oldMode} -> ${newMode} (battery: ${Math.round(this.batteryLevel * 100)}%, charging: ${this.isCharging}, background: ${this.isBackgrounded})`);
-      
+
       // Notify callback
       this.onPowerModeChanged?.(newMode, this.getPowerModeConfig(newMode));
     }
@@ -196,7 +196,7 @@ export class BatteryOptimizer {
     // Simulate gradual battery drain for testing
     let simulatedLevel = 0.8;
     let simulatedCharging = false;
-    
+
     setInterval(() => {
       if (!simulatedCharging) {
         simulatedLevel -= 0.01; // 1% per interval
@@ -210,13 +210,13 @@ export class BatteryOptimizer {
           simulatedCharging = false; // Stop charging when full
         }
       }
-      
+
       const oldLevel = this.batteryLevel;
       const oldCharging = this.isCharging;
-      
+
       this.batteryLevel = simulatedLevel;
       this.isCharging = simulatedCharging;
-      
+
       if (this.shouldUpdatePowerMode(oldLevel, oldCharging)) {
         this.updatePowerMode();
       }
@@ -305,11 +305,11 @@ export class BatteryOptimizer {
     if (this.batteryCheckInterval) {
       clearInterval(this.batteryCheckInterval);
     }
-    
+
     // Remove event listeners
     DeviceEventEmitter.removeAllListeners('BatteryLevelChanged');
     DeviceEventEmitter.removeAllListeners('AppStateChanged');
-    
+
     console.log('[KRTR Battery] Battery optimizer destroyed');
   }
 }

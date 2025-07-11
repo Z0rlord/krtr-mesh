@@ -1,7 +1,7 @@
 /**
  * KRTR Mesh - Main Application
  * Decentralized, encrypted, offline-first messaging
- * Integrating components adapted from bitchat
+ * Advanced mesh networking with zero-knowledge privacy
  */
 
 import React, { useState, useEffect, useRef } from 'react';

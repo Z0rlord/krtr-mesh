@@ -1,6 +1,6 @@
 /**
  * KRTR Store and Forward Service - Offline message caching and delivery
- * Adapted from bitchat's store-and-forward mechanism
+ * Intelligent message caching with tiered retention policies
  */
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -12,17 +12,17 @@ export class StoreAndForwardService {
     this.messageCache = new Map(); // peerID -> messages[]
     this.favoriteCache = new Map(); // peerID -> messages[] (longer retention)
     this.deliveryQueue = new Map(); // messageID -> delivery attempts
-    
+
     // Cache limits and TTL
     this.regularCacheLimit = 100; // messages per peer
     this.favoriteCacheLimit = 1000; // messages per favorite peer
     this.regularTTL = 12 * 60 * 60 * 1000; // 12 hours
     this.favoriteTTL = 7 * 24 * 60 * 60 * 1000; // 7 days
-    
+
     // Delivery tracking
     this.maxDeliveryAttempts = 5;
     this.deliveryRetryInterval = 30 * 1000; // 30 seconds
-    
+
     this.initialize();
   }
 
@@ -30,10 +30,10 @@ export class StoreAndForwardService {
     try {
       // Load cached messages from persistent storage
       await this.loadCachedMessages();
-      
+
       // Set up periodic cleanup
       this.setupCleanupTasks();
-      
+
       console.log('[KRTR Store&Forward] Service initialized');
     } catch (error) {
       console.error('[KRTR Store&Forward] Initialization error:', error);
@@ -44,7 +44,7 @@ export class StoreAndForwardService {
     try {
       const regularCacheData = await AsyncStorage.getItem('krtr_message_cache');
       const favoriteCacheData = await AsyncStorage.getItem('krtr_favorite_cache');
-      
+
       if (regularCacheData) {
         const parsed = JSON.parse(regularCacheData);
         for (const [peerID, messages] of Object.entries(parsed)) {
@@ -54,7 +54,7 @@ export class StoreAndForwardService {
           })));
         }
       }
-      
+
       if (favoriteCacheData) {
         const parsed = JSON.parse(favoriteCacheData);
         for (const [peerID, messages] of Object.entries(parsed)) {
@@ -64,7 +64,7 @@ export class StoreAndForwardService {
           })));
         }
       }
-      
+
       console.log(`[KRTR Store&Forward] Loaded ${this.messageCache.size} regular and ${this.favoriteCache.size} favorite caches`);
     } catch (error) {
       console.error('[KRTR Store&Forward] Load cache error:', error);
@@ -78,15 +78,15 @@ export class StoreAndForwardService {
       for (const [peerID, messages] of this.messageCache) {
         regularCacheObj[peerID] = messages;
       }
-      
+
       const favoriteCacheObj = {};
       for (const [peerID, messages] of this.favoriteCache) {
         favoriteCacheObj[peerID] = messages;
       }
-      
+
       await AsyncStorage.setItem('krtr_message_cache', JSON.stringify(regularCacheObj));
       await AsyncStorage.setItem('krtr_favorite_cache', JSON.stringify(favoriteCacheObj));
-      
+
       console.log('[KRTR Store&Forward] Cached messages saved');
     } catch (error) {
       console.error('[KRTR Store&Forward] Save cache error:', error);
@@ -97,13 +97,13 @@ export class StoreAndForwardService {
     try {
       const cache = isFavorite ? this.favoriteCache : this.messageCache;
       const limit = isFavorite ? this.favoriteCacheLimit : this.regularCacheLimit;
-      
+
       if (!cache.has(recipientID)) {
         cache.set(recipientID, []);
       }
-      
+
       const messages = cache.get(recipientID);
-      
+
       // Add message with metadata
       const cachedMessage = {
         ...message,
@@ -111,17 +111,17 @@ export class StoreAndForwardService {
         deliveryAttempts: 0,
         isFavorite
       };
-      
+
       messages.push(cachedMessage);
-      
+
       // Enforce cache limits (FIFO)
       if (messages.length > limit) {
         messages.splice(0, messages.length - limit);
       }
-      
+
       // Save to persistent storage
       await this.saveCachedMessages();
-      
+
       console.log(`[KRTR Store&Forward] Cached message for ${recipientID} (favorite: ${isFavorite})`);
     } catch (error) {
       console.error('[KRTR Store&Forward] Cache message error:', error);
@@ -133,29 +133,29 @@ export class StoreAndForwardService {
       const regularMessages = this.messageCache.get(peerID) || [];
       const favoriteMessages = this.favoriteCache.get(peerID) || [];
       const allMessages = [...regularMessages, ...favoriteMessages];
-      
+
       if (allMessages.length === 0) {
         return;
       }
-      
+
       console.log(`[KRTR Store&Forward] Delivering ${allMessages.length} cached messages to ${peerID}`);
-      
+
       const deliveryPromises = [];
-      
+
       for (const message of allMessages) {
         // Check if message is still valid (not expired)
         if (this.isMessageExpired(message)) {
           continue;
         }
-        
+
         // Attempt delivery
         const deliveryPromise = this.attemptDelivery(message, peerID, meshService);
         deliveryPromises.push(deliveryPromise);
       }
-      
+
       // Wait for all deliveries to complete
       const results = await Promise.allSettled(deliveryPromises);
-      
+
       // Remove successfully delivered messages
       let deliveredCount = 0;
       for (let i = 0; i < results.length; i++) {
@@ -165,9 +165,9 @@ export class StoreAndForwardService {
           deliveredCount++;
         }
       }
-      
+
       console.log(`[KRTR Store&Forward] Delivered ${deliveredCount}/${allMessages.length} messages to ${peerID}`);
-      
+
       // Save updated cache
       await this.saveCachedMessages();
     } catch (error) {
@@ -179,32 +179,32 @@ export class StoreAndForwardService {
     try {
       // Increment delivery attempts
       message.deliveryAttempts = (message.deliveryAttempts || 0) + 1;
-      
+
       // Check if we've exceeded max attempts
       if (message.deliveryAttempts > this.maxDeliveryAttempts) {
         console.warn(`[KRTR Store&Forward] Max delivery attempts reached for message ${message.id}`);
         throw new Error('Max delivery attempts exceeded');
       }
-      
+
       // Attempt to send the message
       await meshService.sendMessage(message.content, peerID, message.isPrivate);
-      
+
       // Mark as delivered
       message.deliveryStatus = DeliveryStatus.DELIVERED;
       message.deliveredAt = new Date();
-      
+
       console.log(`[KRTR Store&Forward] Successfully delivered message ${message.id} to ${peerID}`);
       return true;
     } catch (error) {
       console.error(`[KRTR Store&Forward] Delivery attempt failed for ${message.id}:`, error);
-      
+
       // Schedule retry if not exceeded max attempts
       if (message.deliveryAttempts < this.maxDeliveryAttempts) {
         setTimeout(() => {
           this.attemptDelivery(message, peerID, meshService);
         }, this.deliveryRetryInterval);
       }
-      
+
       throw error;
     }
   }
@@ -222,7 +222,7 @@ export class StoreAndForwardService {
         return;
       }
     }
-    
+
     // Remove from favorite cache
     const favoriteMessages = this.favoriteCache.get(peerID);
     if (favoriteMessages) {
@@ -240,7 +240,7 @@ export class StoreAndForwardService {
     const now = Date.now();
     const cachedAt = new Date(message.cachedAt).getTime();
     const ttl = message.isFavorite ? this.favoriteTTL : this.regularTTL;
-    
+
     return (now - cachedAt) > ttl;
   }
 
@@ -249,7 +249,7 @@ export class StoreAndForwardService {
     setInterval(() => {
       this.cleanupExpiredMessages();
     }, 60 * 60 * 1000);
-    
+
     // Save cache every 5 minutes
     setInterval(() => {
       this.saveCachedMessages();
@@ -259,7 +259,7 @@ export class StoreAndForwardService {
   async cleanupExpiredMessages() {
     try {
       let cleanedCount = 0;
-      
+
       // Clean regular cache
       for (const [peerID, messages] of this.messageCache) {
         const validMessages = messages.filter(msg => !this.isMessageExpired(msg));
@@ -272,7 +272,7 @@ export class StoreAndForwardService {
           }
         }
       }
-      
+
       // Clean favorite cache
       for (const [peerID, messages] of this.favoriteCache) {
         const validMessages = messages.filter(msg => !this.isMessageExpired(msg));
@@ -285,7 +285,7 @@ export class StoreAndForwardService {
           }
         }
       }
-      
+
       if (cleanedCount > 0) {
         console.log(`[KRTR Store&Forward] Cleaned up ${cleanedCount} expired messages`);
         await this.saveCachedMessages();
@@ -323,7 +323,7 @@ export class StoreAndForwardService {
       this.messageCache.clear();
       this.favoriteCache.clear();
     }
-    
+
     await this.saveCachedMessages();
     console.log(`[KRTR Store&Forward] Cleared cache${peerID ? ` for ${peerID}` : ''}`);
   }

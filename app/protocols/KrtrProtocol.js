@@ -1,5 +1,5 @@
 /**
- * KRTR Protocol - Core messaging protocol adapted from bitchat
+ * KRTR Protocol - Core messaging protocol implementation
  * Implements binary protocol, message types, and packet structures
  */
 
