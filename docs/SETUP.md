@@ -243,6 +243,8 @@ npm run format
 3. Make changes with tests
 4. Submit pull request
 
+**Project Lead**: Zorie Barber
+
 ## 🔒 Security Considerations
 
 ### Production Deployment

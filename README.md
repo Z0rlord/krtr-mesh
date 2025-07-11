@@ -22,10 +22,12 @@ Think: AirDrop meets Signal — offline.
 
 - [x] Device discovery via Bluetooth / WiFi mesh
 - [x] Ephemeral session key generation
-- [ ] AES-256 end-to-end encrypted messaging
-- [ ] Biometric-based message decryption (FaceID / fingerprint)
-- [ ] Minimal UI chat prototype
-- [ ] No backend dependencies
+- [x] AES-256 end-to-end encrypted messaging
+- [x] Store-and-forward for offline peers
+- [x] Battery optimization with adaptive power modes
+- [x] Privacy features: cover traffic, timing randomization
+- [x] Message compression and fragmentation
+- [x] Emergency wipe capability
 
 ---
 
@@ -33,8 +35,9 @@ Think: AirDrop meets Signal — offline.
 
 - **React Native (Expo)** – cross-platform mobile base
 - **react-native-ble-plx** – for Bluetooth LE mesh
-- **libsodium / crypto.subtle** – for cryptographic layer
-- **expo-local-authentication** – biometric unlock
+- **react-native-sodium** – for cryptographic layer
+- **LZ4 compression** – bandwidth optimization
+- **AsyncStorage** – persistent message caching
 
 _Note: Native implementations (MultipeerConnectivity, Nearby Connections API) can be swapped in._
 
@@ -44,42 +47,74 @@ _Note: Native implementations (MultipeerConnectivity, Nearby Connections API) ca
 
 | Folder       | Purpose                                   |
 |--------------|-------------------------------------------|
-| `app/`       | Core logic (mesh networking, crypto, UI)  |
-| `docs/`      | Whitepaper, architecture docs             |
-| `android/`   | Native Android bindings                   |
-| `ios/`       | Native iOS bindings                       |
+| `app/mesh/`  | Bluetooth mesh networking services       |
+| `app/crypto/`| Encryption and key management            |
+| `app/privacy/`| Privacy features and cover traffic      |
+| `app/protocols/`| Binary protocol and compression       |
+| `docs/`      | Documentation and setup guides          |
 
 ---
 
 ## 🔐 Encryption Overview
 
-- Session key negotiated via Bluetooth handshake
-- Messages encrypted using AES-256-GCM
-- Optional: biometric unlock required to decrypt payload
-- Long-term identity stored locally or ZK-derived
+- **X25519 key exchange** – Secure key agreement with forward secrecy
+- **AES-256-GCM** – Authenticated encryption for messages
+- **Ed25519 signatures** – Message authenticity verification
+- **Argon2id** – Password-based key derivation for channels
+- **Ephemeral keys** – New key pairs generated each session
 
-Detailed spec in [`docs/WHITEPAPER.md`](docs/WHITEPAPER.md)
+Detailed architecture in [`docs/INTEGRATION_SUMMARY.md`](docs/INTEGRATION_SUMMARY.md)
+
+---
+
+## 🚀 Features
+
+### Mesh Networking
+- **Multi-hop routing** with TTL-based forwarding (max 7 hops)
+- **Store-and-forward** for offline message delivery
+- **Automatic peer discovery** via BLE advertising
+- **Connection management** with adaptive limits (2-20 connections)
+
+### Privacy & Security
+- **Cover traffic** generation to prevent traffic analysis
+- **Timing randomization** (50-500ms delays) to prevent correlation
+- **Ephemeral identities** with no persistent tracking
+- **Emergency wipe** via triple-tap logo activation
+
+### Performance
+- **LZ4 compression** with 30-70% bandwidth savings
+- **Message fragmentation** for large payloads (>500 bytes)
+- **Battery optimization** with 4-tier power management
+- **Binary protocol** for efficient transmission
 
 ---
 
 ## 📆 Roadmap
 
-### Phase 1 – Proof of Concept (4–6 weeks)
-- Bluetooth chat mesh
-- Encrypted payloads
-- Biometric decryption
-- Local UI only
+### Phase 1 – Core Implementation ✅
+- Bluetooth mesh networking
+- End-to-end encryption
+- Store-and-forward messaging
+- Battery optimization
+- Privacy features
 
-### Phase 2 – Optional Extensions
-- Trust graph / identity layer
-- Burn-after-read + stealth modes
-- Crypto wallet hooks (ZK / MPC / UTXO opt-in)
+### Phase 2 – Advanced Features
+- Channel management with IRC-style commands
+- WiFi Direct transport for high bandwidth
+- File sharing capabilities
+- Network topology visualization
+
+### Phase 3 – Ecosystem Integration
+- Nostr protocol bridging for internet relay
+- Multi-transport bonding (BLE + WiFi + LoRa)
+- Integration with crypto wallets
+- Decentralized identity systems
 
 ---
 
 ## 👤 Team
 
-- 🧠 [Your Name] — Vision, product, crypto architecture
+- 🧠 **Zorie Barber** — Vision, product, crypto architecture
 - 🛠️ (TBD) — Mesh developer
 - 🎨 (TBD) — Frontend / UX
 
@@ -87,10 +122,10 @@ Detailed spec in [`docs/WHITEPAPER.md`](docs/WHITEPAPER.md)
 
 ## 📜 License
 
-MIT or TBD
+MIT
 
 ---
 
 ## 🕳️ We build from the edge.
 
-> "Jack Dorsey and I have the same birthday. He’s building his version now. This is mine."
+> "Decentralized by design. Privacy by default. Built for the people."

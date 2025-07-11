@@ -172,4 +172,4 @@ This document summarizes the key components successfully integrated from the bit
 ✅ **Battery optimization fully functional**
 ✅ **Production-ready architecture established**
 
-The KRTR project now has a robust, privacy-preserving mesh networking foundation based on the proven bitchat architecture, ready for further development and deployment.
+The KRTR project, led by **Zorie Barber**, now has a robust, privacy-preserving mesh networking foundation based on the proven bitchat architecture, ready for further development and deployment.
