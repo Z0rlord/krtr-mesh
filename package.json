@@ -5,11 +5,20 @@
   "main": "App.js",
   "scripts": {
     "start": "expo start",
+    "start:dev": "expo start --dev-client",
+    "start:tunnel": "expo start --tunnel",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
+    "build:android": "eas build --platform android",
+    "build:ios": "eas build --platform ios",
+    "build:all": "eas build --platform all",
+    "submit:android": "eas submit --platform android",
+    "submit:ios": "eas submit --platform ios",
+    "update": "eas update",
     "test": "jest",
     "test:zk": "jest --testPathPattern=zk",
+    "test:mesh": "jest --testPathPattern=mesh",
     "lint": "eslint .",
     "format": "prettier --write .",
     "build:circuits": "./scripts/build-circuits.sh",
@@ -47,7 +56,8 @@
     "metro-react-native-babel-preset": "0.77.0",
     "prettier": "^2.4.1",
     "react-test-renderer": "18.2.0",
-    "typescript": "^4.8.4"
+    "typescript": "^4.8.4",
+    "@expo/cli": "latest"
   },
   "keywords": [
     "mesh-networking",

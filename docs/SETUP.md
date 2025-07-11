@@ -6,7 +6,8 @@ This guide will help you set up and run the KRTR mesh networking application.
 
 ### Development Environment
 - **Node.js** 16+ and npm/yarn
-- **React Native CLI** or **Expo CLI**
+- **Expo CLI** (recommended for KRTR development)
+- **EAS CLI** (for builds and deployment)
 - **Android Studio** (for Android development)
 - **Xcode** (for iOS development, macOS only)
 
@@ -59,18 +60,24 @@ Add permissions to `android/app/src/main/AndroidManifest.xml`:
 
 ### 3. Run the Application
 
-#### Using Expo (Recommended for development)
+#### Using Expo (Recommended)
 ```bash
-npx expo start
+# Start development server
+npm start
+
+# Or with tunnel for cross-network testing
+npm run start:tunnel
+
+# Run on specific platform
+npm run ios
+npm run android
 ```
 
-#### Using React Native CLI
+#### Multi-Device Mesh Testing
 ```bash
-# For iOS
-npx react-native run-ios
-
-# For Android
-npx react-native run-android
+# Install Expo Go on multiple devices
+# Scan QR code on all devices to test mesh networking
+# Use physical devices for Bluetooth LE testing
 ```
 
 ## 🔧 Configuration
