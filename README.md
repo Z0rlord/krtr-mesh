@@ -28,6 +28,8 @@ Think: AirDrop meets Signal — offline.
 - [x] Privacy features: cover traffic, timing randomization
 - [x] Message compression and fragmentation
 - [x] Emergency wipe capability
+- [x] **Zero-knowledge proofs**: Anonymous authentication, private reputation
+- [x] **Noir integration**: ZK circuits for membership and reputation proofs
 
 ---
 
@@ -36,6 +38,7 @@ Think: AirDrop meets Signal — offline.
 - **React Native (Expo)** – cross-platform mobile base
 - **react-native-ble-plx** – for Bluetooth LE mesh
 - **react-native-sodium** – for cryptographic layer
+- **@noir-lang/noir_js** – for zero-knowledge proofs
 - **LZ4 compression** – bandwidth optimization
 - **AsyncStorage** – persistent message caching
 
@@ -49,8 +52,10 @@ _Note: Native implementations (MultipeerConnectivity, Nearby Connections API) ca
 |--------------|-------------------------------------------|
 | `app/mesh/`  | Bluetooth mesh networking services       |
 | `app/crypto/`| Encryption and key management            |
+| `app/zk/`    | Zero-knowledge proofs and authentication |
 | `app/privacy/`| Privacy features and cover traffic      |
 | `app/protocols/`| Binary protocol and compression       |
+| `circuits/`  | Noir zero-knowledge proof circuits      |
 | `docs/`      | Documentation and setup guides          |
 
 ---

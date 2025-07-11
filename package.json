@@ -9,8 +9,11 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest",
+    "test:zk": "jest --testPathPattern=zk",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "build:circuits": "./scripts/build-circuits.sh",
+    "setup:noir": "curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash && noirup"
   },
   "dependencies": {
     "expo": "~50.0.0",
@@ -24,7 +27,11 @@
     "react-native-keychain": "^8.1.3",
     "lz4js": "^0.2.0",
     "react-native-uuid": "^2.0.1",
-    "react-native-vector-icons": "^10.0.3"
+    "react-native-vector-icons": "^10.0.3",
+    "@noir-lang/noir_js": "^0.32.0",
+    "@noir-lang/backend_barretenberg": "^0.32.0",
+    "@noir-lang/types": "^0.32.0",
+    "comlink": "^4.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

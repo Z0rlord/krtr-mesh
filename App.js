@@ -26,6 +26,8 @@ import { StoreAndForwardService } from './app/mesh/StoreAndForwardService';
 import { BatteryOptimizer } from './app/mesh/BatteryOptimizer';
 import { PrivacyService } from './app/privacy/PrivacyService';
 import { MessageCompression, MessageFragmentation } from './app/protocols/MessageCompression';
+import { ZKService } from './app/zk/ZKService';
+import { ZKAuthService } from './app/zk/ZKAuthService';
 
 export default function App() {
   // State management
@@ -45,6 +47,8 @@ export default function App() {
   const privacyService = useRef(null);
   const compression = useRef(null);
   const fragmentation = useRef(null);
+  const zkService = useRef(null);
+  const zkAuthService = useRef(null);
 
   // UI references
   const scrollViewRef = useRef(null);
@@ -72,6 +76,10 @@ export default function App() {
       compression.current = new MessageCompression();
       fragmentation.current = new MessageFragmentation();
 
+      // Initialize ZK services
+      zkService.current = new ZKService();
+      await zkService.current.initialize();
+
       // Initialize mesh service with delegate
       meshService.current = new BluetoothMeshService({
         didReceiveMessage: handleMessageReceived,
@@ -85,6 +93,12 @@ export default function App() {
       privacyService.current = new PrivacyService(
         meshService.current,
         batteryOptimizer.current
+      );
+
+      // Initialize ZK authentication service
+      zkAuthService.current = new ZKAuthService(
+        zkService.current,
+        meshService.current
       );
 
       // Set up battery optimization callbacks
@@ -199,6 +213,8 @@ export default function App() {
     const batteryStats = batteryOptimizer.current?.getStats() || {};
     const privacyStats = privacyService.current?.getStats() || {};
     const compressionStats = compression.current?.getStats() || {};
+    const zkStats = zkService.current?.getStats() || {};
+    const zkAuthStats = zkAuthService.current?.getStats() || {};
 
     setStats({
       mesh: meshStats,
@@ -206,7 +222,9 @@ export default function App() {
       storeForward: storeForwardStats,
       battery: batteryStats,
       privacy: privacyStats,
-      compression: compressionStats
+      compression: compressionStats,
+      zk: zkStats,
+      zkAuth: zkAuthStats
     });
   };
 
@@ -238,6 +256,8 @@ export default function App() {
       await encryptionService.current?.emergencyWipe();
       await privacyService.current?.emergencyWipe();
       await storeAndForward.current?.clearCache();
+      await zkService.current?.emergencyWipe();
+      await zkAuthService.current?.emergencyWipe();
 
       setMessages([]);
       setConnectedPeers([]);
@@ -312,7 +332,8 @@ export default function App() {
         <Text style={styles.statusText}>
           Peers: {connectedPeers.length} |
           Messages: {stats.mesh?.messagesReceived || 0} |
-          Battery: {stats.battery?.batteryLevel || 0}%
+          Battery: {stats.battery?.batteryLevel || 0}% |
+          ZK: {stats.zk?.proofsGenerated || 0} proofs
         </Text>
       </View>
 

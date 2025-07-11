@@ -1,0 +1,7 @@
+[package]
+name = "krtr_message_proof"
+type = "bin"
+authors = ["Zorie Barber"]
+compiler_version = ">=0.32.0"
+
+[dependencies]

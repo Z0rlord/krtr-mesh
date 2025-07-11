@@ -19,7 +19,12 @@ export const MessageType = {
   CHANNEL_RETENTION: 0x09, // Channel retention policy
   DELIVERY_ACK: 0x0A,    // Acknowledge message received
   DELIVERY_STATUS_REQUEST: 0x0B, // Request delivery status
-  READ_RECEIPT: 0x0C     // Message read confirmation
+  READ_RECEIPT: 0x0C,    // Message read confirmation
+  ZK_MEMBERSHIP_PROOF: 0x0D, // Zero-knowledge membership proof
+  ZK_REPUTATION_PROOF: 0x0E, // Zero-knowledge reputation proof
+  ZK_MESSAGE_PROOF: 0x0F,    // Zero-knowledge message authenticity proof
+  ZK_AUTH_CHALLENGE: 0x10,   // Challenge for ZK authentication
+  ZK_AUTH_RESPONSE: 0x11     // Response to ZK authentication challenge
 };
 
 // Special recipient IDs
@@ -33,37 +38,37 @@ export class MessagePadding {
 
   static pad(data, targetSize) {
     if (data.length >= targetSize) return data;
-    
+
     const paddingNeeded = targetSize - data.length;
     if (paddingNeeded > 255) return data; // PKCS#7 limit
-    
+
     const padded = Buffer.concat([data]);
     const randomBytes = Buffer.alloc(paddingNeeded - 1);
     // Fill with random bytes
     for (let i = 0; i < randomBytes.length; i++) {
       randomBytes[i] = Math.floor(Math.random() * 256);
     }
-    
+
     padded = Buffer.concat([padded, randomBytes, Buffer.from([paddingNeeded])]);
     return padded;
   }
 
   static unpad(data) {
     if (data.length === 0) return data;
-    
+
     const paddingLength = data[data.length - 1];
     if (paddingLength <= 0 || paddingLength > data.length) return data;
-    
+
     return data.slice(0, data.length - paddingLength);
   }
 
   static optimalBlockSize(dataSize) {
     const totalSize = dataSize + 16; // Account for encryption overhead
-    
+
     for (const blockSize of this.blockSizes) {
       if (totalSize <= blockSize) return blockSize;
     }
-    
+
     return dataSize; // For very large messages
   }
 }
@@ -105,16 +110,16 @@ export class BinaryProtocol {
   static encode(packet) {
     try {
       const buffers = [];
-      
+
       // Header: version (1) + type (1) + ttl (1) = 3 bytes
       buffers.push(Buffer.from([packet.version, packet.type, packet.ttl]));
-      
+
       // Sender ID (8 bytes)
       const senderBuffer = Buffer.from(packet.senderID, 'utf8');
       const senderPadded = Buffer.alloc(8);
       senderBuffer.copy(senderPadded, 0, 0, Math.min(8, senderBuffer.length));
       buffers.push(senderPadded);
-      
+
       // Recipient ID (8 bytes, optional)
       if (packet.recipientID) {
         const recipientBuffer = Buffer.from(packet.recipientID, 'utf8');
@@ -124,23 +129,23 @@ export class BinaryProtocol {
       } else {
         buffers.push(Buffer.alloc(8, 0));
       }
-      
+
       // Timestamp (8 bytes)
       const timestampBuffer = Buffer.alloc(8);
       timestampBuffer.writeBigUInt64BE(BigInt(packet.timestamp));
       buffers.push(timestampBuffer);
-      
+
       // Payload length (4 bytes) + payload
       const payloadLength = Buffer.alloc(4);
       payloadLength.writeUInt32BE(packet.payload.length);
       buffers.push(payloadLength);
       buffers.push(packet.payload);
-      
+
       // Signature (optional, 64 bytes if present)
       if (packet.signature) {
         buffers.push(packet.signature);
       }
-      
+
       return Buffer.concat(buffers);
     } catch (error) {
       console.error('[KRTR Protocol] Encoding error:', error);
@@ -151,44 +156,44 @@ export class BinaryProtocol {
   static decode(data) {
     try {
       if (data.length < 27) return null; // Minimum packet size
-      
+
       let offset = 0;
-      
+
       // Header
       const version = data[offset++];
       const type = data[offset++];
       const ttl = data[offset++];
-      
+
       // Sender ID (8 bytes)
       const senderBuffer = data.slice(offset, offset + 8);
       const senderID = senderBuffer.toString('utf8').replace(/\0+$/, '');
       offset += 8;
-      
+
       // Recipient ID (8 bytes)
       const recipientBuffer = data.slice(offset, offset + 8);
-      const recipientID = recipientBuffer.every(b => b === 0) ? 
+      const recipientID = recipientBuffer.every(b => b === 0) ?
         null : recipientBuffer.toString('utf8').replace(/\0+$/, '');
       offset += 8;
-      
+
       // Timestamp (8 bytes)
       const timestamp = Number(data.readBigUInt64BE(offset));
       offset += 8;
-      
+
       // Payload length and payload
       const payloadLength = data.readUInt32BE(offset);
       offset += 4;
-      
+
       if (offset + payloadLength > data.length) return null;
-      
+
       const payload = data.slice(offset, offset + payloadLength);
       offset += payloadLength;
-      
+
       // Signature (optional)
       let signature = null;
       if (offset + 64 <= data.length) {
         signature = data.slice(offset, offset + 64);
       }
-      
+
       return new KrtrPacket({
         type,
         senderID,
@@ -313,5 +318,146 @@ export class ReadReceipt {
       console.error('[KRTR Protocol] ReadReceipt decode error:', error);
       return null;
     }
+  }
+}
+
+// Zero-Knowledge Proof structures
+export class ZKMembershipProof {
+  constructor(proof, publicSignals, nullifierHash) {
+    this.proof = proof;
+    this.publicSignals = publicSignals;
+    this.nullifierHash = nullifierHash;
+    this.timestamp = Date.now();
+  }
+
+  encode() {
+    return Buffer.from(JSON.stringify({
+      proof: this.proof,
+      publicSignals: this.publicSignals,
+      nullifierHash: this.nullifierHash,
+      timestamp: this.timestamp
+    }), 'utf8');
+  }
+
+  static decode(data) {
+    try {
+      const json = JSON.parse(data.toString('utf8'));
+      return new ZKMembershipProof(
+        json.proof,
+        json.publicSignals,
+        json.nullifierHash
+      );
+    } catch (error) {
+      console.error('[KRTR Protocol] ZKMembershipProof decode error:', error);
+      return null;
+    }
+  }
+}
+
+export class ZKReputationProof {
+  constructor(proof, publicSignals, commitment, threshold) {
+    this.proof = proof;
+    this.publicSignals = publicSignals;
+    this.commitment = commitment;
+    this.threshold = threshold;
+    this.timestamp = Date.now();
+  }
+
+  encode() {
+    return Buffer.from(JSON.stringify({
+      proof: this.proof,
+      publicSignals: this.publicSignals,
+      commitment: this.commitment,
+      threshold: this.threshold,
+      timestamp: this.timestamp
+    }), 'utf8');
+  }
+
+  static decode(data) {
+    try {
+      const json = JSON.parse(data.toString('utf8'));
+      return new ZKReputationProof(
+        json.proof,
+        json.publicSignals,
+        json.commitment,
+        json.threshold
+      );
+    } catch (error) {
+      console.error('[KRTR Protocol] ZKReputationProof decode error:', error);
+      return null;
+    }
+  }
+}
+
+export class ZKMessageProof {
+  constructor(proof, publicSignals, messageHash) {
+    this.proof = proof;
+    this.publicSignals = publicSignals;
+    this.messageHash = messageHash;
+    this.timestamp = Date.now();
+  }
+
+  encode() {
+    return Buffer.from(JSON.stringify({
+      proof: this.proof,
+      publicSignals: this.publicSignals,
+      messageHash: this.messageHash,
+      timestamp: this.timestamp
+    }), 'utf8');
+  }
+
+  static decode(data) {
+    try {
+      const json = JSON.parse(data.toString('utf8'));
+      return new ZKMessageProof(
+        json.proof,
+        json.publicSignals,
+        json.messageHash
+      );
+    } catch (error) {
+      console.error('[KRTR Protocol] ZKMessageProof decode error:', error);
+      return null;
+    }
+  }
+}
+
+export class ZKAuthChallenge {
+  constructor(challengeId, groupRoot, requiredReputation = 0) {
+    this.challengeId = challengeId;
+    this.groupRoot = groupRoot;
+    this.requiredReputation = requiredReputation;
+    this.timestamp = Date.now();
+    this.expiresAt = Date.now() + (5 * 60 * 1000); // 5 minutes
+  }
+
+  encode() {
+    return Buffer.from(JSON.stringify({
+      challengeId: this.challengeId,
+      groupRoot: this.groupRoot,
+      requiredReputation: this.requiredReputation,
+      timestamp: this.timestamp,
+      expiresAt: this.expiresAt
+    }), 'utf8');
+  }
+
+  static decode(data) {
+    try {
+      const json = JSON.parse(data.toString('utf8'));
+      const challenge = new ZKAuthChallenge(
+        json.challengeId,
+        json.groupRoot,
+        json.requiredReputation
+      );
+      challenge.timestamp = json.timestamp;
+      challenge.expiresAt = json.expiresAt;
+      return challenge;
+    } catch (error) {
+      console.error('[KRTR Protocol] ZKAuthChallenge decode error:', error);
+      return null;
+    }
+  }
+
+  isExpired() {
+    return Date.now() > this.expiresAt;
   }
 }
