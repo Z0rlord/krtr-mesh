@@ -1887,6 +1887,20 @@ index 22005d4..4274a1e 100644
    ? require('./AppContainer-dev').default
    : require('./AppContainer-prod').default;
  
+diff --git a/node_modules/react-native/Libraries/ReactNative/I18nManager.js b/node_modules/react-native/Libraries/ReactNative/I18nManager.js
+index 48e0e03..6339b2f 100644
+--- a/node_modules/react-native/Libraries/ReactNative/I18nManager.js
++++ b/node_modules/react-native/Libraries/ReactNative/I18nManager.js
+@@ -56,7 +56,6 @@ export default {
+     NativeI18nManager.swapLeftAndRightInRTL(flipStyles);
+   },
+ 
+-  isRTL: i18nConstants.isRTL as I18nManagerConstants['isRTL'],
+-  doLeftAndRightSwapInRTL:
+-    i18nConstants.doLeftAndRightSwapInRTL as I18nManagerConstants['doLeftAndRightSwapInRTL'],
++  isRTL: i18nConstants.isRTL,
++  doLeftAndRightSwapInRTL: i18nConstants.doLeftAndRightSwapInRTL,
+ };
 diff --git a/node_modules/react-native/Libraries/ReactNative/getCachedComponentWithDebugName.js b/node_modules/react-native/Libraries/ReactNative/getCachedComponentWithDebugName.js
 index 6b58118..c67cc2a 100644
 --- a/node_modules/react-native/Libraries/ReactNative/getCachedComponentWithDebugName.js

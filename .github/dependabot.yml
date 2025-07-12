@@ -1,0 +1,52 @@
+# Dependabot configuration for automated dependency updates
+# This helps maintain the dependency graph and security posture
+version: 2
+updates:
+  # Enable version updates for npm (JavaScript/Node.js dependencies)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "Z0rlord"
+    assignees:
+      - "Z0rlord"
+    commit-message:
+      prefix: "deps"
+      prefix-development: "deps-dev"
+      include: "scope"
+    # Group minor and patch updates together
+    groups:
+      react-native:
+        patterns:
+          - "react-native*"
+          - "@react-native*"
+      expo:
+        patterns:
+          - "expo*"
+          - "@expo*"
+      development:
+        dependency-type: "development"
+        patterns:
+          - "*"
+    # Allow automatic merging of patch-level updates for development dependencies
+    allow:
+      - dependency-type: "development"
+        update-type: "version-update:semver-patch"
+      - dependency-type: "development"
+        update-type: "version-update:semver-minor"
+
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    reviewers:
+      - "Z0rlord"
+    assignees:
+      - "Z0rlord"
