@@ -29,7 +29,7 @@
         "resourceClass": "m-medium"
       },
       "android": {
-        "buildType": "aab"
+        "buildType": "app-bundle"
       }
     }
   },
@@ -44,17 +44,6 @@
         "serviceAccountKeyPath": "./google-service-account.json",
         "track": "internal"
       }
-    }
-  },
-  "update": {
-    "development": {
-      "channel": "development"
-    },
-    "preview": {
-      "channel": "preview"
-    },
-    "production": {
-      "channel": "production"
     }
   }
 }

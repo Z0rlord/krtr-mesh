@@ -22,13 +22,21 @@
         "NSBluetoothAlwaysUsageDescription": "KRTR needs Bluetooth to connect with nearby devices for secure mesh networking",
         "NSBluetoothPeripheralUsageDescription": "KRTR needs Bluetooth to advertise to nearby devices for mesh networking",
         "NSLocalNetworkUsageDescription": "KRTR uses local networking for mesh communication",
-        "UIBackgroundModes": ["bluetooth-central", "bluetooth-peripheral"],
+        "UIBackgroundModes": [
+          "bluetooth-central",
+          "bluetooth-peripheral",
+          "bluetooth-central",
+          "bluetooth-peripheral"
+        ],
         "NSAppTransportSecurity": {
           "NSAllowsArbitraryLoads": false,
           "NSExceptionDomains": {}
-        }
+        },
+        "NSFaceIDUsageDescription": "Allow KRTR to use Face ID for secure access to your mesh identity"
       },
-      "associatedDomains": ["applinks:krtr.mesh"]
+      "associatedDomains": [
+        "applinks:krtr.mesh"
+      ]
     },
     "android": {
       "adaptiveIcon": {
@@ -46,7 +54,20 @@
         "android.permission.BLUETOOTH_ADVERTISE",
         "android.permission.BLUETOOTH_CONNECT",
         "android.permission.WAKE_LOCK",
-        "android.permission.FOREGROUND_SERVICE"
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT",
+        "android.permission.BLUETOOTH",
+        "android.permission.BLUETOOTH_ADMIN",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.BLUETOOTH_SCAN",
+        "android.permission.BLUETOOTH_ADVERTISE",
+        "android.permission.BLUETOOTH_CONNECT",
+        "android.permission.WAKE_LOCK",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT"
       ],
       "intentFilters": [
         {
@@ -57,7 +78,10 @@
               "host": "krtr.mesh"
             }
           ],
-          "category": ["BROWSABLE", "DEFAULT"]
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
         }
       ]
     },
@@ -71,28 +95,20 @@
         {
           "faceIDPermission": "Allow KRTR to use Face ID for secure access to your mesh identity"
         }
-      ],
-      [
-        "expo-crypto",
-        {}
-      ],
-      [
-        "@react-native-async-storage/async-storage",
-        {}
       ]
     ],
     "scheme": "krtr",
     "extra": {
       "eas": {
-        "projectId": "your-project-id-here"
+        "projectId": "aeeba0cd-2e0e-46aa-99c7-6e63472094b0"
       }
     },
-    "owner": "zorie-barber",
+    "owner": "z0rlord",
     "runtimeVersion": {
       "policy": "sdkVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/your-project-id-here"
+      "url": "https://u.expo.dev/aeeba0cd-2e0e-46aa-99c7-6e63472094b0"
     }
   }
 }
