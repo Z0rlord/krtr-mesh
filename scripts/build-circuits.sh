@@ -43,9 +43,9 @@ echo "📦 Creating JavaScript circuit imports..."
 mkdir -p app/zk/circuits
 
 # Copy compiled circuits to app directory
-cp circuits/membership/target/membership.json app/zk/circuits/
-cp circuits/reputation/target/reputation.json app/zk/circuits/
-cp circuits/message_proof/target/message_proof.json app/zk/circuits/
+cp circuits/membership/target/krtr_membership.json app/zk/circuits/membership.json
+cp circuits/reputation/target/krtr_reputation.json app/zk/circuits/reputation.json
+cp circuits/message_proof/target/krtr_message_proof.json app/zk/circuits/message_proof.json
 
 # Create index file for circuit imports
 cat > app/zk/circuits/index.js << 'EOF'

@@ -1,0 +1,27 @@
+# KRTR Mesh Code Owners
+# These owners will be requested for review when anyone opens a pull request.
+
+# Global ownership - Zorie Barber owns everything by default
+* @Z0rlord
+
+# Critical security components require extra scrutiny
+app/crypto/ @Z0rlord
+app/zk/ @Z0rlord
+circuits/ @Z0rlord
+
+# Protocol and mesh networking core
+app/mesh/ @Z0rlord
+app/protocols/ @Z0rlord
+
+# Configuration and deployment
+app.json @Z0rlord
+eas.json @Z0rlord
+package.json @Z0rlord
+
+# Documentation changes
+docs/ @Z0rlord
+README.md @Z0rlord
+
+# Security-sensitive files
+.github/ @Z0rlord
+scripts/ @Z0rlord

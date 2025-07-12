@@ -1,0 +1,13 @@
+# KRTR Mesh Authorized Signers
+# Only commits signed by these keys are allowed
+
+# Zorie Barber - Project Lead
+# Add your GPG key fingerprint here when you set up commit signing
+# Example: ABCD1234EFGH5678IJKL9012MNOP3456QRST7890
+
+# Instructions to set up commit signing:
+# 1. Generate GPG key: gpg --full-generate-key
+# 2. Get key ID: gpg --list-secret-keys --keyid-format=long
+# 3. Configure git: git config --global user.signingkey YOUR_KEY_ID
+# 4. Enable signing: git config --global commit.gpgsign true
+# 5. Add public key to GitHub: Settings > SSH and GPG keys
