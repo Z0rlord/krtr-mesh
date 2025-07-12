@@ -15,7 +15,7 @@ export class ZKNativeService {
       proofsGenerated: 0,
       proofsVerified: 0,
       averageProofTime: 0,
-      totalProofTime: 0
+      totalProofTime: 0,
     };
   }
 
@@ -24,19 +24,24 @@ export class ZKNativeService {
     return await KRTRZKModule.isSupported();
   }
 
-  async generateMembershipProof(membershipKey, groupRoot, pathElements, pathIndices) {
+  async generateMembershipProof(
+    membershipKey,
+    groupRoot,
+    pathElements,
+    pathIndices
+  ) {
     if (!this.isAvailable) {
       throw new Error('ZK Native Module not available');
     }
 
     const startTime = Date.now();
-    
+
     try {
       const result = await KRTRZKModule.generateMembershipProof({
         membershipKey,
         groupRoot,
         pathElements,
-        pathIndices
+        pathIndices,
       });
 
       const proofTime = Date.now() - startTime;
@@ -44,7 +49,7 @@ export class ZKNativeService {
 
       return {
         proof: new Uint8Array(result.proof),
-        publicInputs: result.publicInputs
+        publicInputs: result.publicInputs,
       };
     } catch (error) {
       throw new Error(`Membership proof generation failed: ${error.message}`);
@@ -60,7 +65,7 @@ export class ZKNativeService {
       const isValid = await KRTRZKModule.verifyMembershipProof({
         proof: Array.from(proof),
         publicInputs,
-        groupRoot
+        groupRoot,
       });
 
       this.stats.proofsVerified++;
@@ -81,7 +86,7 @@ export class ZKNativeService {
       const result = await KRTRZKModule.generateReputationProof({
         reputationScore,
         threshold,
-        nonce
+        nonce,
       });
 
       const proofTime = Date.now() - startTime;
@@ -89,7 +94,7 @@ export class ZKNativeService {
 
       return {
         proof: new Uint8Array(result.proof),
-        publicInputs: result.publicInputs
+        publicInputs: result.publicInputs,
       };
     } catch (error) {
       throw new Error(`Reputation proof generation failed: ${error.message}`);
@@ -105,7 +110,7 @@ export class ZKNativeService {
       const isValid = await KRTRZKModule.verifyReputationProof({
         proof: Array.from(proof),
         publicInputs,
-        threshold
+        threshold,
       });
 
       this.stats.proofsVerified++;
@@ -118,7 +123,8 @@ export class ZKNativeService {
   updateStats(proofTime) {
     this.stats.proofsGenerated++;
     this.stats.totalProofTime += proofTime;
-    this.stats.averageProofTime = this.stats.totalProofTime / this.stats.proofsGenerated;
+    this.stats.averageProofTime =
+      this.stats.totalProofTime / this.stats.proofsGenerated;
   }
 
   getStats() {
@@ -130,7 +136,7 @@ export class ZKNativeService {
       proofsGenerated: 0,
       proofsVerified: 0,
       averageProofTime: 0,
-      totalProofTime: 0
+      totalProofTime: 0,
     };
   }
 }

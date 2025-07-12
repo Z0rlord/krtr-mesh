@@ -10,7 +10,7 @@ export class MessageCompression {
   constructor() {
     // Compression settings
     this.compressionThreshold = 100; // bytes
-    this.maxCompressionRatio = 0.9;  // Don't compress if ratio > 90%
+    this.maxCompressionRatio = 0.9; // Don't compress if ratio > 90%
 
     // Statistics
     this.stats = {
@@ -19,7 +19,7 @@ export class MessageCompression {
       bytesBeforeCompression: 0,
       bytesAfterCompression: 0,
       compressionErrors: 0,
-      decompressionErrors: 0
+      decompressionErrors: 0,
     };
   }
 
@@ -57,7 +57,11 @@ export class MessageCompression {
       this.stats.bytesBeforeCompression += data.length;
       this.stats.bytesAfterCompression += compressed.length;
 
-      console.log(`[KRTR Compression] Compressed ${data.length} -> ${compressed.length} bytes (${Math.round((1 - compressionRatio) * 100)}% savings)`);
+      console.log(
+        `[KRTR Compression] Compressed ${data.length} -> ${
+          compressed.length
+        } bytes (${Math.round((1 - compressionRatio) * 100)}% savings)`
+      );
 
       return { data: compressed, compressed: true };
     } catch (error) {
@@ -78,7 +82,9 @@ export class MessageCompression {
 
       this.stats.messagesDecompressed++;
 
-      console.log(`[KRTR Compression] Decompressed ${data.length} -> ${decompressed.length} bytes`);
+      console.log(
+        `[KRTR Compression] Decompressed ${data.length} -> ${decompressed.length} bytes`
+      );
 
       return decompressed;
     } catch (error) {
@@ -123,15 +129,18 @@ export class MessageCompression {
    * @returns {Object} - Compression stats
    */
   getStats() {
-    const totalSavings = this.stats.bytesBeforeCompression - this.stats.bytesAfterCompression;
-    const averageRatio = this.stats.bytesBeforeCompression > 0 ?
-      this.stats.bytesAfterCompression / this.stats.bytesBeforeCompression : 0;
+    const totalSavings =
+      this.stats.bytesBeforeCompression - this.stats.bytesAfterCompression;
+    const averageRatio =
+      this.stats.bytesBeforeCompression > 0
+        ? this.stats.bytesAfterCompression / this.stats.bytesBeforeCompression
+        : 0;
 
     return {
       ...this.stats,
       totalBytesSaved: totalSavings,
       averageCompressionRatio: averageRatio,
-      averageSavingsPercent: Math.round((1 - averageRatio) * 100)
+      averageSavingsPercent: Math.round((1 - averageRatio) * 100),
     };
   }
 
@@ -145,7 +154,7 @@ export class MessageCompression {
       bytesBeforeCompression: 0,
       bytesAfterCompression: 0,
       compressionErrors: 0,
-      decompressionErrors: 0
+      decompressionErrors: 0,
     };
   }
 
@@ -158,11 +167,13 @@ export class MessageCompression {
       performance: 100,
       balanced: 100,
       powerSaver: 50,
-      ultraLowPower: 50
+      ultraLowPower: 50,
     };
 
     this.compressionThreshold = thresholds[powerMode] || 100;
-    console.log(`[KRTR Compression] Updated threshold for ${powerMode}: ${this.compressionThreshold} bytes`);
+    console.log(
+      `[KRTR Compression] Updated threshold for ${powerMode}: ${this.compressionThreshold} bytes`
+    );
   }
 }
 
@@ -182,7 +193,7 @@ export class MessageFragmentation {
       fragmentsSent: 0,
       fragmentsReceived: 0,
       timeouts: 0,
-      errors: 0
+      errors: 0,
     };
 
     this.setupCleanup();
@@ -213,18 +224,23 @@ export class MessageFragmentation {
           fragmentIndex: i,
           totalFragments,
           isFirst: i === 0,
-          isLast: i === totalFragments - 1
+          isLast: i === totalFragments - 1,
         };
 
         // Create fragment packet
-        const fragmentPacket = this.createFragmentPacket(fragmentHeader, fragmentData);
+        const fragmentPacket = this.createFragmentPacket(
+          fragmentHeader,
+          fragmentData
+        );
         fragments.push(fragmentPacket);
       }
 
       this.stats.messagesFragmented++;
       this.stats.fragmentsSent += fragments.length;
 
-      console.log(`[KRTR Fragmentation] Fragmented message ${messageID} into ${totalFragments} fragments`);
+      console.log(
+        `[KRTR Fragmentation] Fragmented message ${messageID} into ${totalFragments} fragments`
+      );
 
       return fragments;
     } catch (error) {
@@ -241,7 +257,8 @@ export class MessageFragmentation {
    */
   processFragment(fragmentPacket) {
     try {
-      const { messageID, fragmentIndex, totalFragments, isFirst, isLast } = fragmentPacket.header;
+      const { messageID, fragmentIndex, totalFragments, isFirst, isLast } =
+        fragmentPacket.header;
       const fragmentData = fragmentPacket.data;
 
       this.stats.fragmentsReceived++;
@@ -252,7 +269,7 @@ export class MessageFragmentation {
           fragments: new Array(totalFragments),
           receivedCount: 0,
           totalFragments,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         });
       }
 
@@ -268,21 +285,27 @@ export class MessageFragmentation {
       fragmentCollection.receivedCount++;
 
       // Check if all fragments received
-      if (fragmentCollection.receivedCount === fragmentCollection.totalFragments) {
+      if (
+        fragmentCollection.receivedCount === fragmentCollection.totalFragments
+      ) {
         // Reassemble message
-        const completeMessage = this.reassembleMessage(fragmentCollection.fragments);
+        const completeMessage = this.reassembleMessage(
+          fragmentCollection.fragments
+        );
 
         // Clean up
         this.activeFragments.delete(messageID);
 
         this.stats.messagesReassembled++;
 
-        console.log(`[KRTR Fragmentation] Reassembled message ${messageID} from ${totalFragments} fragments`);
+        console.log(
+          `[KRTR Fragmentation] Reassembled message ${messageID} from ${totalFragments} fragments`
+        );
 
         return {
           messageID,
           data: completeMessage,
-          isComplete: true
+          isComplete: true,
         };
       }
 
@@ -308,7 +331,7 @@ export class MessageFragmentation {
     return {
       data: Buffer.concat([headerLength, headerBuffer, data]),
       header,
-      isFragment: true
+      isFragment: true,
     };
   }
 
@@ -358,7 +381,9 @@ export class MessageFragmentation {
       }
 
       if (cleanedCount > 0) {
-        console.log(`[KRTR Fragmentation] Cleaned up ${cleanedCount} expired fragment collections`);
+        console.log(
+          `[KRTR Fragmentation] Cleaned up ${cleanedCount} expired fragment collections`
+        );
       }
     }, 60000); // Check every minute
   }
@@ -372,7 +397,7 @@ export class MessageFragmentation {
       ...this.stats,
       activeFragmentCollections: this.activeFragments.size,
       maxFragmentSize: this.maxFragmentSize,
-      fragmentTimeout: this.fragmentTimeout
+      fragmentTimeout: this.fragmentTimeout,
     };
   }
 
@@ -385,10 +410,12 @@ export class MessageFragmentation {
       performance: 500,
       balanced: 500,
       powerSaver: 400,
-      ultraLowPower: 300
+      ultraLowPower: 300,
     };
 
     this.maxFragmentSize = fragmentSizes[powerMode] || 500;
-    console.log(`[KRTR Fragmentation] Updated fragment size for ${powerMode}: ${this.maxFragmentSize} bytes`);
+    console.log(
+      `[KRTR Fragmentation] Updated fragment size for ${powerMode}: ${this.maxFragmentSize} bytes`
+    );
   }
 }

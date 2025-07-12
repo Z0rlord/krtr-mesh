@@ -4,8 +4,6 @@
  * Advanced mesh networking with zero-knowledge privacy
  */
 
-
-
 import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
@@ -18,7 +16,7 @@ import {
   StatusBar,
   SafeAreaView,
   KeyboardAvoidingView,
-  Platform
+  Platform,
 } from 'react-native';
 
 // KRTR Services
@@ -27,7 +25,10 @@ import { EncryptionService } from './app/crypto/EncryptionService';
 import { StoreAndForwardService } from './app/mesh/StoreAndForwardService';
 import { BatteryOptimizer } from './app/mesh/BatteryOptimizer';
 import { PrivacyService } from './app/privacy/PrivacyService';
-import { MessageCompression, MessageFragmentation } from './app/protocols/MessageCompression';
+import {
+  MessageCompression,
+  MessageFragmentation,
+} from './app/protocols/MessageCompression';
 import { ZKService } from './app/zk/ZKService';
 import { ZKAuthService } from './app/zk/ZKAuthService';
 
@@ -88,7 +89,7 @@ export default function App() {
         didConnectToPeer: handlePeerConnected,
         didDisconnectFromPeer: handlePeerDisconnected,
         didUpdatePeerList: handlePeerListUpdated,
-        didReceiveDeliveryAck: handleDeliveryAck
+        didReceiveDeliveryAck: handleDeliveryAck,
       });
 
       // Initialize privacy service
@@ -118,28 +119,30 @@ export default function App() {
 
       setIsInitialized(true);
       console.log('[KRTR App] Services initialized successfully');
-
     } catch (error) {
       console.error('[KRTR App] Initialization error:', error);
       Alert.alert('Initialization Error', 'Failed to initialize KRTR services');
     }
   };
 
-  const updateServicesForPowerMode = (mode) => {
+  const updateServicesForPowerMode = mode => {
     compression.current?.updateForPowerMode(mode);
     fragmentation.current?.updateForPowerMode(mode);
     console.log(`[KRTR App] Updated services for power mode: ${mode}`);
   };
 
-  const handleMessageReceived = (message) => {
+  const handleMessageReceived = message => {
     // Filter out cover traffic
     if (privacyService.current?.shouldDisplayMessage(message)) {
-      setMessages(prev => [...prev, {
-        ...message,
-        id: message.id || Date.now().toString(),
-        timestamp: message.timestamp || new Date(),
-        isOwn: false
-      }]);
+      setMessages(prev => [
+        ...prev,
+        {
+          ...message,
+          id: message.id || Date.now().toString(),
+          timestamp: message.timestamp || new Date(),
+          isOwn: false,
+        },
+      ]);
 
       // Auto-scroll to bottom
       setTimeout(() => {
@@ -148,22 +151,22 @@ export default function App() {
     }
   };
 
-  const handlePeerConnected = (peerID) => {
+  const handlePeerConnected = peerID => {
     console.log(`[KRTR App] Peer connected: ${peerID}`);
 
     // Deliver cached messages
     storeAndForward.current?.deliverCachedMessages(peerID, meshService.current);
   };
 
-  const handlePeerDisconnected = (peerID) => {
+  const handlePeerDisconnected = peerID => {
     console.log(`[KRTR App] Peer disconnected: ${peerID}`);
   };
 
-  const handlePeerListUpdated = (peers) => {
+  const handlePeerListUpdated = peers => {
     setConnectedPeers(peers);
   };
 
-  const handleDeliveryAck = (ack) => {
+  const handleDeliveryAck = ack => {
     console.log(`[KRTR App] Delivery ack received:`, ack);
   };
 
@@ -181,7 +184,7 @@ export default function App() {
         content: messageContent,
         timestamp: new Date(),
         isOwn: true,
-        deliveryStatus: 'sending'
+        deliveryStatus: 'sending',
       };
 
       setMessages(prev => [...prev, localMessage]);
@@ -191,15 +194,16 @@ export default function App() {
       await privacyService.current.sendMessageWithPrivacy(messageContent);
 
       // Update message status
-      setMessages(prev => prev.map(msg =>
-        msg.id === messageId ? { ...msg, deliveryStatus: 'sent' } : msg
-      ));
+      setMessages(prev =>
+        prev.map(msg =>
+          msg.id === messageId ? { ...msg, deliveryStatus: 'sent' } : msg
+        )
+      );
 
       // Auto-scroll to bottom
       setTimeout(() => {
         scrollViewRef.current?.scrollToEnd({ animated: true });
       }, 100);
-
     } catch (error) {
       console.error('[KRTR App] Send message error:', error);
       Alert.alert('Send Error', 'Failed to send message');
@@ -226,7 +230,7 @@ export default function App() {
       privacy: privacyStats,
       compression: compressionStats,
       zk: zkStats,
-      zkAuth: zkAuthStats
+      zkAuth: zkAuthStats,
     });
   };
 
@@ -245,7 +249,11 @@ export default function App() {
           'This will clear all data and reset the app. Continue?',
           [
             { text: 'Cancel', style: 'cancel' },
-            { text: 'Wipe', style: 'destructive', onPress: performEmergencyWipe }
+            {
+              text: 'Wipe',
+              style: 'destructive',
+              onPress: performEmergencyWipe,
+            },
           ]
         );
       }
@@ -284,19 +292,19 @@ export default function App() {
     }
   };
 
-  const formatTimestamp = (timestamp) => {
+  const formatTimestamp = timestamp => {
     return new Date(timestamp).toLocaleTimeString([], {
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
 
-  const getPowerModeColor = (mode) => {
+  const getPowerModeColor = mode => {
     const colors = {
       performance: '#4CAF50',
       balanced: '#2196F3',
       powerSaver: '#FF9800',
-      ultraLowPower: '#F44336'
+      ultraLowPower: '#F44336',
     };
     return colors[mode] || '#2196F3';
   };
@@ -306,7 +314,9 @@ export default function App() {
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
           <Text style={styles.loadingText}>Initializing KRTR Mesh...</Text>
-          <Text style={styles.loadingSubtext}>Setting up encryption and mesh networking</Text>
+          <Text style={styles.loadingSubtext}>
+            Setting up encryption and mesh networking
+          </Text>
         </View>
       </SafeAreaView>
     );
@@ -323,7 +333,12 @@ export default function App() {
         </TouchableOpacity>
         <View style={styles.headerInfo}>
           <Text style={styles.nickname}>{nickname}</Text>
-          <View style={[styles.powerIndicator, { backgroundColor: getPowerModeColor(powerMode) }]}>
+          <View
+            style={[
+              styles.powerIndicator,
+              { backgroundColor: getPowerModeColor(powerMode) },
+            ]}
+          >
             <Text style={styles.powerText}>{powerMode.toUpperCase()}</Text>
           </View>
         </View>
@@ -332,10 +347,10 @@ export default function App() {
       {/* Status Bar */}
       <View style={styles.statusBar}>
         <Text style={styles.statusText}>
-          Peers: {connectedPeers.length} |
-          Messages: {stats.mesh?.messagesReceived || 0} |
-          Battery: {stats.battery?.batteryLevel || 0}% |
-          ZK: {stats.zk?.proofsGenerated || 0} proofs
+          Peers: {connectedPeers.length} | Messages:{' '}
+          {stats.mesh?.messagesReceived || 0} | Battery:{' '}
+          {stats.battery?.batteryLevel || 0}% | ZK:{' '}
+          {stats.zk?.proofsGenerated || 0} proofs
         </Text>
       </View>
 
@@ -345,12 +360,12 @@ export default function App() {
         style={styles.messagesContainer}
         contentContainerStyle={styles.messagesContent}
       >
-        {messages.map((message) => (
+        {messages.map(message => (
           <View
             key={message.id}
             style={[
               styles.messageContainer,
-              message.isOwn ? styles.ownMessage : styles.otherMessage
+              message.isOwn ? styles.ownMessage : styles.otherMessage,
             ]}
           >
             <View style={styles.messageHeader}>
@@ -361,7 +376,9 @@ export default function App() {
             </View>
             <Text style={styles.messageContent}>{message.content}</Text>
             {message.deliveryStatus && (
-              <Text style={styles.deliveryStatus}>{message.deliveryStatus}</Text>
+              <Text style={styles.deliveryStatus}>
+                {message.deliveryStatus}
+              </Text>
             )}
           </View>
         ))}
@@ -382,7 +399,10 @@ export default function App() {
           maxLength={1000}
         />
         <TouchableOpacity
-          style={[styles.sendButton, !inputText.trim() && styles.sendButtonDisabled]}
+          style={[
+            styles.sendButton,
+            !inputText.trim() && styles.sendButtonDisabled,
+          ]}
           onPress={sendMessage}
           disabled={!inputText.trim()}
         >

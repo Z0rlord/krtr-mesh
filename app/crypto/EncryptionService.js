@@ -11,17 +11,17 @@ import Sodium from 'react-native-sodium';
 export class EncryptionService {
   constructor() {
     // Ephemeral keys for this session (regenerated each app start)
-    this.keyPair = null;           // X25519 key agreement
-    this.signingKeyPair = null;    // Ed25519 signing
+    this.keyPair = null; // X25519 key agreement
+    this.signingKeyPair = null; // Ed25519 signing
 
     // Persistent identity key (for favorites)
-    this.identityKeyPair = null;   // Ed25519 identity
+    this.identityKeyPair = null; // Ed25519 identity
 
     // Peer key storage
-    this.peerPublicKeys = new Map();     // peerID -> X25519 public key
-    this.peerSigningKeys = new Map();    // peerID -> Ed25519 signing key
-    this.peerIdentityKeys = new Map();   // peerID -> Ed25519 identity key
-    this.sharedSecrets = new Map();      // peerID -> shared secret
+    this.peerPublicKeys = new Map(); // peerID -> X25519 public key
+    this.peerSigningKeys = new Map(); // peerID -> Ed25519 signing key
+    this.peerIdentityKeys = new Map(); // peerID -> Ed25519 identity key
+    this.sharedSecrets = new Map(); // peerID -> shared secret
 
     // Short ID for this device
     this.shortID = null;
@@ -43,7 +43,9 @@ export class EncryptionService {
       // Generate short ID from public key
       this.shortID = this.generateShortID();
 
-      console.log(`[KRTR Crypto] Encryption service initialized (ID: ${this.shortID})`);
+      console.log(
+        `[KRTR Crypto] Encryption service initialized (ID: ${this.shortID})`
+      );
     } catch (error) {
       console.error('[KRTR Crypto] Initialization error:', error);
       throw error;
@@ -75,7 +77,7 @@ export class EncryptionService {
         const keyData = JSON.parse(identityKeyData);
         this.identityKeyPair = {
           publicKey: Buffer.from(keyData.publicKey, 'base64'),
-          privateKey: Buffer.from(keyData.privateKey, 'base64')
+          privateKey: Buffer.from(keyData.privateKey, 'base64'),
         };
         console.log('[KRTR Crypto] Loaded existing identity key');
       } else {
@@ -85,9 +87,12 @@ export class EncryptionService {
         // Save to storage
         const keyData = {
           publicKey: this.identityKeyPair.publicKey.toString('base64'),
-          privateKey: this.identityKeyPair.privateKey.toString('base64')
+          privateKey: this.identityKeyPair.privateKey.toString('base64'),
         };
-        await AsyncStorage.setItem('krtr_identity_key', JSON.stringify(keyData));
+        await AsyncStorage.setItem(
+          'krtr_identity_key',
+          JSON.stringify(keyData)
+        );
 
         console.log('[KRTR Crypto] Created new identity key');
       }
@@ -107,9 +112,9 @@ export class EncryptionService {
     // Combine all three public keys: encryption + signing + identity
     const combined = Buffer.alloc(96); // 32 + 32 + 32 bytes
 
-    this.keyPair.publicKey.copy(combined, 0);           // X25519 encryption key
-    this.signingKeyPair.publicKey.copy(combined, 32);   // Ed25519 signing key
-    this.identityKeyPair.publicKey.copy(combined, 64);  // Ed25519 identity key
+    this.keyPair.publicKey.copy(combined, 0); // X25519 encryption key
+    this.signingKeyPair.publicKey.copy(combined, 32); // Ed25519 signing key
+    this.identityKeyPair.publicKey.copy(combined, 64); // Ed25519 identity key
 
     return combined;
   }
@@ -117,7 +122,9 @@ export class EncryptionService {
   async addPeerPublicKey(peerID, combinedKeyData) {
     try {
       if (combinedKeyData.length !== 96) {
-        throw new Error(`Invalid key data size: ${combinedKeyData.length}, expected 96`);
+        throw new Error(
+          `Invalid key data size: ${combinedKeyData.length}, expected 96`
+        );
       }
 
       // Extract the three keys
@@ -131,7 +138,10 @@ export class EncryptionService {
       this.peerIdentityKeys.set(peerID, identityKey);
 
       // Generate shared secret for encryption
-      const sharedSecret = Sodium.crypto_box_beforenm(encryptionKey, this.keyPair.privateKey);
+      const sharedSecret = Sodium.crypto_box_beforenm(
+        encryptionKey,
+        this.keyPair.privateKey
+      );
       this.sharedSecrets.set(peerID, sharedSecret);
 
       console.log(`[KRTR Crypto] Added public keys for peer: ${peerID}`);
@@ -152,7 +162,11 @@ export class EncryptionService {
       const nonce = Sodium.randombytes_buf(Sodium.crypto_box_NONCEBYTES);
 
       // Encrypt using shared secret
-      const ciphertext = Sodium.crypto_box_easy_afternm(data, nonce, sharedSecret);
+      const ciphertext = Sodium.crypto_box_easy_afternm(
+        data,
+        nonce,
+        sharedSecret
+      );
 
       // Combine nonce + ciphertext
       const encrypted = Buffer.alloc(nonce.length + ciphertext.length);
@@ -182,7 +196,11 @@ export class EncryptionService {
       const ciphertext = encryptedData.slice(Sodium.crypto_box_NONCEBYTES);
 
       // Decrypt using shared secret
-      const decrypted = Sodium.crypto_box_open_easy_afternm(ciphertext, nonce, sharedSecret);
+      const decrypted = Sodium.crypto_box_open_easy_afternm(
+        ciphertext,
+        nonce,
+        sharedSecret
+      );
 
       return decrypted;
     } catch (error) {
@@ -194,7 +212,10 @@ export class EncryptionService {
   async sign(data) {
     try {
       // Sign with ephemeral signing key
-      const signature = Sodium.crypto_sign_detached(data, this.signingKeyPair.privateKey);
+      const signature = Sodium.crypto_sign_detached(
+        data,
+        this.signingKeyPair.privateKey
+      );
       return signature;
     } catch (error) {
       console.error('[KRTR Crypto] Signing error:', error);
@@ -210,7 +231,11 @@ export class EncryptionService {
       }
 
       // Verify signature
-      return Sodium.crypto_sign_verify_detached(signature, data, peerSigningKey);
+      return Sodium.crypto_sign_verify_detached(
+        signature,
+        data,
+        peerSigningKey
+      );
     } catch (error) {
       console.error(`[KRTR Crypto] Verification error for ${peerID}:`, error);
       return false;
@@ -221,14 +246,21 @@ export class EncryptionService {
   async encryptChannelMessage(message, channelName, password) {
     try {
       // Derive key from password using Argon2id
-      const salt = Sodium.crypto_generichash(32, Buffer.from(channelName, 'utf8'));
+      const salt = Sodium.crypto_generichash(
+        32,
+        Buffer.from(channelName, 'utf8')
+      );
       const key = await this.deriveChannelKey(password, salt);
 
       // Generate random nonce
       const nonce = Sodium.randombytes_buf(Sodium.crypto_secretbox_NONCEBYTES);
 
       // Encrypt message
-      const ciphertext = Sodium.crypto_secretbox_easy(Buffer.from(message, 'utf8'), nonce, key);
+      const ciphertext = Sodium.crypto_secretbox_easy(
+        Buffer.from(message, 'utf8'),
+        nonce,
+        key
+      );
 
       // Combine nonce + ciphertext
       const encrypted = Buffer.alloc(nonce.length + ciphertext.length);
@@ -245,7 +277,10 @@ export class EncryptionService {
   async decryptChannelMessage(encryptedData, channelName, password) {
     try {
       // Derive key from password
-      const salt = Sodium.crypto_generichash(32, Buffer.from(channelName, 'utf8'));
+      const salt = Sodium.crypto_generichash(
+        32,
+        Buffer.from(channelName, 'utf8')
+      );
       const key = await this.deriveChannelKey(password, salt);
 
       if (encryptedData.length < Sodium.crypto_secretbox_NONCEBYTES) {
@@ -254,10 +289,16 @@ export class EncryptionService {
 
       // Extract nonce and ciphertext
       const nonce = encryptedData.slice(0, Sodium.crypto_secretbox_NONCEBYTES);
-      const ciphertext = encryptedData.slice(Sodium.crypto_secretbox_NONCEBYTES);
+      const ciphertext = encryptedData.slice(
+        Sodium.crypto_secretbox_NONCEBYTES
+      );
 
       // Decrypt message
-      const decrypted = Sodium.crypto_secretbox_open_easy(ciphertext, nonce, key);
+      const decrypted = Sodium.crypto_secretbox_open_easy(
+        ciphertext,
+        nonce,
+        key
+      );
 
       return decrypted.toString('utf8');
     } catch (error) {
@@ -270,12 +311,12 @@ export class EncryptionService {
     try {
       // Use Argon2id for secure key derivation
       const key = Sodium.crypto_pwhash(
-        32,                                    // 32 bytes output
-        Buffer.from(password, 'utf8'),         // password
-        salt,                                  // salt
+        32, // 32 bytes output
+        Buffer.from(password, 'utf8'), // password
+        salt, // salt
         Sodium.crypto_pwhash_OPSLIMIT_INTERACTIVE, // operations limit
         Sodium.crypto_pwhash_MEMLIMIT_INTERACTIVE, // memory limit
-        Sodium.crypto_pwhash_ALG_ARGON2ID      // algorithm
+        Sodium.crypto_pwhash_ALG_ARGON2ID // algorithm
       );
 
       return key;
@@ -291,9 +332,9 @@ export class EncryptionService {
   }
 
   getIdentityFingerprint(peerID = null) {
-    const publicKey = peerID ?
-      this.peerIdentityKeys.get(peerID) :
-      this.identityKeyPair.publicKey;
+    const publicKey = peerID
+      ? this.peerIdentityKeys.get(peerID)
+      : this.identityKeyPair.publicKey;
 
     if (!publicKey) return null;
 
@@ -364,7 +405,7 @@ export class EncryptionService {
       shortID: this.shortID,
       connectedPeers: this.sharedSecrets.size,
       hasIdentityKey: !!this.identityKeyPair,
-      keyPairGenerated: !!this.keyPair
+      keyPairGenerated: !!this.keyPair,
     };
   }
 }

@@ -43,29 +43,39 @@ export class StoreAndForwardService {
   async loadCachedMessages() {
     try {
       const regularCacheData = await AsyncStorage.getItem('krtr_message_cache');
-      const favoriteCacheData = await AsyncStorage.getItem('krtr_favorite_cache');
+      const favoriteCacheData = await AsyncStorage.getItem(
+        'krtr_favorite_cache'
+      );
 
       if (regularCacheData) {
         const parsed = JSON.parse(regularCacheData);
         for (const [peerID, messages] of Object.entries(parsed)) {
-          this.messageCache.set(peerID, messages.map(msg => ({
-            ...msg,
-            timestamp: new Date(msg.timestamp)
-          })));
+          this.messageCache.set(
+            peerID,
+            messages.map(msg => ({
+              ...msg,
+              timestamp: new Date(msg.timestamp),
+            }))
+          );
         }
       }
 
       if (favoriteCacheData) {
         const parsed = JSON.parse(favoriteCacheData);
         for (const [peerID, messages] of Object.entries(parsed)) {
-          this.favoriteCache.set(peerID, messages.map(msg => ({
-            ...msg,
-            timestamp: new Date(msg.timestamp)
-          })));
+          this.favoriteCache.set(
+            peerID,
+            messages.map(msg => ({
+              ...msg,
+              timestamp: new Date(msg.timestamp),
+            }))
+          );
         }
       }
 
-      console.log(`[KRTR Store&Forward] Loaded ${this.messageCache.size} regular and ${this.favoriteCache.size} favorite caches`);
+      console.log(
+        `[KRTR Store&Forward] Loaded ${this.messageCache.size} regular and ${this.favoriteCache.size} favorite caches`
+      );
     } catch (error) {
       console.error('[KRTR Store&Forward] Load cache error:', error);
     }
@@ -84,8 +94,14 @@ export class StoreAndForwardService {
         favoriteCacheObj[peerID] = messages;
       }
 
-      await AsyncStorage.setItem('krtr_message_cache', JSON.stringify(regularCacheObj));
-      await AsyncStorage.setItem('krtr_favorite_cache', JSON.stringify(favoriteCacheObj));
+      await AsyncStorage.setItem(
+        'krtr_message_cache',
+        JSON.stringify(regularCacheObj)
+      );
+      await AsyncStorage.setItem(
+        'krtr_favorite_cache',
+        JSON.stringify(favoriteCacheObj)
+      );
 
       console.log('[KRTR Store&Forward] Cached messages saved');
     } catch (error) {
@@ -96,7 +112,9 @@ export class StoreAndForwardService {
   async cacheMessage(message, recipientID, isFavorite = false) {
     try {
       const cache = isFavorite ? this.favoriteCache : this.messageCache;
-      const limit = isFavorite ? this.favoriteCacheLimit : this.regularCacheLimit;
+      const limit = isFavorite
+        ? this.favoriteCacheLimit
+        : this.regularCacheLimit;
 
       if (!cache.has(recipientID)) {
         cache.set(recipientID, []);
@@ -109,7 +127,7 @@ export class StoreAndForwardService {
         ...message,
         cachedAt: new Date(),
         deliveryAttempts: 0,
-        isFavorite
+        isFavorite,
       };
 
       messages.push(cachedMessage);
@@ -122,7 +140,9 @@ export class StoreAndForwardService {
       // Save to persistent storage
       await this.saveCachedMessages();
 
-      console.log(`[KRTR Store&Forward] Cached message for ${recipientID} (favorite: ${isFavorite})`);
+      console.log(
+        `[KRTR Store&Forward] Cached message for ${recipientID} (favorite: ${isFavorite})`
+      );
     } catch (error) {
       console.error('[KRTR Store&Forward] Cache message error:', error);
     }
@@ -138,7 +158,9 @@ export class StoreAndForwardService {
         return;
       }
 
-      console.log(`[KRTR Store&Forward] Delivering ${allMessages.length} cached messages to ${peerID}`);
+      console.log(
+        `[KRTR Store&Forward] Delivering ${allMessages.length} cached messages to ${peerID}`
+      );
 
       const deliveryPromises = [];
 
@@ -149,7 +171,11 @@ export class StoreAndForwardService {
         }
 
         // Attempt delivery
-        const deliveryPromise = this.attemptDelivery(message, peerID, meshService);
+        const deliveryPromise = this.attemptDelivery(
+          message,
+          peerID,
+          meshService
+        );
         deliveryPromises.push(deliveryPromise);
       }
 
@@ -166,7 +192,9 @@ export class StoreAndForwardService {
         }
       }
 
-      console.log(`[KRTR Store&Forward] Delivered ${deliveredCount}/${allMessages.length} messages to ${peerID}`);
+      console.log(
+        `[KRTR Store&Forward] Delivered ${deliveredCount}/${allMessages.length} messages to ${peerID}`
+      );
 
       // Save updated cache
       await this.saveCachedMessages();
@@ -182,7 +210,9 @@ export class StoreAndForwardService {
 
       // Check if we've exceeded max attempts
       if (message.deliveryAttempts > this.maxDeliveryAttempts) {
-        console.warn(`[KRTR Store&Forward] Max delivery attempts reached for message ${message.id}`);
+        console.warn(
+          `[KRTR Store&Forward] Max delivery attempts reached for message ${message.id}`
+        );
         throw new Error('Max delivery attempts exceeded');
       }
 
@@ -193,10 +223,15 @@ export class StoreAndForwardService {
       message.deliveryStatus = DeliveryStatus.DELIVERED;
       message.deliveredAt = new Date();
 
-      console.log(`[KRTR Store&Forward] Successfully delivered message ${message.id} to ${peerID}`);
+      console.log(
+        `[KRTR Store&Forward] Successfully delivered message ${message.id} to ${peerID}`
+      );
       return true;
     } catch (error) {
-      console.error(`[KRTR Store&Forward] Delivery attempt failed for ${message.id}:`, error);
+      console.error(
+        `[KRTR Store&Forward] Delivery attempt failed for ${message.id}:`,
+        error
+      );
 
       // Schedule retry if not exceeded max attempts
       if (message.deliveryAttempts < this.maxDeliveryAttempts) {
@@ -241,7 +276,7 @@ export class StoreAndForwardService {
     const cachedAt = new Date(message.cachedAt).getTime();
     const ttl = message.isFavorite ? this.favoriteTTL : this.regularTTL;
 
-    return (now - cachedAt) > ttl;
+    return now - cachedAt > ttl;
   }
 
   setupCleanupTasks() {
@@ -262,7 +297,9 @@ export class StoreAndForwardService {
 
       // Clean regular cache
       for (const [peerID, messages] of this.messageCache) {
-        const validMessages = messages.filter(msg => !this.isMessageExpired(msg));
+        const validMessages = messages.filter(
+          msg => !this.isMessageExpired(msg)
+        );
         if (validMessages.length !== messages.length) {
           cleanedCount += messages.length - validMessages.length;
           if (validMessages.length === 0) {
@@ -275,7 +312,9 @@ export class StoreAndForwardService {
 
       // Clean favorite cache
       for (const [peerID, messages] of this.favoriteCache) {
-        const validMessages = messages.filter(msg => !this.isMessageExpired(msg));
+        const validMessages = messages.filter(
+          msg => !this.isMessageExpired(msg)
+        );
         if (validMessages.length !== messages.length) {
           cleanedCount += messages.length - validMessages.length;
           if (validMessages.length === 0) {
@@ -287,7 +326,9 @@ export class StoreAndForwardService {
       }
 
       if (cleanedCount > 0) {
-        console.log(`[KRTR Store&Forward] Cleaned up ${cleanedCount} expired messages`);
+        console.log(
+          `[KRTR Store&Forward] Cleaned up ${cleanedCount} expired messages`
+        );
         await this.saveCachedMessages();
       }
     } catch (error) {
@@ -325,7 +366,9 @@ export class StoreAndForwardService {
     }
 
     await this.saveCachedMessages();
-    console.log(`[KRTR Store&Forward] Cleared cache${peerID ? ` for ${peerID}` : ''}`);
+    console.log(
+      `[KRTR Store&Forward] Cleared cache${peerID ? ` for ${peerID}` : ''}`
+    );
   }
 
   getStats() {
@@ -335,12 +378,12 @@ export class StoreAndForwardService {
       totalCachedMessages: this.getTotalCachedMessages(),
       cacheLimit: {
         regular: this.regularCacheLimit,
-        favorite: this.favoriteCacheLimit
+        favorite: this.favoriteCacheLimit,
       },
       ttl: {
         regular: this.regularTTL,
-        favorite: this.favoriteTTL
-      }
+        favorite: this.favoriteTTL,
+      },
     };
   }
 }

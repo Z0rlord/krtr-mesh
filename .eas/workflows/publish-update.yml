@@ -1,0 +1,12 @@
+name: Publish Update
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  update:
+    name: Publish OTA Update
+    type: update
+    params:
+      branch: main

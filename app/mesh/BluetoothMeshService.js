@@ -5,7 +5,11 @@
 
 import { BleManager } from 'react-native-ble-plx';
 import { Buffer } from 'buffer';
-import { KrtrPacket, MessageType, BinaryProtocol } from '../protocols/KrtrProtocol';
+import {
+  KrtrPacket,
+  MessageType,
+  BinaryProtocol,
+} from '../protocols/KrtrProtocol';
 import { EncryptionService } from '../crypto/EncryptionService';
 import { StoreAndForwardService } from './StoreAndForwardService';
 import { BatteryOptimizer } from './BatteryOptimizer';
@@ -45,7 +49,7 @@ export class BluetoothMeshService {
       messagesReceived: 0,
       messagesRelayed: 0,
       bytesTransmitted: 0,
-      bytesReceived: 0
+      bytesReceived: 0,
     };
 
     this.initialize();
@@ -63,7 +67,7 @@ export class BluetoothMeshService {
       }
 
       // Set up battery optimization
-      this.batteryOptimizer.onPowerModeChanged = (mode) => {
+      this.batteryOptimizer.onPowerModeChanged = mode => {
         this.adjustForPowerMode(mode);
       };
 
@@ -94,7 +98,7 @@ export class BluetoothMeshService {
           txPowerLevel: 'medium',
           isConnectable: true,
           includeDeviceName: true,
-          interval: advertisingInterval
+          interval: advertisingInterval,
         }
       );
 
@@ -204,7 +208,7 @@ export class BluetoothMeshService {
         type: MessageType.KEY_EXCHANGE,
         senderID: this.encryptionService.getShortID(),
         recipientID: peerID,
-        payload: publicKeyData
+        payload: publicKeyData,
       });
 
       await this.sendPacketToPeer(peerID, keyExchangePacket);
@@ -269,11 +273,17 @@ export class BluetoothMeshService {
 
       // Decrypt if encrypted
       let content = packet.payload;
-      if (packet.recipientID && packet.recipientID !== this.encryptionService.getShortID()) {
+      if (
+        packet.recipientID &&
+        packet.recipientID !== this.encryptionService.getShortID()
+      ) {
         // This is a relayed message, don't decrypt
       } else {
         try {
-          content = await this.encryptionService.decrypt(packet.payload, peerID);
+          content = await this.encryptionService.decrypt(
+            packet.payload,
+            peerID
+          );
         } catch (decryptError) {
           console.warn('[KRTR Mesh] Decryption failed, treating as plaintext');
         }
@@ -285,14 +295,17 @@ export class BluetoothMeshService {
       }
 
       // Deliver to local user if intended for us
-      if (!packet.recipientID || packet.recipientID === this.encryptionService.getShortID()) {
+      if (
+        !packet.recipientID ||
+        packet.recipientID === this.encryptionService.getShortID()
+      ) {
         this.delegate?.didReceiveMessage?.({
           id: messageID,
           sender: packet.senderID,
           content: content.toString('utf8'),
           timestamp: new Date(packet.timestamp),
           isRelay: packet.senderID !== peerID,
-          senderPeerID: peerID
+          senderPeerID: peerID,
         });
       }
     } catch (error) {
@@ -335,7 +348,7 @@ export class BluetoothMeshService {
         type: MessageType.MESSAGE,
         senderID: this.encryptionService.getShortID(),
         recipientID: recipientID,
-        payload: payload
+        payload: payload,
       });
 
       // Send to all connected peers
@@ -399,10 +412,10 @@ export class BluetoothMeshService {
 
   getAdvertisingInterval(powerMode) {
     const intervals = {
-      performance: 100,    // 100ms
-      balanced: 500,       // 500ms
-      powerSaver: 1500,    // 1.5s
-      ultraLowPower: 3000  // 3s
+      performance: 100, // 100ms
+      balanced: 500, // 500ms
+      powerSaver: 1500, // 1.5s
+      ultraLowPower: 3000, // 3s
     };
     return intervals[powerMode] || intervals.balanced;
   }
@@ -412,7 +425,7 @@ export class BluetoothMeshService {
       performance: { scanDuration: 3000, pauseDuration: 2000 },
       balanced: { scanDuration: 2000, pauseDuration: 3000 },
       powerSaver: { scanDuration: 1000, pauseDuration: 8000 },
-      ultraLowPower: { scanDuration: 500, pauseDuration: 20000 }
+      ultraLowPower: { scanDuration: 500, pauseDuration: 20000 },
     };
     return cycles[powerMode] || cycles.balanced;
   }
@@ -422,11 +435,13 @@ export class BluetoothMeshService {
       performance: 20,
       balanced: 10,
       powerSaver: 5,
-      ultraLowPower: 2
+      ultraLowPower: 2,
     };
 
     this.maxConnections = connectionLimits[powerMode] || 10;
-    console.log(`[KRTR Mesh] Adjusted for power mode: ${powerMode}, max connections: ${this.maxConnections}`);
+    console.log(
+      `[KRTR Mesh] Adjusted for power mode: ${powerMode}, max connections: ${this.maxConnections}`
+    );
   }
 
   scheduleDutyCycle(scanDuration, pauseDuration) {
@@ -476,7 +491,9 @@ export class BluetoothMeshService {
 
     // Update peer list every 30 seconds
     setInterval(() => {
-      this.delegate?.didUpdatePeerList?.(Array.from(this.connectedPeers.keys()));
+      this.delegate?.didUpdatePeerList?.(
+        Array.from(this.connectedPeers.keys())
+      );
     }, 30 * 1000);
 
     // Clean up stale peer data every 2 minutes
@@ -506,7 +523,7 @@ export class BluetoothMeshService {
     return {
       ...this.stats,
       connectedPeers: this.connectedPeers.size,
-      knownPeers: this.peerLastSeen.size
+      knownPeers: this.peerLastSeen.size,
     };
   }
 

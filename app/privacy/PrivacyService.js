@@ -18,8 +18,8 @@ export class PrivacyService {
 
     // Timing randomization
     this.timingRandomization = true;
-    this.minDelay = 50;   // 50ms
-    this.maxDelay = 500;  // 500ms
+    this.minDelay = 50; // 50ms
+    this.maxDelay = 500; // 500ms
 
     // Message queue for timing randomization
     this.messageQueue = [];
@@ -30,7 +30,7 @@ export class PrivacyService {
       coverMessagesGenerated: 0,
       messagesDelayed: 0,
       totalDelayTime: 0,
-      averageDelay: 0
+      averageDelay: 0,
     };
 
     this.initialize();
@@ -44,7 +44,7 @@ export class PrivacyService {
     this.startMessageQueueProcessor();
 
     // Listen for power mode changes
-    this.batteryOptimizer.onPowerModeChanged = (powerMode) => {
+    this.batteryOptimizer.onPowerModeChanged = powerMode => {
       this.updateForPowerMode(powerMode);
     };
 
@@ -69,7 +69,7 @@ export class PrivacyService {
         timestamp: Date.now(),
         delay,
         resolve,
-        reject
+        reject,
       };
 
       this.messageQueue.push(queuedMessage);
@@ -77,7 +77,8 @@ export class PrivacyService {
       if (delay > 0) {
         this.stats.messagesDelayed++;
         this.stats.totalDelayTime += delay;
-        this.stats.averageDelay = this.stats.totalDelayTime / this.stats.messagesDelayed;
+        this.stats.averageDelay =
+          this.stats.totalDelayTime / this.stats.messagesDelayed;
       }
     });
   }
@@ -87,7 +88,10 @@ export class PrivacyService {
    * @returns {number} - Delay in milliseconds
    */
   generateRandomDelay() {
-    return Math.floor(Math.random() * (this.maxDelay - this.minDelay + 1)) + this.minDelay;
+    return (
+      Math.floor(Math.random() * (this.maxDelay - this.minDelay + 1)) +
+      this.minDelay
+    );
   }
 
   /**
@@ -137,9 +141,11 @@ export class PrivacyService {
     if (!this.coverTrafficEnabled) return;
 
     const scheduleNextCoverMessage = () => {
-      const interval = Math.floor(
-        Math.random() * (this.coverTrafficInterval.max - this.coverTrafficInterval.min + 1)
-      ) + this.coverTrafficInterval.min;
+      const interval =
+        Math.floor(
+          Math.random() *
+            (this.coverTrafficInterval.max - this.coverTrafficInterval.min + 1)
+        ) + this.coverTrafficInterval.min;
 
       this.coverTrafficTimer = setTimeout(() => {
         this.generateCoverTraffic();
@@ -164,7 +170,8 @@ export class PrivacyService {
       const coverMessage = this.generateCoverMessage();
 
       // Select random peer for cover traffic
-      const randomPeer = connectedPeers[Math.floor(Math.random() * connectedPeers.length)];
+      const randomPeer =
+        connectedPeers[Math.floor(Math.random() * connectedPeers.length)];
 
       // Send cover message (will be discarded by recipient)
       await this.meshService.sendMessage(coverMessage, randomPeer, true);
@@ -184,7 +191,7 @@ export class PrivacyService {
   generateCoverMessage() {
     const coverMessages = [
       'hey',
-      'what\'s up?',
+      "what's up?",
       'how are you?',
       'thanks',
       'ok',
@@ -194,11 +201,12 @@ export class PrivacyService {
       'let me know',
       'talk later',
       'see you',
-      'take care'
+      'take care',
     ];
 
     // Add cover traffic marker (will be filtered out by recipient)
-    const baseMessage = coverMessages[Math.floor(Math.random() * coverMessages.length)];
+    const baseMessage =
+      coverMessages[Math.floor(Math.random() * coverMessages.length)];
     return `__COVER__${baseMessage}`;
   }
 
@@ -226,23 +234,45 @@ export class PrivacyService {
    */
   generateEphemeralIdentity() {
     const adjectives = [
-      'Anonymous', 'Silent', 'Hidden', 'Ghost', 'Shadow', 'Phantom',
-      'Stealth', 'Invisible', 'Masked', 'Covert', 'Secret', 'Unknown'
+      'Anonymous',
+      'Silent',
+      'Hidden',
+      'Ghost',
+      'Shadow',
+      'Phantom',
+      'Stealth',
+      'Invisible',
+      'Masked',
+      'Covert',
+      'Secret',
+      'Unknown',
     ];
 
     const nouns = [
-      'User', 'Peer', 'Node', 'Agent', 'Entity', 'Client',
-      'Sender', 'Messenger', 'Contact', 'Source', 'Terminal', 'Device'
+      'User',
+      'Peer',
+      'Node',
+      'Agent',
+      'Entity',
+      'Client',
+      'Sender',
+      'Messenger',
+      'Contact',
+      'Source',
+      'Terminal',
+      'Device',
     ];
 
     const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
     const noun = nouns[Math.floor(Math.random() * nouns.length)];
-    const number = Math.floor(Math.random() * 9999).toString().padStart(4, '0');
+    const number = Math.floor(Math.random() * 9999)
+      .toString()
+      .padStart(4, '0');
 
     return {
       nickname: `${adjective}${noun}${number}`,
       sessionID: this.generateSessionID(),
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 
@@ -251,7 +281,8 @@ export class PrivacyService {
    * @returns {string} - Session ID
    */
   generateSessionID() {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const chars =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
     for (let i = 0; i < 8; i++) {
       result += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -270,29 +301,29 @@ export class PrivacyService {
         timingRandomization: true,
         minDelay: 50,
         maxDelay: 500,
-        coverInterval: { min: 30000, max: 120000 }
+        coverInterval: { min: 30000, max: 120000 },
       },
       balanced: {
         coverTrafficEnabled: true,
         timingRandomization: true,
         minDelay: 100,
         maxDelay: 750,
-        coverInterval: { min: 60000, max: 180000 }
+        coverInterval: { min: 60000, max: 180000 },
       },
       powerSaver: {
         coverTrafficEnabled: false,
         timingRandomization: true,
         minDelay: 200,
         maxDelay: 1000,
-        coverInterval: { min: 120000, max: 300000 }
+        coverInterval: { min: 120000, max: 300000 },
       },
       ultraLowPower: {
         coverTrafficEnabled: false,
         timingRandomization: false,
         minDelay: 0,
         maxDelay: 0,
-        coverInterval: { min: 300000, max: 600000 }
-      }
+        coverInterval: { min: 300000, max: 600000 },
+      },
     };
 
     const config = privacyConfigs[powerMode] || privacyConfigs.balanced;
@@ -314,7 +345,9 @@ export class PrivacyService {
       this.startCoverTraffic();
     }
 
-    console.log(`[KRTR Privacy] Updated privacy settings for power mode: ${powerMode}`);
+    console.log(
+      `[KRTR Privacy] Updated privacy settings for power mode: ${powerMode}`
+    );
   }
 
   /**
@@ -336,7 +369,7 @@ export class PrivacyService {
         coverMessagesGenerated: 0,
         messagesDelayed: 0,
         totalDelayTime: 0,
-        averageDelay: 0
+        averageDelay: 0,
       };
 
       console.log('[KRTR Privacy] Emergency privacy wipe completed');
@@ -356,7 +389,7 @@ export class PrivacyService {
       timingRandomization: this.timingRandomization,
       queuedMessages: this.messageQueue.length,
       delayRange: { min: this.minDelay, max: this.maxDelay },
-      coverTrafficInterval: this.coverTrafficInterval
+      coverTrafficInterval: this.coverTrafficInterval,
     };
   }
 

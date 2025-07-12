@@ -10,26 +10,34 @@ export class ZKServerService {
       proofsGenerated: 0,
       proofsVerified: 0,
       averageProofTime: 0,
-      totalProofTime: 0
+      totalProofTime: 0,
     };
   }
 
-  async generateMembershipProof(membershipKey, groupRoot, pathElements, pathIndices) {
+  async generateMembershipProof(
+    membershipKey,
+    groupRoot,
+    pathElements,
+    pathIndices
+  ) {
     const startTime = Date.now();
 
     try {
-      const response = await fetch(`${this.serverUrl}/api/zk/membership/generate`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          membershipKey,
-          groupRoot,
-          pathElements,
-          pathIndices
-        })
-      });
+      const response = await fetch(
+        `${this.serverUrl}/api/zk/membership/generate`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            membershipKey,
+            groupRoot,
+            pathElements,
+            pathIndices,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Server error: ${response.status}`);
@@ -41,7 +49,7 @@ export class ZKServerService {
 
       return {
         proof: new Uint8Array(result.proof),
-        publicInputs: result.publicInputs
+        publicInputs: result.publicInputs,
       };
     } catch (error) {
       throw new Error(`Membership proof generation failed: ${error.message}`);
@@ -50,17 +58,20 @@ export class ZKServerService {
 
   async verifyMembershipProof(proof, publicInputs, groupRoot) {
     try {
-      const response = await fetch(`${this.serverUrl}/api/zk/membership/verify`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          proof: Array.from(proof),
-          publicInputs,
-          groupRoot
-        })
-      });
+      const response = await fetch(
+        `${this.serverUrl}/api/zk/membership/verify`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            proof: Array.from(proof),
+            publicInputs,
+            groupRoot,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Server error: ${response.status}`);
@@ -68,7 +79,7 @@ export class ZKServerService {
 
       const result = await response.json();
       this.stats.proofsVerified++;
-      
+
       return result.isValid;
     } catch (error) {
       throw new Error(`Membership proof verification failed: ${error.message}`);
@@ -79,17 +90,20 @@ export class ZKServerService {
     const startTime = Date.now();
 
     try {
-      const response = await fetch(`${this.serverUrl}/api/zk/reputation/generate`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          reputationScore,
-          threshold,
-          nonce
-        })
-      });
+      const response = await fetch(
+        `${this.serverUrl}/api/zk/reputation/generate`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            reputationScore,
+            threshold,
+            nonce,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Server error: ${response.status}`);
@@ -101,7 +115,7 @@ export class ZKServerService {
 
       return {
         proof: new Uint8Array(result.proof),
-        publicInputs: result.publicInputs
+        publicInputs: result.publicInputs,
       };
     } catch (error) {
       throw new Error(`Reputation proof generation failed: ${error.message}`);
@@ -110,17 +124,20 @@ export class ZKServerService {
 
   async verifyReputationProof(proof, publicInputs, threshold) {
     try {
-      const response = await fetch(`${this.serverUrl}/api/zk/reputation/verify`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          proof: Array.from(proof),
-          publicInputs,
-          threshold
-        })
-      });
+      const response = await fetch(
+        `${this.serverUrl}/api/zk/reputation/verify`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            proof: Array.from(proof),
+            publicInputs,
+            threshold,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Server error: ${response.status}`);
@@ -128,7 +145,7 @@ export class ZKServerService {
 
       const result = await response.json();
       this.stats.proofsVerified++;
-      
+
       return result.isValid;
     } catch (error) {
       throw new Error(`Reputation proof verification failed: ${error.message}`);
@@ -138,7 +155,8 @@ export class ZKServerService {
   updateStats(proofTime) {
     this.stats.proofsGenerated++;
     this.stats.totalProofTime += proofTime;
-    this.stats.averageProofTime = this.stats.totalProofTime / this.stats.proofsGenerated;
+    this.stats.averageProofTime =
+      this.stats.totalProofTime / this.stats.proofsGenerated;
   }
 
   getStats() {
@@ -150,7 +168,7 @@ export class ZKServerService {
       proofsGenerated: 0,
       proofsVerified: 0,
       averageProofTime: 0,
-      totalProofTime: 0
+      totalProofTime: 0,
     };
   }
 }

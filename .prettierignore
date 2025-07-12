@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+.expo/
+.eas/
+
+# Build outputs
+dist/
+build/
+target/
+
+# Generated files
+*.json
+*.lock
+*.log
+
+# Patches
+patches/
+
+# Documentation that should preserve formatting
+*.md
+
+# Config files that have specific formatting
+babel.config.js
+metro.config.js
+jest.config.js
+
+# Circuit files
+circuits/
+app/zk/circuits/

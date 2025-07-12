@@ -8,28 +8,28 @@ import uuid from 'react-native-uuid';
 
 // Message types for KRTR protocol
 export const MessageType = {
-  ANNOUNCE: 0x01,        // Peer announcement with public key
-  KEY_EXCHANGE: 0x02,    // Key exchange messages
-  LEAVE: 0x03,           // Graceful disconnect
-  MESSAGE: 0x04,         // Chat messages (private/broadcast)
-  FRAGMENT_START: 0x05,  // Start of fragmented message
+  ANNOUNCE: 0x01, // Peer announcement with public key
+  KEY_EXCHANGE: 0x02, // Key exchange messages
+  LEAVE: 0x03, // Graceful disconnect
+  MESSAGE: 0x04, // Chat messages (private/broadcast)
+  FRAGMENT_START: 0x05, // Start of fragmented message
   FRAGMENT_CONTINUE: 0x06, // Continuation fragment
-  FRAGMENT_END: 0x07,    // Final fragment
+  FRAGMENT_END: 0x07, // Final fragment
   CHANNEL_ANNOUNCE: 0x08, // Channel status announcement
   CHANNEL_RETENTION: 0x09, // Channel retention policy
-  DELIVERY_ACK: 0x0A,    // Acknowledge message received
-  DELIVERY_STATUS_REQUEST: 0x0B, // Request delivery status
-  READ_RECEIPT: 0x0C,    // Message read confirmation
-  ZK_MEMBERSHIP_PROOF: 0x0D, // Zero-knowledge membership proof
-  ZK_REPUTATION_PROOF: 0x0E, // Zero-knowledge reputation proof
-  ZK_MESSAGE_PROOF: 0x0F,    // Zero-knowledge message authenticity proof
-  ZK_AUTH_CHALLENGE: 0x10,   // Challenge for ZK authentication
-  ZK_AUTH_RESPONSE: 0x11     // Response to ZK authentication challenge
+  DELIVERY_ACK: 0x0a, // Acknowledge message received
+  DELIVERY_STATUS_REQUEST: 0x0b, // Request delivery status
+  READ_RECEIPT: 0x0c, // Message read confirmation
+  ZK_MEMBERSHIP_PROOF: 0x0d, // Zero-knowledge membership proof
+  ZK_REPUTATION_PROOF: 0x0e, // Zero-knowledge reputation proof
+  ZK_MESSAGE_PROOF: 0x0f, // Zero-knowledge message authenticity proof
+  ZK_AUTH_CHALLENGE: 0x10, // Challenge for ZK authentication
+  ZK_AUTH_RESPONSE: 0x11, // Response to ZK authentication challenge
 };
 
 // Special recipient IDs
 export const SpecialRecipients = {
-  BROADCAST: Buffer.alloc(8, 0xFF) // All 0xFF = broadcast
+  BROADCAST: Buffer.alloc(8, 0xff), // All 0xFF = broadcast
 };
 
 // Privacy-preserving padding utilities
@@ -82,7 +82,7 @@ export class KrtrPacket {
     timestamp = null,
     payload,
     signature = null,
-    ttl = 7
+    ttl = 7,
   }) {
     this.version = 1;
     this.type = type;
@@ -124,7 +124,12 @@ export class BinaryProtocol {
       if (packet.recipientID) {
         const recipientBuffer = Buffer.from(packet.recipientID, 'utf8');
         const recipientPadded = Buffer.alloc(8);
-        recipientBuffer.copy(recipientPadded, 0, 0, Math.min(8, recipientBuffer.length));
+        recipientBuffer.copy(
+          recipientPadded,
+          0,
+          0,
+          Math.min(8, recipientBuffer.length)
+        );
         buffers.push(recipientPadded);
       } else {
         buffers.push(Buffer.alloc(8, 0));
@@ -171,8 +176,9 @@ export class BinaryProtocol {
 
       // Recipient ID (8 bytes)
       const recipientBuffer = data.slice(offset, offset + 8);
-      const recipientID = recipientBuffer.every(b => b === 0) ?
-        null : recipientBuffer.toString('utf8').replace(/\0+$/, '');
+      const recipientID = recipientBuffer.every(b => b === 0)
+        ? null
+        : recipientBuffer.toString('utf8').replace(/\0+$/, '');
       offset += 8;
 
       // Timestamp (8 bytes)
@@ -201,7 +207,7 @@ export class BinaryProtocol {
         timestamp,
         payload,
         signature,
-        ttl
+        ttl,
       });
     } catch (error) {
       console.error('[KRTR Protocol] Decoding error:', error);
@@ -226,7 +232,7 @@ export class KrtrMessage {
     channel = null,
     encryptedContent = null,
     isEncrypted = false,
-    deliveryStatus = null
+    deliveryStatus = null,
   }) {
     this.id = id || uuid.v4();
     this.sender = sender;
@@ -252,7 +258,7 @@ export const DeliveryStatus = {
   DELIVERED: 'delivered',
   READ: 'read',
   FAILED: 'failed',
-  PARTIALLY_DELIVERED: 'partially_delivered'
+  PARTIALLY_DELIVERED: 'partially_delivered',
 };
 
 // Delivery acknowledgment structure
@@ -331,12 +337,15 @@ export class ZKMembershipProof {
   }
 
   encode() {
-    return Buffer.from(JSON.stringify({
-      proof: this.proof,
-      publicSignals: this.publicSignals,
-      nullifierHash: this.nullifierHash,
-      timestamp: this.timestamp
-    }), 'utf8');
+    return Buffer.from(
+      JSON.stringify({
+        proof: this.proof,
+        publicSignals: this.publicSignals,
+        nullifierHash: this.nullifierHash,
+        timestamp: this.timestamp,
+      }),
+      'utf8'
+    );
   }
 
   static decode(data) {
@@ -364,13 +373,16 @@ export class ZKReputationProof {
   }
 
   encode() {
-    return Buffer.from(JSON.stringify({
-      proof: this.proof,
-      publicSignals: this.publicSignals,
-      commitment: this.commitment,
-      threshold: this.threshold,
-      timestamp: this.timestamp
-    }), 'utf8');
+    return Buffer.from(
+      JSON.stringify({
+        proof: this.proof,
+        publicSignals: this.publicSignals,
+        commitment: this.commitment,
+        threshold: this.threshold,
+        timestamp: this.timestamp,
+      }),
+      'utf8'
+    );
   }
 
   static decode(data) {
@@ -398,12 +410,15 @@ export class ZKMessageProof {
   }
 
   encode() {
-    return Buffer.from(JSON.stringify({
-      proof: this.proof,
-      publicSignals: this.publicSignals,
-      messageHash: this.messageHash,
-      timestamp: this.timestamp
-    }), 'utf8');
+    return Buffer.from(
+      JSON.stringify({
+        proof: this.proof,
+        publicSignals: this.publicSignals,
+        messageHash: this.messageHash,
+        timestamp: this.timestamp,
+      }),
+      'utf8'
+    );
   }
 
   static decode(data) {
@@ -427,17 +442,20 @@ export class ZKAuthChallenge {
     this.groupRoot = groupRoot;
     this.requiredReputation = requiredReputation;
     this.timestamp = Date.now();
-    this.expiresAt = Date.now() + (5 * 60 * 1000); // 5 minutes
+    this.expiresAt = Date.now() + 5 * 60 * 1000; // 5 minutes
   }
 
   encode() {
-    return Buffer.from(JSON.stringify({
-      challengeId: this.challengeId,
-      groupRoot: this.groupRoot,
-      requiredReputation: this.requiredReputation,
-      timestamp: this.timestamp,
-      expiresAt: this.expiresAt
-    }), 'utf8');
+    return Buffer.from(
+      JSON.stringify({
+        challengeId: this.challengeId,
+        groupRoot: this.groupRoot,
+        requiredReputation: this.requiredReputation,
+        timestamp: this.timestamp,
+        expiresAt: this.expiresAt,
+      }),
+      'utf8'
+    );
   }
 
   static decode(data) {

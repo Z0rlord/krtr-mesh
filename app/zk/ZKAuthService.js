@@ -3,356 +3,249 @@
  * Handles anonymous authentication and authorization using ZK proofs
  */
 
-import { ZKAuthChallenge, ZKMembershipProof, ZKReputationProof, MessageType } from '../protocols/KrtrProtocol';
 import uuid from 'react-native-uuid';
+import {
+  ZKAuthChallenge,
+  ZKMembershipProof,
+  ZKReputationProof,
+  MessageType,
+} from '../protocols/KrtrProtocol';
 
 export class ZKAuthService {
   constructor(zkService, meshService) {
     this.zkService = zkService;
     this.meshService = meshService;
-    
-    // Active challenges and responses
+
+    // Authentication state
     this.activeChallenges = new Map(); // challengeId -> challenge
-    this.pendingAuths = new Map(); // peerID -> authState
-    this.authorizedPeers = new Map(); // peerID -> authInfo
-    
-    // Group membership configuration
-    this.groupRoots = new Map(); // groupName -> merkleRoot
-    this.reputationThresholds = new Map(); // groupName -> threshold
-    
+    this.pendingAuths = new Map(); // peerID -> challengeId
+    this.authorizedPeers = new Map(); // peerID -> { groups: Set, timestamp }
+
+    // Group configurations
+    this.groupRoots = new Map([
+      ['public', 'public-group-root-hash'],
+      ['trusted', 'trusted-group-root-hash'],
+      ['admin', 'admin-group-root-hash'],
+    ]);
+
+    this.reputationThresholds = new Map([
+      ['public', 0],
+      ['trusted', 50],
+      ['admin', 100],
+    ]);
+
     // Statistics
     this.stats = {
       challengesSent: 0,
       challengesReceived: 0,
-      proofsGenerated: 0,
-      proofsVerified: 0,
       authSuccesses: 0,
-      authFailures: 0
+      authFailures: 0,
     };
-    
-    this.initialize();
+
+    // Setup message handlers
+    this.setupMessageHandlers();
   }
 
-  initialize() {
-    // Set up default groups
-    this.setupDefaultGroups();
-    
-    // Set up challenge cleanup
-    this.setupChallengeCleanup();
-    
-    console.log('[KRTR ZK Auth] Authentication service initialized');
+  setupMessageHandlers() {
+    this.meshService.on(MessageType.ZK_AUTH_CHALLENGE, (peerID, challenge) => {
+      this.handleAuthChallenge(peerID, challenge);
+    });
+
+    this.meshService.on(MessageType.ZK_AUTH_RESPONSE, (peerID, response) => {
+      this.handleAuthResponse(peerID, response.challengeId, response.proofs);
+    });
   }
 
-  setupDefaultGroups() {
-    // Default public group (anyone can join)
-    this.groupRoots.set('public', '0x1234567890abcdef'); // Placeholder root
-    this.reputationThresholds.set('public', 0);
-    
-    // Trusted group (requires positive reputation)
-    this.groupRoots.set('trusted', '0xfedcba0987654321'); // Placeholder root
-    this.reputationThresholds.set('trusted', 10);
-    
-    // VIP group (requires high reputation)
-    this.groupRoots.set('vip', '0xabcdef1234567890'); // Placeholder root
-    this.reputationThresholds.set('vip', 100);
+  // Group management
+  addGroup(name, rootHash, reputationThreshold = 0) {
+    this.groupRoots.set(name, rootHash);
+    this.reputationThresholds.set(name, reputationThreshold);
   }
 
-  setupChallengeCleanup() {
-    // Clean up expired challenges every minute
-    setInterval(() => {
-      this.cleanupExpiredChallenges();
-    }, 60 * 1000);
-  }
-
-  // Challenge-Response Authentication
-  async initiateAuthentication(peerID, groupName = 'public') {
-    try {
-      const groupRoot = this.groupRoots.get(groupName);
-      const reputationThreshold = this.reputationThresholds.get(groupName) || 0;
-      
-      if (!groupRoot) {
-        throw new Error(`Unknown group: ${groupName}`);
-      }
-      
-      // Create authentication challenge
-      const challengeId = uuid.v4();
-      const challenge = new ZKAuthChallenge(challengeId, groupRoot, reputationThreshold);
-      
-      // Store challenge
-      this.activeChallenges.set(challengeId, challenge);
-      this.pendingAuths.set(peerID, {
-        challengeId,
-        groupName,
-        status: 'challenge_sent',
-        timestamp: Date.now()
-      });
-      
-      // Send challenge to peer
-      await this.sendChallenge(peerID, challenge);
-      
-      this.stats.challengesSent++;
-      
-      console.log(`[KRTR ZK Auth] Sent authentication challenge to ${peerID} for group ${groupName}`);
-      
-      return challengeId;
-    } catch (error) {
-      console.error('[KRTR ZK Auth] Authentication initiation error:', error);
-      throw error;
+  removeGroup(name) {
+    if (['public', 'trusted', 'admin'].includes(name)) {
+      throw new Error(`Cannot remove default group: ${name}`);
     }
+    this.groupRoots.delete(name);
+    this.reputationThresholds.delete(name);
   }
 
+  getGroups() {
+    return Array.from(this.groupRoots.keys());
+  }
+
+  // Authentication initiation
+  async initiateAuthentication(peerID, groupName, timeout = 30000) {
+    if (!this.groupRoots.has(groupName)) {
+      throw new Error(`Unknown group: ${groupName}`);
+    }
+
+    const challengeId = uuid.v4();
+    const groupRoot = this.groupRoots.get(groupName);
+    const reputationThreshold = this.reputationThresholds.get(groupName);
+
+    const challenge = new ZKAuthChallenge(
+      challengeId,
+      groupRoot,
+      reputationThreshold
+    );
+
+    // Store challenge and set timeout
+    this.activeChallenges.set(challengeId, challenge);
+    this.pendingAuths.set(peerID, challengeId);
+
+    setTimeout(() => {
+      if (this.activeChallenges.has(challengeId)) {
+        this.activeChallenges.delete(challengeId);
+        this.pendingAuths.delete(peerID);
+        this.stats.authFailures++;
+      }
+    }, timeout);
+
+    // Send challenge to peer
+    await this.meshService.sendMessage(
+      peerID,
+      MessageType.ZK_AUTH_CHALLENGE,
+      challenge
+    );
+    this.stats.challengesSent++;
+
+    return challengeId;
+  }
+
+  // Challenge handling
   async handleAuthChallenge(peerID, challenge) {
-    try {
-      this.stats.challengesReceived++;
-      
-      // Check if challenge is valid and not expired
-      if (challenge.isExpired()) {
-        console.warn('[KRTR ZK Auth] Received expired challenge');
-        return;
-      }
-      
-      // Generate appropriate proofs based on challenge requirements
-      const proofs = await this.generateAuthProofs(challenge);
-      
-      // Send response to peer
-      await this.sendAuthResponse(peerID, challenge.challengeId, proofs);
-      
-      console.log(`[KRTR ZK Auth] Sent authentication response to ${peerID}`);
-    } catch (error) {
-      console.error('[KRTR ZK Auth] Challenge handling error:', error);
-      this.stats.authFailures++;
-    }
-  }
+    this.stats.challengesReceived++;
 
-  async generateAuthProofs(challenge) {
-    const proofs = {};
-    
+    if (challenge.isExpired()) {
+      return; // Ignore expired challenges
+    }
+
     try {
-      // Generate membership proof
-      const membershipProof = await this.zkService.generateMembershipProof(
-        challenge.groupRoot,
-        challenge.challengeId
+      // Check if we can provide the required proofs
+      const canProveMembership = await this.zkService.canProveMembership(
+        challenge.groupRoot
       );
-      proofs.membership = membershipProof;
-      
-      // Generate reputation proof if required
-      if (challenge.requiredReputation > 0) {
-        const canProveReputation = await this.zkService.canProveReputation(challenge.requiredReputation);
-        
-        if (canProveReputation) {
-          const reputationProof = await this.zkService.generateReputationProof(challenge.requiredReputation);
-          proofs.reputation = reputationProof;
-        } else {
-          throw new Error(`Insufficient reputation: required ${challenge.requiredReputation}`);
-        }
+      const canProveReputation = await this.zkService.canProveReputation(
+        challenge.reputationThreshold
+      );
+
+      if (!canProveMembership || !canProveReputation) {
+        return; // Cannot satisfy challenge requirements
       }
-      
-      this.stats.proofsGenerated++;
-      
-      return proofs;
+
+      // Generate proofs
+      const membershipProof = await this.zkService.generateMembershipProof(
+        challenge.groupRoot
+      );
+
+      const reputationProof = await this.zkService.generateReputationProof(
+        challenge.reputationThreshold
+      );
+
+      const response = {
+        challengeId: challenge.challengeId,
+        proofs: {
+          membership: membershipProof,
+          reputation: reputationProof,
+        },
+      };
+
+      await this.meshService.sendMessage(
+        peerID,
+        MessageType.ZK_AUTH_RESPONSE,
+        response
+      );
     } catch (error) {
-      console.error('[KRTR ZK Auth] Proof generation error:', error);
-      throw error;
+      console.error('Failed to handle auth challenge:', error);
     }
   }
 
+  // Response handling
   async handleAuthResponse(peerID, challengeId, proofs) {
+    const challenge = this.activeChallenges.get(challengeId);
+    if (!challenge || challenge.isExpired()) {
+      this.stats.authFailures++;
+      return false;
+    }
+
     try {
-      const challenge = this.activeChallenges.get(challengeId);
-      const authState = this.pendingAuths.get(peerID);
-      
-      if (!challenge || !authState) {
-        console.warn('[KRTR ZK Auth] Invalid authentication response');
-        return false;
-      }
-      
       // Verify membership proof
-      let membershipValid = false;
-      if (proofs.membership) {
-        membershipValid = await this.zkService.verifyMembershipProof(
-          proofs.membership.proof,
-          proofs.membership.publicSignals
-        );
-      }
-      
-      // Verify reputation proof if required
-      let reputationValid = true;
-      if (challenge.requiredReputation > 0 && proofs.reputation) {
-        reputationValid = await this.zkService.verifyReputationProof(
-          proofs.reputation.proof,
-          proofs.reputation.publicSignals
-        );
-      } else if (challenge.requiredReputation > 0) {
-        reputationValid = false; // Required but not provided
-      }
-      
-      const authSuccess = membershipValid && reputationValid;
-      
-      if (authSuccess) {
-        // Store authorization
-        this.authorizedPeers.set(peerID, {
-          groupName: authState.groupName,
-          membershipProof: proofs.membership,
-          reputationProof: proofs.reputation,
-          authorizedAt: Date.now(),
-          nullifierHash: proofs.membership?.nullifierHash
-        });
-        
+      const membershipValid = await this.zkService.verifyMembershipProof(
+        proofs.membership.proof,
+        proofs.membership.publicInputs,
+        challenge.groupRoot
+      );
+
+      // Verify reputation proof
+      const reputationValid = await this.zkService.verifyReputationProof(
+        proofs.reputation.proof,
+        proofs.reputation.publicInputs,
+        challenge.reputationThreshold
+      );
+
+      if (membershipValid && reputationValid) {
+        // Authentication successful
+        const groupName = this.getGroupNameByRoot(challenge.groupRoot);
+        this.authorizePeer(peerID, groupName);
+
+        this.activeChallenges.delete(challengeId);
+        this.pendingAuths.delete(peerID);
         this.stats.authSuccesses++;
-        console.log(`[KRTR ZK Auth] Successfully authenticated ${peerID} for group ${authState.groupName}`);
+
+        return true;
       } else {
         this.stats.authFailures++;
-        console.warn(`[KRTR ZK Auth] Authentication failed for ${peerID}`);
+        return false;
       }
-      
-      // Cleanup
-      this.activeChallenges.delete(challengeId);
-      this.pendingAuths.delete(peerID);
-      
-      this.stats.proofsVerified++;
-      
-      return authSuccess;
     } catch (error) {
-      console.error('[KRTR ZK Auth] Response handling error:', error);
+      console.error('Failed to verify auth response:', error);
       this.stats.authFailures++;
       return false;
     }
   }
 
-  // Message sending with ZK authentication
-  async sendChallenge(peerID, challenge) {
-    const packet = {
-      type: MessageType.ZK_AUTH_CHALLENGE,
-      senderID: this.meshService.encryptionService.getShortID(),
-      recipientID: peerID,
-      payload: challenge.encode()
-    };
-    
-    await this.meshService.sendPacketToPeer(peerID, packet);
-  }
-
-  async sendAuthResponse(peerID, challengeId, proofs) {
-    const response = {
-      challengeId,
-      proofs,
-      timestamp: Date.now()
-    };
-    
-    const packet = {
-      type: MessageType.ZK_AUTH_RESPONSE,
-      senderID: this.meshService.encryptionService.getShortID(),
-      recipientID: peerID,
-      payload: Buffer.from(JSON.stringify(response), 'utf8')
-    };
-    
-    await this.meshService.sendPacketToPeer(peerID, packet);
-  }
-
-  // Authorization checking
-  isPeerAuthorized(peerID, groupName = 'public') {
-    const authInfo = this.authorizedPeers.get(peerID);
-    return authInfo && authInfo.groupName === groupName;
-  }
-
-  getPeerAuthInfo(peerID) {
-    return this.authorizedPeers.get(peerID);
-  }
-
-  getAuthorizedPeers(groupName = null) {
-    if (!groupName) {
-      return Array.from(this.authorizedPeers.keys());
+  // Authorization management
+  authorizePeer(peerID, groupName) {
+    if (!this.authorizedPeers.has(peerID)) {
+      this.authorizedPeers.set(peerID, {
+        groups: new Set(),
+        timestamp: Date.now(),
+      });
     }
-    
-    return Array.from(this.authorizedPeers.entries())
-      .filter(([_, authInfo]) => authInfo.groupName === groupName)
-      .map(([peerID, _]) => peerID);
+
+    this.authorizedPeers.get(peerID).groups.add(groupName);
   }
 
-  // Group management
-  addGroup(groupName, merkleRoot, reputationThreshold = 0) {
-    this.groupRoots.set(groupName, merkleRoot);
-    this.reputationThresholds.set(groupName, reputationThreshold);
-    
-    console.log(`[KRTR ZK Auth] Added group: ${groupName} (reputation: ${reputationThreshold})`);
-  }
+  revokePeerAuthorization(peerID, groupName = null) {
+    if (!this.authorizedPeers.has(peerID)) return;
 
-  removeGroup(groupName) {
-    this.groupRoots.delete(groupName);
-    this.reputationThresholds.delete(groupName);
-    
-    // Remove authorizations for this group
-    for (const [peerID, authInfo] of this.authorizedPeers) {
-      if (authInfo.groupName === groupName) {
-        this.authorizedPeers.delete(peerID);
-      }
-    }
-    
-    console.log(`[KRTR ZK Auth] Removed group: ${groupName}`);
-  }
-
-  getGroups() {
-    return Array.from(this.groupRoots.keys()).map(groupName => ({
-      name: groupName,
-      root: this.groupRoots.get(groupName),
-      reputationThreshold: this.reputationThresholds.get(groupName),
-      authorizedPeers: this.getAuthorizedPeers(groupName).length
-    }));
-  }
-
-  // Cleanup
-  cleanupExpiredChallenges() {
-    let cleanedCount = 0;
-    
-    for (const [challengeId, challenge] of this.activeChallenges) {
-      if (challenge.isExpired()) {
-        this.activeChallenges.delete(challengeId);
-        cleanedCount++;
-      }
-    }
-    
-    // Clean up stale pending auths (older than 10 minutes)
-    const staleThreshold = Date.now() - (10 * 60 * 1000);
-    for (const [peerID, authState] of this.pendingAuths) {
-      if (authState.timestamp < staleThreshold) {
-        this.pendingAuths.delete(peerID);
-        cleanedCount++;
-      }
-    }
-    
-    if (cleanedCount > 0) {
-      console.log(`[KRTR ZK Auth] Cleaned up ${cleanedCount} expired challenges/auths`);
+    if (groupName) {
+      this.authorizedPeers.get(peerID).groups.delete(groupName);
+    } else {
+      this.authorizedPeers.delete(peerID);
     }
   }
 
-  // Statistics and monitoring
+  isPeerAuthorized(peerID, groupName) {
+    const peerAuth = this.authorizedPeers.get(peerID);
+    return peerAuth && peerAuth.groups.has(groupName);
+  }
+
+  // Utility methods
+  getGroupNameByRoot(rootHash) {
+    for (const [name, root] of this.groupRoots.entries()) {
+      if (root === rootHash) return name;
+    }
+    return null;
+  }
+
   getStats() {
-    return {
-      ...this.stats,
-      activeChallenges: this.activeChallenges.size,
-      pendingAuths: this.pendingAuths.size,
-      authorizedPeers: this.authorizedPeers.size,
-      groups: this.groupRoots.size,
-      successRate: this.stats.challengesSent > 0 ? 
-        (this.stats.authSuccesses / this.stats.challengesSent * 100).toFixed(1) + '%' : '0%'
-    };
+    return { ...this.stats };
   }
 
-  // Emergency cleanup
-  async emergencyWipe() {
-    this.activeChallenges.clear();
-    this.pendingAuths.clear();
-    this.authorizedPeers.clear();
-    
-    // Reset stats
-    this.stats = {
-      challengesSent: 0,
-      challengesReceived: 0,
-      proofsGenerated: 0,
-      proofsVerified: 0,
-      authSuccesses: 0,
-      authFailures: 0
-    };
-    
-    console.log('[KRTR ZK Auth] Emergency wipe completed');
+  cleanup() {
+    this.meshService.off(MessageType.ZK_AUTH_CHALLENGE);
+    this.meshService.off(MessageType.ZK_AUTH_RESPONSE);
   }
 }
