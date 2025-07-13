@@ -98,6 +98,14 @@ const syntaxPatterns = [
     replacement: '$1',
     description: 'Fix expression as $FlowFixMe',
   },
+
+  // Object/bracket type assertions
+  {
+    name: 'object closing bracket type assertion',
+    regex: /(\}\))\s+as\s+\w+;/g,
+    replacement: '$1;',
+    description: 'Fix }) as Type;'
+  },
 ];
 
 // Find all relevant files

@@ -1,11 +1,12 @@
 /**
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * @flow strict-local
- * @format
+
+* Copyright (c) Meta Platforms, Inc. and affiliates.
+*
+* This source code is licensed under the MIT license found in the
+* LICENSE file in the root directory of this source tree.
+*
+* @flow strict-local
+* @format
  */
 
 import type { HostInstance } from '../../../src/private/types/HostInstance';
@@ -18,7 +19,7 @@ import type {
 import type { ViewProps } from '../View/ViewPropTypes';
 import type { TextInputInstance, TextInputType } from './TextInput.flow';
 
-import * as ReactNativeFeatureFlags from '../../../src/private/featureflags/ReactNativeFeatureFlags';
+import *as ReactNativeFeatureFlags from '../../../src/private/featureflags/ReactNativeFeatureFlags';
 import usePressability from '../../Pressability/usePressability';
 import flattenStyle from '../../StyleSheet/flattenStyle';
 import StyleSheet, {
@@ -33,7 +34,7 @@ import useMergeRefs from '../../Utilities/useMergeRefs';
 import TextInputState from './TextInputState';
 import invariant from 'invariant';
 import nullthrows from 'nullthrows';
-import * as React from 'react';
+import* as React from 'react';
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 
 let AndroidTextInput;
@@ -262,123 +263,138 @@ type PasswordRules = string;
 
 export type TextInputIOSProps = $ReadOnly<{
   /**
-   * If true, the keyboard shortcuts (undo/redo and copy buttons) are disabled. The default value is false.
-   * @platform ios
+
+* If true, the keyboard shortcuts (undo/redo and copy buttons) are disabled. The default value is false.
+* @platform ios
    */
   disableKeyboardShortcuts?: ?boolean,
 
   /**
-   * When the clear button should appear on the right side of the text view.
-   * This property is supported only for single-line TextInput component.
-   * @platform ios
+
+* When the clear button should appear on the right side of the text view.
+* This property is supported only for single-line TextInput component.
+* @platform ios
    */
   clearButtonMode?: ?('never' | 'while-editing' | 'unless-editing' | 'always'),
 
   /**
-   * If `true`, clears the text field automatically when editing begins.
-   * @platform ios
+
+* If `true`, clears the text field automatically when editing begins.
+* @platform ios
    */
   clearTextOnFocus?: ?boolean,
 
   /**
-   * Determines the types of data converted to clickable URLs in the text input.
-   * Only valid if `multiline={true}` and `editable={false}`.
-   * By default no data types are detected.
-   *
-   * You can provide one type or an array of many types.
-   *
-   * Possible values for `dataDetectorTypes` are:
-   *
-   * - `'phoneNumber'`
-   * - `'link'`
-   * - `'address'`
-   * - `'calendarEvent'`
-   * - `'none'`
-   * - `'all'`
-   *
-   * @platform ios
+
+* Determines the types of data converted to clickable URLs in the text input.
+* Only valid if `multiline={true}` and `editable={false}`.
+* By default no data types are detected.
+*
+* You can provide one type or an array of many types.
+*
+* Possible values for `dataDetectorTypes` are:
+*
+* * `'phoneNumber'`
+* * `'link'`
+* * `'address'`
+* * `'calendarEvent'`
+* * `'none'`
+* * `'all'`
+*
+* @platform ios
    */
   dataDetectorTypes?:
   | ?DataDetectorTypesType
   | $ReadOnlyArray<DataDetectorTypesType>,
 
   /**
-   * If `true`, the keyboard disables the return key when there is no text and
-   * automatically enables it when there is text. The default value is `false`.
-   * @platform ios
+
+* If `true`, the keyboard disables the return key when there is no text and
+* automatically enables it when there is text. The default value is `false`.
+* @platform ios
    */
   enablesReturnKeyAutomatically?: ?boolean,
 
   /**
-   * An optional identifier which links a custom InputAccessoryView to
-   * this text input. The InputAccessoryView is rendered above the
-   * keyboard when this text input is focused.
-   * @platform ios
+
+* An optional identifier which links a custom InputAccessoryView to
+* this text input. The InputAccessoryView is rendered above the
+* keyboard when this text input is focused.
+* @platform ios
    */
   inputAccessoryViewID?: ?string,
 
   /**
-   * An optional label that overrides the default input accessory view button label.
-   * @platform ios
+
+* An optional label that overrides the default input accessory view button label.
+* @platform ios
    */
   inputAccessoryViewButtonLabel?: ?string,
 
   /**
-   * Determines the color of the keyboard.
-   * @platform ios
+
+* Determines the color of the keyboard.
+* @platform ios
    */
   keyboardAppearance?: ?('default' | 'light' | 'dark'),
 
   /**
-   * Provide rules for your password.
-   * For example, say you want to require a password with at least eight characters consisting of a mix of uppercase and lowercase letters, at least one number, and at most two consecutive characters.
-   * "required: upper; required: lower; required: digit; max-consecutive: 2; minlength: 8;"
-   * @platform ios
+
+* Provide rules for your password.
+* For example, say you want to require a password with at least eight characters consisting of a mix of uppercase and lowercase letters, at least one number, and at most two consecutive characters.
+* "required: upper; required: lower; required: digit; max-consecutive: 2; minlength: 8;"
+* @platform ios
    */
   passwordRules?: ?PasswordRules,
 
   /*
-   * If `true`, allows TextInput to pass touch events to the parent component.
-   * This allows components to be swipeable from the TextInput on iOS,
-   * as is the case on Android by default.
-   * If `false`, TextInput always asks to handle the input (except when disabled).
-   * @platform ios
+
+* If `true`, allows TextInput to pass touch events to the parent component.
+* This allows components to be swipeable from the TextInput on iOS,
+* as is the case on Android by default.
+* If `false`, TextInput always asks to handle the input (except when disabled).
+* @platform ios
    */
   rejectResponderTermination?: ?boolean,
 
   /**
-   * If `false`, scrolling of the text view will be disabled.
-   * The default value is `true`. Does only work with 'multiline={true}'.
-   * @platform ios
+
+* If `false`, scrolling of the text view will be disabled.
+* The default value is `true`. Does only work with 'multiline={true}'.
+* @platform ios
    */
   scrollEnabled?: ?boolean,
 
   /**
-   * If `false`, disables spell-check style (i.e. red underlines).
-   * The default value is inherited from `autoCorrect`.
-   * @platform ios
+
+* If `false`, disables spell-check style (i.e. red underlines).
+* The default value is inherited from `autoCorrect`.
+* @platform ios
    */
   spellCheck?: ?boolean,
 
   /**
-   * Give the keyboard and the system information about the
-   * expected semantic meaning for the content that users enter.
-   * `autoComplete` property accomplishes same behavior and is recommended as its supported by both platforms.
-   * Avoid using both `autoComplete` and `textContentType`, you can use `Platform.select` for differing platform behaviors.
-   * For backwards compatibility, when both set, `textContentType` takes precedence on iOS.
-   * @platform ios
+
+* Give the keyboard and the system information about the
+* expected semantic meaning for the content that users enter.
+* `autoComplete` property accomplishes same behavior and is recommended as its supported by both platforms.
+* Avoid using both `autoComplete` and `textContentType`, you can use `Platform.select` for differing platform behaviors.
+* For backwards compatibility, when both set, `textContentType` takes precedence on iOS.
+* @platform ios
    */
   textContentType?: ?TextContentType,
 
   /**
-   * Set line break strategy on iOS.
-   * @platform ios
+
+* Set line break strategy on iOS.
+* @platform ios
    */
   lineBreakStrategyIOS?: ?('none' | 'standard' | 'hangul-word' | 'push-out'),
 
   /**
-   * Set line break mode on iOS.
-   * @platform ios
+
+* Set line break mode on iOS.
+* @platform ios
    */
   lineBreakModeIOS?: ?(
     | 'wordWrapping'
@@ -390,32 +406,35 @@ export type TextInputIOSProps = $ReadOnly<{
   ),
 
   /**
-   * If `false`, the iOS system will not insert an extra space after a paste operation
-   * neither delete one or two spaces after a cut or delete operation.
-   *
-   * The default value is `true`.
-   *
-   * @platform ios
+
+* If `false`, the iOS system will not insert an extra space after a paste operation
+* neither delete one or two spaces after a cut or delete operation.
+*
+* The default value is `true`.
+*
+* @platform ios
    */
   smartInsertDelete?: ?boolean,
 }>;
 
 export type TextInputAndroidProps = $ReadOnly<{
   /**
-   * When provided it will set the color of the cursor (or "caret") in the component.
-   * Unlike the behavior of `selectionColor` the cursor color will be set independently
-   * from the color of the text selection box.
-   * @platform android
+
+* When provided it will set the color of the cursor (or "caret") in the component.
+* Unlike the behavior of `selectionColor` the cursor color will be set independently
+* from the color of the text selection box.
+* @platform android
    */
   cursorColor?: ?ColorValue,
 
   /**
-   * When `false`, if there is a small amount of space available around a text input
-   * (e.g. landscape orientation on a phone), the OS may choose to have the user edit
-   * the text inside of a full screen text input mode. When `true`, this feature is
-   * disabled and users will always edit the text directly inside of the text input.
-   * Defaults to `false`.
-   * @platform android
+
+* When `false`, if there is a small amount of space available around a text input
+* (e.g. landscape orientation on a phone), the OS may choose to have the user edit
+* the text inside of a full screen text input mode. When `true`, this feature is
+* disabled and users will always edit the text directly inside of the text input.
+* Defaults to `false`.
+* @platform android
    */
   disableFullscreenUI?: ?boolean,
 
@@ -428,14 +447,16 @@ export type TextInputAndroidProps = $ReadOnly<{
   ),
 
   /**
-   * If defined, the provided image resource will be rendered on the left.
-   * The image resource must be inside `/android/app/src/main/res/drawable` and referenced
-   * like
-   * ```
+
+* If defined, the provided image resource will be rendered on the left.
+* The image resource must be inside `/android/app/src/main/res/drawable` and referenced
+* like
+
+* ```
 * <TextInput
-   *  inlineImageLeft='search_icon'
-   * />
-   *
+  * inlineImageLeft='search_icon'
+  * />
+  *
 ```
    * @platform android
    */
@@ -1209,66 +1230,68 @@ function useTextInputStateSynchronization_REFS({
  * AppRegistry.registerComponent('AwesomeProject', () => UselessTextInput);
  *
 ```
- *
- * Two methods exposed via the native element are .focus() and .blur() that
- * will focus or blur the TextInput programmatically.
- *
- * Note that some props are only available with `multiline={true/false}`.
- * Additionally, border styles that apply to only one side of the element
- * (e.g., `borderBottomColor`, `borderLeftWidth`, etc.) will not be applied if
- * `multiline=false`. To achieve the same effect, you can wrap your `TextInput`
- * in a `View`:
- *
- * ```ReactNativeWebPlayer
+
+*
+* Two methods exposed via the native element are .focus() and .blur() that
+* will focus or blur the TextInput programmatically.
+*
+* Note that some props are only available with `multiline={true/false}`.
+* Additionally, border styles that apply to only one side of the element
+* (e.g., `borderBottomColor`, `borderLeftWidth`, etc.) will not be applied if
+* `multiline=false`. To achieve the same effect, you can wrap your `TextInput`
+* in a `View`:
+*
+
+* ```ReactNativeWebPlayer
 * import React, { Component } from 'react';
- * import { AppRegistry, View, TextInput } from 'react-native';
- *
- * class UselessTextInput extends Component {
- *   render() {
- *     return (
- *       <TextInput
- *         {...this.props} // Inherit any props passed to it; e.g., multiline, numberOfLines below
- *         editable={true}
- *         maxLength={40}
- *       />
- *     );
- *   }
- * }
- *
- * export default class UselessTextInputMultiline extends Component {
- *   constructor(props) {
- *     super(props);
- *     this.state = {
- *       text: 'Useless Multiline Placeholder',
- *     };
- *   }
- *
- *   // If you type something in the text box that is a color, the background will change to that
- *   // color.
- *   render() {
- *     return (
- *      <View style={{
- *        backgroundColor: this.state.text,
- *        borderBottomColor: '#000000',
- *        borderBottomWidth: 1 }}
- *      >
- *        <UselessTextInput
- *          multiline={true}
- *          numberOfLines={4}
- *          onChangeText={(text) => this.setState({text})}
- *          value={this.state.text}
- *        />
- *      </View>
- *     );
- *   }
- * }
- *
- * // skip these lines if using Create React Native App
- * AppRegistry.registerComponent(
- *  'AwesomeProject',
- *  () => UselessTextInputMultiline
- * );
- *
+* import { AppRegistry, View, TextInput } from 'react-native';
+*
+* class UselessTextInput extends Component {
+* render() {
+*     return (
+*       <TextInput
+*         {...this.props} // Inherit any props passed to it; e.g., multiline, numberOfLines below
+*         editable={true}
+*         maxLength={40}
+*       />
+*     );
+* }
+* }
+*
+* export default class UselessTextInputMultiline extends Component {
+* constructor(props) {
+*     super(props);
+*     this.state = {
+*       text: 'Useless Multiline Placeholder',
+*     };
+* }
+*
+* // If you type something in the text box that is a color, the background will change to that
+* // color.
+* render() {
+*     return (
+*      <View style={{
+*        backgroundColor: this.state.text,
+*        borderBottomColor: '#000000',
+*        borderBottomWidth: 1 }}
+*      >
+*        <UselessTextInput
+*          multiline={true}
+*          numberOfLines={4}
+*          onChangeText={(text) => this.setState({text})}
+*          value={this.state.text}
+*        />
+*      </View>
+*     );
+* }
+* }
+*
+* // skip these lines if using Create React Native App
+* AppRegistry.registerComponent(
+* 'AwesomeProject',
+* () => UselessTextInputMultiline
+* );
+*
 ```
  *
  * `TextInput` has by default a border at the bottom of its view. This border
@@ -1922,3 +1945,5 @@ Wrapper.Context = ScrollViewContext;
 
 export default ((Wrapper: $FlowFixMe): typeof Wrapper &
   ScrollViewComponentStatics);
+;
+;
