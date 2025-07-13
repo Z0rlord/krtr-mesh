@@ -98,9 +98,7 @@
       }
     },
     "owner": "z0rlord",
-    "runtimeVersion": {
-      "policy": "sdkVersion"
-    },
+    "runtimeVersion": "1.0.0",
     "updates": {
       "url": "https://u.expo.dev/aeeba0cd-2e0e-46aa-99c7-6e63472094b0"
     }

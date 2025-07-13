@@ -30,7 +30,6 @@
     "@expo/config-plugins": "~10.1.1",
     "@expo/metro-runtime": "~5.0.4",
     "@expo/prebuild-config": "~9.0.0",
-
     "@noir-lang/backend_barretenberg": "^0.32.0",
     "@noir-lang/noir_js": "^0.32.0",
     "@noir-lang/types": "^0.32.0",
@@ -38,7 +37,7 @@
     "comlink": "^4.4.1",
     "expo": "~53.0.0",
     "expo-crypto": "~14.1.5",
-
+    "expo-dev-client": "^5.2.4",
     "expo-local-authentication": "~16.0.5",
     "expo-updates": "~0.28.17",
     "lz4js": "^0.2.0",
@@ -55,7 +54,6 @@
     "react-native-vector-icons": "^10.0.3",
     "react-native-web": "^0.20.0"
   },
-
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/plugin-proposal-class-properties": "^7.18.6",
