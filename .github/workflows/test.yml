@@ -1,0 +1,112 @@
+name: React Native Testing
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-type-check:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🏗 Setup repo
+        uses: actions/checkout@v4
+
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+          cache: npm
+
+      - name: 📦 Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🔍 ESLint
+        run: npm run lint
+
+      - name: 🔍 TypeScript check
+        run: npx tsc --noEmit
+
+      - name: 🔍 Prettier check
+        run: npx prettier --check .
+
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🏗 Setup repo
+        uses: actions/checkout@v4
+
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+          cache: npm
+
+      - name: 📦 Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🧪 Run Jest tests
+        run: npm test -- --coverage --watchAll=false
+
+      - name: 📊 Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage/lcov.info
+
+  metro-bundle:
+    name: Metro Bundle Validation
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🏗 Setup repo
+        uses: actions/checkout@v4
+
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+          cache: npm
+
+      - name: 📦 Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 📱 Test iOS bundle
+        run: npx expo export --platform ios
+
+      - name: 📱 Test Android bundle
+        run: npx expo export --platform android
+
+      - name: 🌐 Test Web bundle
+        run: npx expo export --platform web
+
+  cross-platform:
+    name: Cross-Platform Compatibility
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🏗 Setup repo
+        uses: actions/checkout@v4
+
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+          cache: npm
+
+      - name: 📦 Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🔍 Check platform-specific imports
+        run: |
+          echo "Checking for proper Platform.OS usage..."
+          grep -r "Platform.OS" app/ || echo "No platform-specific code found"
+          
+      - name: 🔍 Validate native module imports
+        run: |
+          echo "Checking native module conditional imports..."
+          grep -r "require.*native" app/ || echo "No conditional native imports found"

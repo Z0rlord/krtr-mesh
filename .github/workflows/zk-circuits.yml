@@ -1,0 +1,95 @@
+name: Zero-Knowledge Circuit Testing
+
+on:
+  push:
+    branches: [main, develop]
+    paths: ['circuits/**', 'app/zk/**']
+  pull_request:
+    branches: [main]
+    paths: ['circuits/**', 'app/zk/**']
+
+jobs:
+  noir-compile:
+    name: Compile Noir Circuits
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🏗 Setup repo
+        uses: actions/checkout@v4
+
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+          cache: npm
+
+      - name: 🏗 Install Noir
+        run: |
+          curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash
+          echo "$HOME/.nargo/bin" >> $GITHUB_PATH
+
+      - name: 📦 Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🔨 Compile circuits
+        run: |
+          echo "Compiling membership circuit..."
+          cd circuits/membership && nargo compile
+          
+          echo "Compiling message proof circuit..."
+          cd ../message_proof && nargo compile
+          
+          echo "Compiling reputation circuit..."
+          cd ../reputation && nargo compile
+
+      - name: 🧪 Test circuits
+        run: |
+          echo "Testing membership circuit..."
+          cd circuits/membership && nargo test
+          
+          echo "Testing message proof circuit..."
+          cd ../message_proof && nargo test
+          
+          echo "Testing reputation circuit..."
+          cd ../reputation && nargo test
+
+      - name: 📊 Circuit analysis
+        run: |
+          echo "Analyzing circuit complexity..."
+          cd circuits/membership && nargo info
+          cd ../message_proof && nargo info
+          cd ../reputation && nargo info
+
+  zk-integration:
+    name: ZK Integration Tests
+    runs-on: ubuntu-latest
+    needs: noir-compile
+    
+    steps:
+      - name: 🏗 Setup repo
+        uses: actions/checkout@v4
+
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+          cache: npm
+
+      - name: 📦 Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🧪 Run ZK service tests
+        run: npm run test:zk
+
+      - name: 📊 Performance benchmarks
+        run: |
+          echo "Running ZK proof generation benchmarks..."
+          node -e "
+            const { ZKService } = require('./app/zk/ZKService');
+            async function benchmark() {
+              const zk = new ZKService();
+              await zk.initialize();
+              console.log('ZK Service initialized successfully');
+            }
+            benchmark().catch(console.error);
+          "

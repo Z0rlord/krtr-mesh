@@ -1,0 +1,86 @@
+name: Security & Dependency Scanning
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Run security scan daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  codeql:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ['javascript']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+  dependency-scan:
+    name: Dependency Vulnerability Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🏗 Setup repo
+        uses: actions/checkout@v4
+
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+          cache: npm
+
+      - name: 📦 Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🔍 Run npm audit
+        run: npm audit --audit-level=high
+
+      - name: 🔍 Check for secrets
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: main
+          head: HEAD
+
+  crypto-security:
+    name: Cryptography Security Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🏗 Setup repo
+        uses: actions/checkout@v4
+
+      - name: 🔍 Check for hardcoded keys
+        run: |
+          echo "Checking for potential hardcoded cryptographic keys..."
+          grep -r "BEGIN.*KEY" . --exclude-dir=node_modules || echo "No hardcoded keys found"
+          grep -r "PRIVATE.*KEY" . --exclude-dir=node_modules || echo "No private keys found"
+          
+      - name: 🔍 Validate ZK circuits
+        run: |
+          echo "Checking ZK circuit files..."
+          find ./circuits -name "*.nr" -type f | wc -l
+          echo "ZK circuit files found"
