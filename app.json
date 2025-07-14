@@ -16,7 +16,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.krtr.mesh",
+      "bundleIdentifier": "com.zbarber.krtrmesh",
       "buildNumber": "1",
       "infoPlist": {
         "NSBluetoothAlwaysUsageDescription": "KRTR needs Bluetooth to connect with nearby devices for secure mesh networking",
@@ -39,16 +39,14 @@
         "NSFaceIDUsageDescription": "Allow KRTR to use Face ID for secure access to your mesh identity",
         "ITSAppUsesNonExemptEncryption": false
       },
-      "associatedDomains": [
-        "applinks:krtr.mesh"
-      ]
+
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#1a1a1a"
       },
-      "package": "com.krtr.mesh",
+      "package": "com.zbarber.krtrmesh",
       "versionCode": 1,
       "permissions": [
         "android.permission.BLUETOOTH",
@@ -98,9 +96,7 @@
       }
     },
     "owner": "z0rlord",
-    "runtimeVersion": {
-      "policy": "sdkVersion"
-    },
+    "runtimeVersion": "1.0.0",
     "updates": {
       "url": "https://u.expo.dev/aeeba0cd-2e0e-46aa-99c7-6e63472094b0"
     }

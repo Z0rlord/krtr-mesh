@@ -105,3 +105,9 @@ $RECYCLE.BIN/
 
 # React Native
 .react-native/
+
+# Activity logs and documentation with sensitive information
+docs/activity.md
+docs/activity-*.md
+*.activity.md
+**/activity.log
