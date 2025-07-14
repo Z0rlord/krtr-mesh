@@ -38,7 +38,7 @@ Think: AirDrop meets Signal — offline.
 - **React Native + Expo** – cross-platform mobile development
 - **Expo Application Services (EAS)** – build, submit, and update
 - **react-native-ble-plx** – for Bluetooth LE mesh
-- **react-native-sodium** – for cryptographic layer
+- **expo-crypto** – for cryptographic layer
 - **@noir-lang/noir_js** – for zero-knowledge proofs
 - **LZ4 compression** – bandwidth optimization
 - **AsyncStorage** – persistent message caching

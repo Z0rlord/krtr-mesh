@@ -16,11 +16,7 @@ prepare_react_native_project!
 target 'KRTRMesh' do
   use_expo_modules!
 
-  # Add libsodium pod for proper iOS device/simulator compatibility
-  pod 'libsodium', '~> 1.0'
 
-  # Add libsodium pod for proper iOS device/simulator compatibility
-  pod 'libsodium', '~> 1.0'
 
   if ENV['EXPO_USE_COMMUNITY_AUTOLINKING'] == '1'
     config_command = ['node', '-e', "process.argv=['', '', 'config'];require('@react-native-community/cli').run()"];
