@@ -69,6 +69,10 @@ buck-out/
 web-build/
 dist/
 
+# Native project folders (for Prebuild/CNG workflow)
+/android
+/ios
+
 # Temporary files created by Metro to check the health of the file watcher
 .metro-health-check*
 
