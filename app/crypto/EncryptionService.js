@@ -6,7 +6,7 @@
 import { NativeModules } from 'react-native';
 import { Buffer } from 'buffer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Sodium from 'react-native-sodium';
+import * as Crypto from 'expo-crypto';
 
 export class EncryptionService {
   constructor() {
