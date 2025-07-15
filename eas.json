@@ -33,7 +33,6 @@
       "prebuildCommand": "npm ci --prefer-offline --no-audit",
       "ios": {
         "resourceClass": "m-medium",
-        "simulator": true,
         "cocoapods": "1.15.2"
       },
       "android": {
