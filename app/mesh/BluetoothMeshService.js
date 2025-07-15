@@ -10,7 +10,7 @@ import {
   MessageType,
   BinaryProtocol,
 } from '../protocols/KrtrProtocol';
-import { EncryptionService } from '../crypto/EncryptionService';
+import { SimpleCryptoService } from '../crypto/SimpleCryptoService';
 import { StoreAndForwardService } from './StoreAndForwardService';
 import { BatteryOptimizer } from './BatteryOptimizer';
 import { ZKService } from '../zk/ZKService';

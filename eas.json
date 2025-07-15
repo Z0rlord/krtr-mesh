@@ -6,8 +6,16 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
+      "cache": {
+        "disabled": false
+      },
+      "env": {
+        "NODE_OPTIONS": "--max-old-space-size=4096"
+      },
+      "prebuildCommand": "npm ci --prefer-offline --no-audit",
       "ios": {
-        "resourceClass": "m-medium"
+        "resourceClass": "m-medium",
+        "cocoapods": "1.15.2"
       },
       "android": {
         "buildType": "apk",
@@ -16,17 +24,32 @@
     },
     "preview": {
       "distribution": "internal",
+      "cache": {
+        "disabled": false
+      },
+      "env": {
+        "NODE_OPTIONS": "--max-old-space-size=4096"
+      },
+      "prebuildCommand": "npm ci --prefer-offline --no-audit",
       "ios": {
         "resourceClass": "m-medium",
-        "simulator": true
+        "cocoapods": "1.15.2"
       },
       "android": {
         "buildType": "apk"
       }
     },
     "production": {
+      "cache": {
+        "disabled": false
+      },
+      "env": {
+        "NODE_OPTIONS": "--max-old-space-size=4096"
+      },
+      "prebuildCommand": "npm ci --prefer-offline --no-audit",
       "ios": {
-        "resourceClass": "m-medium"
+        "resourceClass": "m-medium",
+        "cocoapods": "1.15.2"
       },
       "android": {
         "buildType": "app-bundle"

@@ -25,7 +25,7 @@ let PrivacyService, MessageCompression, MessageFragmentation, ZKService, ZKAuthS
 
 if (Platform.OS !== 'web') {
   BluetoothMeshService = require('./app/mesh/BluetoothMeshService').BluetoothMeshService;
-  EncryptionService = require('./app/crypto/EncryptionService').EncryptionService;
+  EncryptionService = require('./app/crypto/SimpleCryptoService').SimpleCryptoService;
   StoreAndForwardService = require('./app/mesh/StoreAndForwardService').StoreAndForwardService;
   BatteryOptimizer = require('./app/mesh/BatteryOptimizer').BatteryOptimizer;
   PrivacyService = require('./app/privacy/PrivacyService').PrivacyService;
