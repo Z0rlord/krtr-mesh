@@ -1,5 +1,3 @@
-source 'https://cdn.cocoapods.org/'
-
 require File.join(File.dirname(`node --print "require.resolve('expo/package.json')"`), "scripts/autolinking")
 require File.join(File.dirname(`node --print "require.resolve('react-native/package.json')"`), "scripts/react_native_pods")
 
@@ -17,8 +15,6 @@ prepare_react_native_project!
 
 target 'KRTRMesh' do
   use_expo_modules!
-
-
 
   if ENV['EXPO_USE_COMMUNITY_AUTOLINKING'] == '1'
     config_command = ['node', '-e', "process.argv=['', '', 'config'];require('@react-native-community/cli').run()"];
@@ -61,15 +57,6 @@ target 'KRTRMesh' do
       target_installation_result.resource_bundle_targets.each do |resource_bundle_target|
         resource_bundle_target.build_configurations.each do |config|
           config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
-        end
-      end
-    end
-
-    # Fix DEFINES_MODULE conflicts for expo-dev-menu and related targets
-    installer.pods_project.targets.each do |target|
-      if ['expo-dev-menu', 'Main', 'ReactNativeCompatibles', 'SafeAreaView', 'Vendored'].include? target.name
-        target.build_configurations.each do |config|
-          config.build_settings['DEFINES_MODULE'] = 'YES'
         end
       end
     end
