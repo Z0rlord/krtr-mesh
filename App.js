@@ -1,11 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-export default function TestApp() {
+// Simple component for KRTR Mesh app
+function KRTRMeshApp() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>KRTR Test App</Text>
-      <Text style={styles.subtitle}>Web version is working!</Text>
+      <Text style={styles.title}>KRTR Mesh</Text>
+      <Text style={styles.subtitle}>Decentralized Mesh Network</Text>
+      <Text style={styles.status}>✅ App loaded successfully!</Text>
     </View>
   );
 }
@@ -26,5 +28,13 @@ const styles = StyleSheet.create({
   subtitle: {
     color: '#fff',
     fontSize: 18,
+    marginBottom: 10,
+  },
+  status: {
+    color: '#00ff88',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
+
+export default KRTRMeshApp;

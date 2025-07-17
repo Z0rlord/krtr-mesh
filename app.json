@@ -18,6 +18,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.zbarber.krtrmesh",
       "buildNumber": "1",
+      "deploymentTarget": "17.0",
       "infoPlist": {
         "NSBluetoothAlwaysUsageDescription": "KRTR needs Bluetooth to connect with nearby devices for secure mesh networking",
         "NSBluetoothPeripheralUsageDescription": "KRTR needs Bluetooth to advertise to nearby devices for mesh networking",
@@ -95,10 +96,6 @@
         "projectId": "aeeba0cd-2e0e-46aa-99c7-6e63472094b0"
       }
     },
-    "owner": "z0rlord",
-    "runtimeVersion": "1.0.0",
-    "updates": {
-      "url": "https://u.expo.dev/aeeba0cd-2e0e-46aa-99c7-6e63472094b0"
-    }
+    "owner": "z0rlord"
   }
 }

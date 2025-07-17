@@ -2,7 +2,7 @@
   "name": "krtr-mesh",
   "version": "1.0.0",
   "description": "Decentralized, encrypted, offline-first messaging for the post-platform era",
-  "main": "App.js",
+  "main": "index.js",
   "scripts": {
     "postinstall": "patch-package",
     "start": "expo start",
