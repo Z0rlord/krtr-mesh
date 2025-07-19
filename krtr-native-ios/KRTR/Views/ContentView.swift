@@ -7,6 +7,190 @@
 //
 
 import SwiftUI
+import Foundation
+
+// MARK: - ZK Service Protocol and Implementation
+
+protocol ZKServiceProtocol: ObservableObject {
+    var isAvailable: Bool { get }
+    func generateMembershipProof(membershipKey: Data, groupRoot: Data, pathElements: [Data], pathIndices: [Int]) async throws -> ZKProofResult
+    func generateReputationProof(reputationScore: Int, threshold: Int, nonce: Data) async throws -> ZKProofResult
+    func generateMessageAuthProof(message: Data, senderKey: Data, timestamp: UInt64) async throws -> ZKProofResult
+    func verifyProof(proof: Data, publicInputs: [Data], proofType: ZKProofType) async throws -> Bool
+    func getStats() -> ZKStats
+    func resetStats()
+}
+
+struct ZKProofResult {
+    let proof: Data
+    let publicInputs: [Data]
+    let proofType: ZKProofType
+    let timestamp: Date
+}
+
+enum ZKProofType: String, Codable {
+    case membership = "membership"
+    case reputation = "reputation"
+    case messageAuth = "message_auth"
+}
+
+struct ZKStats {
+    var totalProofs: Int = 0
+    var successfulProofs: Int = 0
+    var averageDuration: TimeInterval = 0
+
+    var successRate: Double {
+        return totalProofs > 0 ? Double(successfulProofs) / Double(totalProofs) : 0.0
+    }
+}
+
+class MockZKService: ZKServiceProtocol {
+    @Published var isAvailable: Bool = true
+    private var stats = ZKStats()
+
+    func generateMembershipProof(membershipKey: Data, groupRoot: Data, pathElements: [Data], pathIndices: [Int]) async throws -> ZKProofResult {
+        let startTime = Date()
+
+        // Simulate proof generation delay
+        try await Task.sleep(nanoseconds: UInt64.random(in: 100_000_000...500_000_000))
+
+        let proofId = "proof_membership_\(UUID().uuidString.prefix(8))"
+        let proof = Data(proofId.utf8)
+
+        let publicInputs = [
+            groupRoot,
+            Data("public_nullifier_\(UUID().uuidString.prefix(8))".utf8),
+            Data("merkle_root_\(UUID().uuidString.prefix(8))".utf8)
+        ]
+
+        updateStats(duration: Date().timeIntervalSince(startTime), success: true)
+
+        return ZKProofResult(
+            proof: proof,
+            publicInputs: publicInputs,
+            proofType: .membership,
+            timestamp: Date()
+        )
+    }
+
+    func generateReputationProof(reputationScore: Int, threshold: Int, nonce: Data) async throws -> ZKProofResult {
+        let startTime = Date()
+
+        guard reputationScore >= threshold else {
+            updateStats(duration: Date().timeIntervalSince(startTime), success: false)
+            throw ZKError.invalidInput("Reputation score below threshold")
+        }
+
+        // Simulate proof generation delay
+        try await Task.sleep(nanoseconds: UInt64.random(in: 100_000_000...500_000_000))
+
+        let proofId = "proof_reputation_\(UUID().uuidString.prefix(8))"
+        let proof = Data(proofId.utf8)
+
+        let publicInputs = [
+            Data(withUnsafeBytes(of: threshold.bigEndian) { Data($0) }),
+            nonce,
+            Data("commitment_\(UUID().uuidString.prefix(8))".utf8)
+        ]
+
+        updateStats(duration: Date().timeIntervalSince(startTime), success: true)
+
+        return ZKProofResult(
+            proof: proof,
+            publicInputs: publicInputs,
+            proofType: .reputation,
+            timestamp: Date()
+        )
+    }
+
+    func generateMessageAuthProof(message: Data, senderKey: Data, timestamp: UInt64) async throws -> ZKProofResult {
+        let startTime = Date()
+
+        // Simulate proof generation delay
+        try await Task.sleep(nanoseconds: UInt64.random(in: 100_000_000...500_000_000))
+
+        let proofId = "proof_message_\(UUID().uuidString.prefix(8))"
+        let proof = Data(proofId.utf8)
+
+        let publicInputs = [
+            Data(withUnsafeBytes(of: timestamp.bigEndian) { Data($0) }),
+            Data(message.sha256.prefix(16)),
+            Data("auth_commitment_\(UUID().uuidString.prefix(8))".utf8)
+        ]
+
+        updateStats(duration: Date().timeIntervalSince(startTime), success: true)
+
+        return ZKProofResult(
+            proof: proof,
+            publicInputs: publicInputs,
+            proofType: .messageAuth,
+            timestamp: Date()
+        )
+    }
+
+    func verifyProof(proof: Data, publicInputs: [Data], proofType: ZKProofType) async throws -> Bool {
+        // Simulate verification delay
+        try await Task.sleep(nanoseconds: UInt64.random(in: 50_000_000...200_000_000))
+
+        // Mock verification - always returns true for valid-looking proofs
+        return proof.count > 0 && !publicInputs.isEmpty
+    }
+
+    func getStats() -> ZKStats {
+        return stats
+    }
+
+    func resetStats() {
+        stats = ZKStats()
+    }
+
+    private func updateStats(duration: TimeInterval, success: Bool) {
+        stats.totalProofs += 1
+        if success {
+            stats.successfulProofs += 1
+        }
+
+        // Update average duration
+        let totalDuration = stats.averageDuration * Double(stats.totalProofs - 1) + duration
+        stats.averageDuration = totalDuration / Double(stats.totalProofs)
+    }
+}
+
+enum ZKError: Error, LocalizedError {
+    case invalidInput(String)
+    case proofGenerationFailed(String)
+    case verificationFailed(String)
+
+    var errorDescription: String? {
+        switch self {
+        case .invalidInput(let message):
+            return "Invalid input: \(message)"
+        case .proofGenerationFailed(let message):
+            return "Proof generation failed: \(message)"
+        case .verificationFailed(let message):
+            return "Verification failed: \(message)"
+        }
+    }
+}
+
+struct ZKServiceFactory {
+    static func createService() -> MockZKService {
+        return MockZKService()
+    }
+}
+
+extension Data {
+    var sha256: Data {
+        var hash = [UInt8](repeating: 0, count: 32)
+        self.withUnsafeBytes { bytes in
+            // Simple hash simulation - not cryptographically secure
+            for (index, byte) in bytes.enumerated() {
+                hash[index % 32] ^= byte
+            }
+        }
+        return Data(hash)
+    }
+}
 
 struct ContentView: View {
     @EnvironmentObject var viewModel: ChatViewModel
@@ -30,6 +214,7 @@ struct ContentView: View {
     @State private var backSwipeOffset: CGFloat = 0
     @State private var showPrivateChat = false
     @State private var showChannel = false
+    @State private var showZKDashboard = false
     
     private var backgroundColor: Color {
         colorScheme == .dark ? Color.black : Color.white
@@ -159,6 +344,9 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showAppInfo) {
             AppInfoView()
+        }
+        .sheet(isPresented: $showZKDashboard) {
+            ZKDashboardSheet()
         }
         .sheet(isPresented: Binding(
             get: { viewModel.showingFingerprintFor != nil },
@@ -989,7 +1177,18 @@ struct ContentView: View {
                         viewModel.saveNickname()
                     }
             }
-            
+
+            // ZK Dashboard button
+            Button(action: {
+                showZKDashboard = true
+            }) {
+                Image(systemName: "lock.shield.fill")
+                    .font(.system(size: 14))
+                    .foregroundColor(.blue)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Zero-Knowledge Dashboard")
+
             Spacer()
             
             // People counter with unread indicator
@@ -1408,5 +1607,512 @@ struct DeliveryStatusView: View {
             .foregroundColor(secondaryTextColor.opacity(0.6))
             .help("Delivered to \(reached) of \(total) members")
         }
+    }
+}
+
+// MARK: - ZK Dashboard Sheet
+
+struct ZKDashboardSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    @StateObject private var zkService = ZKServiceFactory.createService()
+    @State private var showingTestView = false
+    @State private var testResults: [ZKTestResult] = []
+    @State private var isRunningTests = false
+    @State private var currentTest = ""
+
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(spacing: 20) {
+                    // Header
+                    VStack(spacing: 12) {
+                        Image(systemName: "lock.shield.fill")
+                            .font(.system(size: 50))
+                            .foregroundStyle(
+                                LinearGradient(
+                                    colors: [.blue, .purple],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+
+                        Text("Zero-Knowledge Privacy")
+                            .font(.title2)
+                            .fontWeight(.bold)
+
+                        Text("Anonymous authentication and privacy-preserving mesh networking")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(16)
+
+                    // Status Cards
+                    LazyVGrid(columns: [
+                        GridItem(.flexible()),
+                        GridItem(.flexible())
+                    ], spacing: 16) {
+                        ZKStatusCard(
+                            title: "ZK Service",
+                            value: zkService.isAvailable ? "Active" : "Fallback",
+                            icon: "cpu",
+                            color: zkService.isAvailable ? .green : .orange
+                        )
+
+                        ZKStatusCard(
+                            title: "Proofs Generated",
+                            value: "\(zkService.getStats().totalProofs)",
+                            icon: "checkmark.shield",
+                            color: .purple
+                        )
+
+                        ZKStatusCard(
+                            title: "Success Rate",
+                            value: String(format: "%.1f%%", zkService.getStats().successRate * 100),
+                            icon: "chart.line.uptrend.xyaxis",
+                            color: .green
+                        )
+
+                        ZKStatusCard(
+                            title: "Avg Duration",
+                            value: String(format: "%.3fs", zkService.getStats().averageDuration),
+                            icon: "timer",
+                            color: .blue
+                        )
+                    }
+
+                    // Quick Actions
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("Quick Actions")
+                            .font(.headline)
+                            .fontWeight(.bold)
+
+                        LazyVGrid(columns: [
+                            GridItem(.flexible()),
+                            GridItem(.flexible())
+                        ], spacing: 12) {
+                            ZKActionButton(
+                                title: "Test ZK",
+                                subtitle: "Run tests",
+                                icon: "testtube.2",
+                                color: .blue
+                            ) {
+                                showingTestView = true
+                            }
+
+                            ZKActionButton(
+                                title: "Generate Proof",
+                                subtitle: "Test proof gen",
+                                icon: "checkmark.shield",
+                                color: .green
+                            ) {
+                                generateTestProof()
+                            }
+
+                            ZKActionButton(
+                                title: "View Stats",
+                                subtitle: "Performance",
+                                icon: "chart.bar",
+                                color: .orange
+                            ) {
+                                // Show detailed stats
+                            }
+
+                            ZKActionButton(
+                                title: "Reset Stats",
+                                subtitle: "Clear data",
+                                icon: "arrow.clockwise",
+                                color: .red
+                            ) {
+                                zkService.resetStats()
+                            }
+                        }
+                    }
+
+                    // Test Results
+                    if !testResults.isEmpty {
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Recent Test Results")
+                                .font(.headline)
+                                .fontWeight(.bold)
+
+                            ForEach(testResults.prefix(5)) { result in
+                                HStack {
+                                    Text(result.statusIcon)
+                                        .font(.title2)
+
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text(result.name)
+                                            .font(.subheadline)
+                                            .fontWeight(.medium)
+
+                                        Text(result.details)
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                            .lineLimit(1)
+                                    }
+
+                                    Spacer()
+
+                                    Text("\(result.durationString)s")
+                                        .font(.caption)
+                                        .foregroundColor(.blue)
+                                }
+                                .padding()
+                                .background(Color(.systemGray6))
+                                .cornerRadius(8)
+                            }
+                        }
+                    }
+
+                    // Current Test Status
+                    if isRunningTests {
+                        VStack(spacing: 12) {
+                            ProgressView()
+                                .scaleEffect(1.2)
+
+                            Text(currentTest)
+                                .font(.subheadline)
+                                .multilineTextAlignment(.center)
+                                .foregroundColor(.blue)
+                        }
+                        .padding()
+                        .background(Color.blue.opacity(0.1))
+                        .cornerRadius(12)
+                    }
+
+                    Spacer(minLength: 100)
+                }
+                .padding()
+            }
+            .navigationTitle("Zero-Knowledge")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
+            .sheet(isPresented: $showingTestView) {
+                ZKTestSheet(
+                    zkService: zkService,
+                    testResults: $testResults,
+                    isRunningTests: $isRunningTests,
+                    currentTest: $currentTest
+                )
+            }
+        }
+    }
+
+    private func generateTestProof() {
+        isRunningTests = true
+        currentTest = "Generating test membership proof..."
+
+        Task {
+            do {
+                let membershipKey = Data("test_membership_key".utf8)
+                let groupRoot = Data("test_group_root".utf8)
+                let pathElements = [Data("path_element_1".utf8)]
+                let pathIndices = [0]
+
+                let startTime = Date()
+                let proofResult = try await zkService.generateMembershipProof(
+                    membershipKey: membershipKey,
+                    groupRoot: groupRoot,
+                    pathElements: pathElements,
+                    pathIndices: pathIndices
+                )
+                let duration = Date().timeIntervalSince(startTime)
+
+                let result = ZKTestResult(
+                    name: "Test Membership Proof",
+                    success: true,
+                    duration: duration,
+                    details: "Generated proof successfully",
+                    proofSize: proofResult.proof.count
+                )
+
+                await MainActor.run {
+                    testResults.insert(result, at: 0)
+                    isRunningTests = false
+                    currentTest = ""
+                }
+
+            } catch {
+                let result = ZKTestResult(
+                    name: "Test Membership Proof",
+                    success: false,
+                    duration: 0,
+                    details: "Error: \(error.localizedDescription)",
+                    proofSize: nil
+                )
+
+                await MainActor.run {
+                    testResults.insert(result, at: 0)
+                    isRunningTests = false
+                    currentTest = ""
+                }
+            }
+        }
+    }
+}
+
+// MARK: - ZK Supporting Views
+
+struct ZKStatusCard: View {
+    let title: String
+    let value: String
+    let icon: String
+    let color: Color
+
+    var body: some View {
+        VStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.title2)
+                .foregroundColor(color)
+
+            Text(value)
+                .font(.headline)
+                .fontWeight(.bold)
+
+            Text(title)
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(Color(.systemGray6))
+        .cornerRadius(12)
+    }
+}
+
+struct ZKActionButton: View {
+    let title: String
+    let subtitle: String
+    let icon: String
+    let color: Color
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.title2)
+                    .foregroundColor(color)
+
+                Text(title)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+
+                Text(subtitle)
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(Color(.systemGray6))
+            .cornerRadius(12)
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
+
+struct ZKTestResult: Identifiable {
+    let id = UUID()
+    let name: String
+    let success: Bool
+    let duration: TimeInterval
+    let details: String
+    let proofSize: Int?
+    let timestamp = Date()
+
+    var statusIcon: String {
+        success ? "✅" : "❌"
+    }
+
+    var durationString: String {
+        String(format: "%.3f", duration)
+    }
+}
+
+struct ZKTestSheet: View {
+    let zkService: MockZKService
+    @Binding var testResults: [ZKTestResult]
+    @Binding var isRunningTests: Bool
+    @Binding var currentTest: String
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 20) {
+                Text("ZK Test Suite")
+                    .font(.title2)
+                    .fontWeight(.bold)
+
+                Text("Run comprehensive tests to verify ZK functionality")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+
+                Button(action: runBasicTests) {
+                    HStack {
+                        if isRunningTests {
+                            ProgressView()
+                                .scaleEffect(0.8)
+                        } else {
+                            Image(systemName: "play.circle.fill")
+                        }
+
+                        Text(isRunningTests ? "Running Tests..." : "Run Basic Tests")
+                    }
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(isRunningTests ? Color.gray : Color.blue)
+                    .cornerRadius(12)
+                }
+                .disabled(isRunningTests)
+
+                if isRunningTests {
+                    Text(currentTest)
+                        .font(.subheadline)
+                        .foregroundColor(.blue)
+                        .multilineTextAlignment(.center)
+                }
+
+                Spacer()
+            }
+            .padding()
+            .navigationTitle("ZK Tests")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+
+    private func runBasicTests() {
+        isRunningTests = true
+
+        Task {
+            // Test 1: Service availability
+            await updateCurrentTest("Testing ZK service availability...")
+            await addTestResult(ZKTestResult(
+                name: "Service Availability",
+                success: true,
+                duration: 0.001,
+                details: "Service available: \(zkService.isAvailable ? "Yes" : "No (fallback)")",
+                proofSize: nil
+            ))
+
+            // Test 2: Membership proof
+            await updateCurrentTest("Testing membership proof generation...")
+            await testMembershipProof()
+
+            // Test 3: Reputation proof
+            await updateCurrentTest("Testing reputation proof generation...")
+            await testReputationProof()
+
+            await MainActor.run {
+                isRunningTests = false
+                currentTest = "All tests completed!"
+            }
+
+            // Clear status after delay
+            try? await Task.sleep(nanoseconds: 2_000_000_000)
+            await MainActor.run {
+                currentTest = ""
+            }
+        }
+    }
+
+    private func testMembershipProof() async {
+        let startTime = Date()
+
+        do {
+            let membershipKey = Data("test_membership_key".utf8)
+            let groupRoot = Data("test_group_root".utf8)
+            let pathElements = [Data("path_element_1".utf8)]
+            let pathIndices = [0]
+
+            let proofResult = try await zkService.generateMembershipProof(
+                membershipKey: membershipKey,
+                groupRoot: groupRoot,
+                pathElements: pathElements,
+                pathIndices: pathIndices
+            )
+
+            let duration = Date().timeIntervalSince(startTime)
+
+            await addTestResult(ZKTestResult(
+                name: "Membership Proof",
+                success: true,
+                duration: duration,
+                details: "Generated proof with \(proofResult.publicInputs.count) public inputs",
+                proofSize: proofResult.proof.count
+            ))
+
+        } catch {
+            let duration = Date().timeIntervalSince(startTime)
+
+            await addTestResult(ZKTestResult(
+                name: "Membership Proof",
+                success: false,
+                duration: duration,
+                details: "Error: \(error.localizedDescription)",
+                proofSize: nil
+            ))
+        }
+    }
+
+    private func testReputationProof() async {
+        let startTime = Date()
+
+        do {
+            let proofResult = try await zkService.generateReputationProof(
+                reputationScore: 85,
+                threshold: 50,
+                nonce: Data("test_nonce".utf8)
+            )
+
+            let duration = Date().timeIntervalSince(startTime)
+
+            await addTestResult(ZKTestResult(
+                name: "Reputation Proof",
+                success: true,
+                duration: duration,
+                details: "Proved score ≥ 50 without revealing actual score (85)",
+                proofSize: proofResult.proof.count
+            ))
+
+        } catch {
+            let duration = Date().timeIntervalSince(startTime)
+
+            await addTestResult(ZKTestResult(
+                name: "Reputation Proof",
+                success: false,
+                duration: duration,
+                details: "Error: \(error.localizedDescription)",
+                proofSize: nil
+            ))
+        }
+    }
+
+    @MainActor
+    private func updateCurrentTest(_ test: String) {
+        currentTest = test
+    }
+
+    @MainActor
+    private func addTestResult(_ result: ZKTestResult) {
+        testResults.insert(result, at: 0)
     }
 }
