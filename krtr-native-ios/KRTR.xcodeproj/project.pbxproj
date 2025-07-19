@@ -38,6 +38,8 @@
 		42B2994DA88572793F9C1F12 /* FingerprintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB158BEE88675F1CCE37879B /* FingerprintView.swift */; };
 		4358243D66BCE062430D4CAE /* NoiseSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = F159F989F402B07E466C9D45 /* NoiseSession.swift */; };
 		45019188AA188F6AC5BB037A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962CB3593D0E53C1392BE968 /* ContentView.swift */; };
+		20B95BFFE5474FF8BC6EC4D6 /* ZKEnhancedFeaturesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D13BD6967144D8AB13D76B9 /* ZKEnhancedFeaturesView.swift */; };
+		A1B2C3D4E5F6789012345678 /* ZKEnhancedComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6789012345678A1 /* ZKEnhancedComponents.swift */; };
 		48838F1FBC5CCA64FCCF1C4F /* IdentityModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA41DF73BA0D911875FF14A1 /* IdentityModels.swift */; };
 		48A3E5CBDE37F65E538BC3E7 /* SecureIdentityStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE14ADA1AC298CAA3EDC7EB /* SecureIdentityStateManager.swift */; };
 		576AF1D9DE13669D16962BD2 /* NoiseRateLimiterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C0DD4B1270D5082BE45EBD /* NoiseRateLimiterTests.swift */; };
@@ -89,6 +91,8 @@
 		C73CDC0F2D39494912DCFE28 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A52913F5231BCBEF4551BF36 /* Assets.xcassets */; };
 		C7AF318E9640EFB59781C7AE /* NoiseSecurityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C090234E22CDC72598F99759 /* NoiseSecurityTests.swift */; };
 		C9E47AD28296564854761263 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962CB3593D0E53C1392BE968 /* ContentView.swift */; };
+		C1D2E3F4567890ABCDEF1234 /* ZKEnhancedFeaturesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D13BD6967144D8AB13D76B9 /* ZKEnhancedFeaturesView.swift */; };
+		D2E3F4567890ABCDEF123456 /* ZKEnhancedComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6789012345678A1 /* ZKEnhancedComponents.swift */; };
 		C9F75F87FC6469BA4EFEDBBA /* KRTRApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66BA1E6DD2AE1B083F1FAD4 /* KRTRApp.swift */; };
 		CD1DC820AE13ECA08DD03EF1 /* BinaryProtocolVersionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40B3999BE912183845C151F /* BinaryProtocolVersionTests.swift */; };
 		CDDEF396A10690E8C1BB65C4 /* FingerprintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB158BEE88675F1CCE37879B /* FingerprintView.swift */; };
@@ -188,6 +192,8 @@
 		927DD4EE0CAA1243E9CA6AAD /* AppInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfoView.swift; sourceTree = "<group>"; };
 		95BD854F791D30FAD31BF8E0 /* NoisePostQuantum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoisePostQuantum.swift; sourceTree = "<group>"; };
 		962CB3593D0E53C1392BE968 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		3D13BD6967144D8AB13D76B9 /* ZKEnhancedFeaturesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZKEnhancedFeaturesView.swift; sourceTree = "<group>"; };
+		B2C3D4E5F6789012345678A1 /* ZKEnhancedComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZKEnhancedComponents.swift; sourceTree = "<group>"; };
 		9FE14ADA1AC298CAA3EDC7EB /* SecureIdentityStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureIdentityStateManager.swift; sourceTree = "<group>"; };
 		A40B3999BE912183845C151F /* BinaryProtocolVersionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryProtocolVersionTests.swift; sourceTree = "<group>"; };
 		A4736DC1CDE59DE738E3BEB9 /* KRTRShareExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = KRTRShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -274,6 +280,8 @@
 				927DD4EE0CAA1243E9CA6AAD /* AppInfoView.swift */,
 				962CB3593D0E53C1392BE968 /* ContentView.swift */,
 				FB158BEE88675F1CCE37879B /* FingerprintView.swift */,
+				3D13BD6967144D8AB13D76B9 /* ZKEnhancedFeaturesView.swift */,
+				B2C3D4E5F6789012345678A1 /* ZKEnhancedComponents.swift */,
 				1D587178AC217135ECDB725B /* LinkPreviewView.swift */,
 				EBC87F84E47CA93939BE16A1 /* NoiseTestingView.swift */,
 			);
@@ -560,6 +568,8 @@
 				629B2AF16F0430E9D90D171E /* ChatViewModel.swift in Sources */,
 				13F870E2D3A01707AFC5CA39 /* CompressionUtil.swift in Sources */,
 				45019188AA188F6AC5BB037A /* ContentView.swift in Sources */,
+				20B95BFFE5474FF8BC6EC4D6 /* ZKEnhancedFeaturesView.swift in Sources */,
+				A1B2C3D4E5F6789012345678 /* ZKEnhancedComponents.swift in Sources */,
 				DFD6EA9F479AD8C33C6D5CD0 /* DeliveryTracker.swift in Sources */,
 				42B2994DA88572793F9C1F12 /* FingerprintView.swift in Sources */,
 				48838F1FBC5CCA64FCCF1C4F /* IdentityModels.swift in Sources */,
@@ -648,6 +658,8 @@
 				3658130375BBE4568648CFFB /* ChatViewModel.swift in Sources */,
 				774FAD38B2CB326B8D429968 /* CompressionUtil.swift in Sources */,
 				C9E47AD28296564854761263 /* ContentView.swift in Sources */,
+				C1D2E3F4567890ABCDEF1234 /* ZKEnhancedFeaturesView.swift in Sources */,
+				D2E3F4567890ABCDEF123456 /* ZKEnhancedComponents.swift in Sources */,
 				ADD6990E3CB8C981553C39B9 /* DeliveryTracker.swift in Sources */,
 				CDDEF396A10690E8C1BB65C4 /* FingerprintView.swift in Sources */,
 				D6F86E7008B466B7F6072F22 /* IdentityModels.swift in Sources */,
