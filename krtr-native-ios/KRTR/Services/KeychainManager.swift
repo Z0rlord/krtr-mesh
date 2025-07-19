@@ -32,11 +32,11 @@ class KeychainManager {
         
         // List of old service names to migrate from
         let legacyServices = [
-            "com.bitchat.passwords",
-            "com.bitchat.deviceidentity",
-            "com.bitchat.noise.identity",
-            "chat.bitchat.passwords",
-            "bitchat.keychain"
+            "com.KRTR.passwords",
+            "com.KRTR.deviceidentity",
+            "com.KRTR.noise.identity",
+            "chat.KRTR.passwords",
+            "KRTR.keychain"
         ]
         
         var migratedItems = 0
@@ -300,9 +300,9 @@ class KeychainManager {
                 let account = item[kSecAttrAccount as String] as? String ?? ""
                 let service = item[kSecAttrService as String] as? String ?? ""
                 
-                // ONLY delete if service name contains "bitchat"
+                // ONLY delete if service name contains "KRTR"
                 // This is the safest approach - we only touch items we know are ours
-                if service.lowercased().contains("bitchat") {
+                if service.lowercased().contains("KRTR") {
                     shouldDelete = true
                 }
                 
@@ -335,14 +335,14 @@ class KeychainManager {
         
         // Also try to delete by known service names (in case we missed any)
         let knownServices = [
-            "chat.bitchat",
-            "com.bitchat.passwords",
-            "com.bitchat.deviceidentity", 
-            "com.bitchat.noise.identity",
-            "chat.bitchat.passwords",
-            "bitchat.keychain",
-            "bitchat",
-            "com.bitchat"
+            "chat.KRTR",
+            "com.KRTR.passwords",
+            "com.KRTR.deviceidentity", 
+            "com.KRTR.noise.identity",
+            "chat.KRTR.passwords",
+            "KRTR.keychain",
+            "KRTR",
+            "com.KRTR"
         ]
         
         for serviceName in knownServices {
@@ -372,19 +372,19 @@ class KeychainManager {
     func aggressiveCleanupLegacyItems() -> Int {
         var deletedCount = 0
         
-        // List of KNOWN bitchat service names from our development history
-        let knownBitchatServices = [
-            "com.bitchat.passwords",
-            "com.bitchat.deviceidentity",
-            "com.bitchat.noise.identity",
-            "chat.bitchat.passwords",
-            "bitchat.keychain",
-            "Bitchat",
-            "BitChat"
+        // List of KNOWN KRTR service names from our development history
+        let knownKRTRServices = [
+            "com.KRTR.passwords",
+            "com.KRTR.deviceidentity",
+            "com.KRTR.noise.identity",
+            "chat.KRTR.passwords",
+            "KRTR.keychain",
+            "KRTR",
+            "KRTR"
         ]
         
         // First, delete all items from known legacy services
-        for legacyService in knownBitchatServices {
+        for legacyService in knownKRTRServices {
             let deleteQuery: [String: Any] = [
                 kSecClass as String: kSecClassGenericPassword,
                 kSecAttrService as String: legacyService
@@ -396,7 +396,7 @@ class KeychainManager {
             }
         }
         
-        // Now search for items that have our specific account patterns with bitchat service names
+        // Now search for items that have our specific account patterns with KRTR service names
         let searchQuery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecMatchLimit as String: kSecMatchLimitAll,
@@ -411,13 +411,13 @@ class KeychainManager {
                 let account = item[kSecAttrAccount as String] as? String ?? ""
                 let service = item[kSecAttrService as String] as? String ?? ""
                 
-                // ONLY delete if service name contains "bitchat" somewhere
+                // ONLY delete if service name contains "KRTR" somewhere
                 // This ensures we never touch other apps' keychain items
                 var shouldDelete = false
                 
-                // Check if service contains "bitchat" (case insensitive) but NOT our current service
+                // Check if service contains "KRTR" (case insensitive) but NOT our current service
                 let serviceLower = service.lowercased()
-                if service != self.service && serviceLower.contains("bitchat") {
+                if service != self.service && serviceLower.contains("KRTR") {
                     shouldDelete = true
                 }
                 

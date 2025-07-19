@@ -1,12 +1,12 @@
 //
 // KeychainIntegrationTests.swift
-// bitchatTests
+// KRTRTests
 //
 // Integration tests for keychain functionality
 //
 
 import XCTest
-@testable import bitchat
+@testable import KRTR
 
 class KeychainIntegrationTests: XCTestCase {
     
@@ -100,10 +100,10 @@ class KeychainIntegrationTests: XCTestCase {
         
         // Check UserDefaults for any sensitive data
         let keysToCheck = [
-            "bitchat.noiseIdentityKey",
-            "bitchat.channelPasswords",
-            "bitchat.identityKey",
-            "bitchat.staticKey"
+            "KRTR.noiseIdentityKey",
+            "KRTR.channelPasswords",
+            "KRTR.identityKey",
+            "KRTR.staticKey"
         ]
         
         for key in keysToCheck {
@@ -135,10 +135,10 @@ class KeychainIntegrationTests: XCTestCase {
     
     // MARK: - Cleanup Tests
     
-    func testAggressiveCleanupOnlyDeletesBitchatItems() {
+    func testAggressiveCleanupOnlyDeletesKRTRItems() {
         // This test verifies we don't delete other apps' keychain items
         
-        // Add a non-bitchat item (simulating another app)
+        // Add a non-KRTR item (simulating another app)
         let otherAppQuery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: "com.otherapp.service",
@@ -153,16 +153,16 @@ class KeychainIntegrationTests: XCTestCase {
         let addStatus = SecItemAdd(otherAppQuery as CFDictionary, nil)
         XCTAssertEqual(addStatus, errSecSuccess, "Should add other app item")
         
-        // Add a bitchat legacy item
-        let bitchatQuery: [String: Any] = [
+        // Add a KRTR legacy item
+        let KRTRQuery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: "com.bitchat.legacy",
+            kSecAttrService as String: "com.KRTR.legacy",
             kSecAttrAccount as String: "test_account",
-            kSecValueData as String: "bitchat data".data(using: .utf8)!
+            kSecValueData as String: "KRTR data".data(using: .utf8)!
         ]
-        SecItemDelete(bitchatQuery as CFDictionary)
-        let bitchatStatus = SecItemAdd(bitchatQuery as CFDictionary, nil)
-        XCTAssertEqual(bitchatStatus, errSecSuccess, "Should add bitchat item")
+        SecItemDelete(KRTRQuery as CFDictionary)
+        let KRTRStatus = SecItemAdd(KRTRQuery as CFDictionary, nil)
+        XCTAssertEqual(KRTRStatus, errSecSuccess, "Should add KRTR item")
         
         // Run aggressive cleanup
         _ = KeychainManager.shared.aggressiveCleanupLegacyItems()
@@ -172,10 +172,10 @@ class KeychainIntegrationTests: XCTestCase {
         let checkStatus = SecItemCopyMatching(otherAppQuery as CFDictionary, &result)
         XCTAssertEqual(checkStatus, errSecSuccess, "Other app item should still exist")
         
-        // Verify bitchat item was deleted
-        var bitchatResult: AnyObject?
-        let bitchatCheck = SecItemCopyMatching(bitchatQuery as CFDictionary, &bitchatResult)
-        XCTAssertEqual(bitchatCheck, errSecItemNotFound, "Bitchat legacy item should be deleted")
+        // Verify KRTR item was deleted
+        var KRTRResult: AnyObject?
+        let KRTRCheck = SecItemCopyMatching(KRTRQuery as CFDictionary, &KRTRResult)
+        XCTAssertEqual(KRTRCheck, errSecItemNotFound, "KRTR legacy item should be deleted")
         
         // Clean up
         SecItemDelete(otherAppQuery as CFDictionary)

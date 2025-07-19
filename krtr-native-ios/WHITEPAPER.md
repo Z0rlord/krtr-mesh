@@ -1,12 +1,12 @@
-# BitChat: Decentralized Messaging Over Bluetooth Mesh
+# KRTR: Decentralized Messaging Over Bluetooth Mesh
 
 ## Abstract
 
-BitChat is a peer-to-peer messaging app that works without internet, cell towers, or any infrastructure. Using Bluetooth Low Energy (BLE) mesh networking and the Noise Protocol Framework, it provides secure, private communication anywhere people gather.
+KRTR is a peer-to-peer messaging app that works without internet, cell towers, or any infrastructure. Using Bluetooth Low Energy (BLE) mesh networking and the Noise Protocol Framework, it provides secure, private communication anywhere people gather.
 
 ## Core Innovation
 
-BitChat combines three key technologies:
+KRTR combines three key technologies:
 1. **Bluetooth mesh networking** for infrastructure-free communication
 2. **The Noise Protocol** for encryption
 3. **Ephemeral peer IDs** for enhanced privacy
@@ -33,7 +33,7 @@ Each phone acts as both a sender and relay, creating a network that extends far 
 
 ### Security Architecture
 
-BitChat uses the **Noise XX** handshake pattern for end-to-end encryption:
+KRTR uses the **Noise XX** handshake pattern for end-to-end encryption:
 
 ```mermaid
 sequenceDiagram
@@ -57,7 +57,7 @@ This provides:
 
 ### Privacy Through Rotation
 
-BitChat introduces **ephemeral peer ID rotation**:
+KRTR introduces **ephemeral peer ID rotation**:
 
 ```mermaid
 graph LR
@@ -187,7 +187,7 @@ Critical Battery: Emergency mode, minimal operation
 
 ## The Future
 
-BitChat is designed for extensibility:
+KRTR is designed for extensibility:
 
 - **Alternative transports**: WiFi Direct, ultrasonic, LoRa
 - **Network bridges**: Optional internet gateways (Nostr integration)
@@ -195,12 +195,12 @@ BitChat is designed for extensibility:
 
 ## Conclusion
 
-BitChat proves that secure, private communication doesn't require billion-dollar infrastructure. By combining time-tested protocols with innovative privacy features, it returns control of digital communication to users.
+KRTR proves that secure, private communication doesn't require billion-dollar infrastructure. By combining time-tested protocols with innovative privacy features, it returns control of digital communication to users.
 
 The entire project is open source and released into the public domain - because permissionless tools belong to everyone.
 
 ---
 
-*Download BitChat: [bitchat.free](https://bitchat.free)*
+*Download KRTR: [KRTR.free](https://KRTR.free)*
 
 *This document is released into the public domain under The Unlicense.*

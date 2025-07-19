@@ -1,6 +1,6 @@
 //
 // VersionNegotiationIntegrationTests.swift
-// bitchatTests
+// KRTRTests
 //
 // This is free and unencumbered software released into the public domain.
 // For more information, see <https://unlicense.org>
@@ -8,17 +8,17 @@
 
 import XCTest
 import CoreBluetooth
-@testable import bitchat
+@testable import KRTR
 
 class VersionNegotiationIntegrationTests: XCTestCase {
     
     var meshService: BluetoothMeshService!
-    var mockDelegate: MockBitchatDelegate!
+    var mockDelegate: MockKRTRDelegate!
     
     override func setUp() {
         super.setUp()
         meshService = BluetoothMeshService()
-        mockDelegate = MockBitchatDelegate()
+        mockDelegate = MockKRTRDelegate()
         meshService.delegate = mockDelegate
     }
     
@@ -46,7 +46,7 @@ class VersionNegotiationIntegrationTests: XCTestCase {
             return
         }
         
-        let helloPacket = BitchatPacket(
+        let helloPacket = KRTRPacket(
             type: MessageType.versionHello.rawValue,
             senderID: Data(hexString: peerID) ?? Data(),
             recipientID: nil,
@@ -83,7 +83,7 @@ class VersionNegotiationIntegrationTests: XCTestCase {
             return
         }
         
-        let helloPacket = BitchatPacket(
+        let helloPacket = KRTRPacket(
             type: MessageType.versionHello.rawValue,
             senderID: Data(hexString: peerID) ?? Data(),
             recipientID: nil,
@@ -104,7 +104,7 @@ class VersionNegotiationIntegrationTests: XCTestCase {
         let peerID = "legacypeer123456"
         
         // Simulate receiving a Noise handshake init without prior version negotiation
-        let handshakePacket = BitchatPacket(
+        let handshakePacket = KRTRPacket(
             type: MessageType.noiseHandshakeInit.rawValue,
             senderID: Data(hexString: peerID) ?? Data(),
             recipientID: nil,
@@ -136,7 +136,7 @@ class VersionNegotiationIntegrationTests: XCTestCase {
             return
         }
         
-        let ackPacket = BitchatPacket(
+        let ackPacket = KRTRPacket(
             type: MessageType.versionAck.rawValue,
             senderID: Data(hexString: peerID) ?? Data(),
             recipientID: meshService.getMyPeerID().data(using: .utf8),
@@ -169,7 +169,7 @@ class VersionNegotiationIntegrationTests: XCTestCase {
             return
         }
         
-        let ackPacket = BitchatPacket(
+        let ackPacket = KRTRPacket(
             type: MessageType.versionAck.rawValue,
             senderID: Data(hexString: peerID) ?? Data(),
             recipientID: meshService.getMyPeerID().data(using: .utf8),
@@ -201,7 +201,7 @@ class VersionNegotiationIntegrationTests: XCTestCase {
             return
         }
         
-        let helloPacket = BitchatPacket(
+        let helloPacket = KRTRPacket(
             type: MessageType.versionHello.rawValue,
             senderID: Data(hexString: peerID) ?? Data(),
             recipientID: nil,
@@ -225,7 +225,7 @@ class VersionNegotiationIntegrationTests: XCTestCase {
         let peerID = "malformedpeer123"
         
         // Send malformed data
-        let malformedPacket = BitchatPacket(
+        let malformedPacket = KRTRPacket(
             type: MessageType.versionHello.rawValue,
             senderID: Data(hexString: peerID) ?? Data(),
             recipientID: nil,
@@ -243,7 +243,7 @@ class VersionNegotiationIntegrationTests: XCTestCase {
         let peerID = "malformedackpeer"
         
         // Send malformed ack data
-        let malformedPacket = BitchatPacket(
+        let malformedPacket = KRTRPacket(
             type: MessageType.versionAck.rawValue,
             senderID: Data(hexString: peerID) ?? Data(),
             recipientID: meshService.getMyPeerID().data(using: .utf8),
@@ -284,7 +284,7 @@ class VersionNegotiationIntegrationTests: XCTestCase {
 
 // MARK: - Mock Delegate
 
-class MockBitchatDelegate: BitchatDelegate {
+class MockKRTRDelegate: KRTRDelegate {
     var receivedMessages: [KRTRMessage] = []
     var connectedPeers: [String] = []
     var disconnectedPeers: [String] = []

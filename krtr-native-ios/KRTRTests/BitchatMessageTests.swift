@@ -1,13 +1,13 @@
 //
 // KRTRMessageTests.swift
-// bitchatTests
+// KRTRTests
 //
 // This is free and unencumbered software released into the public domain.
 // For more information, see <https://unlicense.org>
 //
 
 import XCTest
-@testable import bitchat
+@testable import KRTR
 
 class KRTRMessageTests: XCTestCase {
     

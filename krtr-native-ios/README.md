@@ -1,6 +1,6 @@
-<img height="300" alt="bitchat" src="https://github.com/user-attachments/assets/2660f828-49c7-444d-beca-d8b01854667a" />
+<img height="300" alt="KRTR" src="https://github.com/user-attachments/assets/2660f828-49c7-444d-beca-d8b01854667a" />
 
-## bitchat
+## KRTR
 
 A decentralized peer-to-peer messaging app that works over Bluetooth mesh networks. No internet required, no servers, no phone numbers. It's the side-groupchat. 
 
@@ -36,20 +36,20 @@ This project is released into the public domain. See the [LICENSE](LICENSE) file
 
 2. Generate the Xcode project:
    ```bash
-   cd bitchat
+   cd KRTR
    xcodegen generate
    ```
 
 3. Open the generated project:
    ```bash
-   open bitchat.xcodeproj
+   open KRTR.xcodeproj
    ```
 
 ### Option 2: Using Swift Package Manager
 
 1. Open the project in Xcode:
    ```bash
-   cd bitchat
+   cd KRTR
    open Package.swift
    ```
 
@@ -58,7 +58,7 @@ This project is released into the public domain. See the [LICENSE](LICENSE) file
 ### Option 3: Manual Xcode Project
 
 1. Open Xcode and create a new iOS/macOS App
-2. Copy all Swift files from the `bitchat` directory into your project
+2. Copy all Swift files from the `KRTR` directory into your project
 3. Update Info.plist with Bluetooth permissions
 4. Set deployment target to iOS 16.0 / macOS 13.0
 
@@ -79,7 +79,7 @@ This project is released into the public domain. See the [LICENSE](LICENSE) file
 
 ### Getting Started
 
-1. Launch bitchat on your device
+1. Launch KRTR on your device
 2. Set your nickname (or use the auto-generated one)
 3. You'll automatically connect to nearby peers
 4. Join a channel with `/j #general` or start chatting in public
@@ -130,7 +130,7 @@ This project is released into the public domain. See the [LICENSE](LICENSE) file
 ## Technical Architecture
 
 ### Binary Protocol
-bitchat uses an efficient binary protocol optimized for Bluetooth LE:
+KRTR uses an efficient binary protocol optimized for Bluetooth LE:
 - Compact packet format with 1-byte type field
 - TTL-based message routing (max 7 hops)
 - Automatic fragmentation for large messages

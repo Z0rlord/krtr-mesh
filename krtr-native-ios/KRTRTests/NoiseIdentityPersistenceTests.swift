@@ -1,12 +1,12 @@
 //
 // NoiseIdentityPersistenceTests.swift
-// bitchatTests
+// KRTRTests
 //
 // Tests for Noise Protocol identity key persistence
 //
 
 import XCTest
-@testable import bitchat
+@testable import KRTR
 
 class NoiseIdentityPersistenceTests: XCTestCase {
     
@@ -28,8 +28,8 @@ class NoiseIdentityPersistenceTests: XCTestCase {
         _ = KeychainManager.shared.deleteIdentityKey(forKey: "messageRetentionKey")
         
         // Clear any UserDefaults that might interfere
-        UserDefaults.standard.removeObject(forKey: "bitchat.noiseIdentityKey")
-        UserDefaults.standard.removeObject(forKey: "bitchat.messageRetentionKey")
+        UserDefaults.standard.removeObject(forKey: "KRTR.noiseIdentityKey")
+        UserDefaults.standard.removeObject(forKey: "KRTR.messageRetentionKey")
         UserDefaults.standard.synchronize()
     }
     
@@ -59,7 +59,7 @@ class NoiseIdentityPersistenceTests: XCTestCase {
         _ = NoiseEncryptionService()
         
         // Verify identity is NOT in UserDefaults
-        let userDefaultsData = UserDefaults.standard.data(forKey: "bitchat.noiseIdentityKey")
+        let userDefaultsData = UserDefaults.standard.data(forKey: "KRTR.noiseIdentityKey")
         XCTAssertNil(userDefaultsData, "Identity key should NOT be stored in UserDefaults")
     }
     
@@ -118,7 +118,7 @@ class NoiseIdentityPersistenceTests: XCTestCase {
     
     func testKeychainServiceName() {
         // Verify we're using the correct service name
-        let expectedService = "chat.bitchat"
+        let expectedService = "chat.KRTR"
         
         // Save a test item
         let testKey = "test_service_verification"
@@ -149,9 +149,9 @@ class NoiseIdentityPersistenceTests: XCTestCase {
     func testLegacyKeychainCleanup() {
         // Create some legacy items with old service names
         let legacyServices = [
-            "com.bitchat.passwords",
-            "com.bitchat.noise.identity",
-            "bitchat.keychain"
+            "com.KRTR.passwords",
+            "com.KRTR.noise.identity",
+            "KRTR.keychain"
         ]
         
         // Add test items with legacy service names

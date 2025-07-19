@@ -1,13 +1,13 @@
 //
 // BinaryProtocolVersionTests.swift
-// bitchatTests
+// KRTRTests
 //
 // This is free and unencumbered software released into the public domain.
 // For more information, see <https://unlicense.org>
 //
 
 import XCTest
-@testable import bitchat
+@testable import KRTR
 
 class BinaryProtocolVersionTests: XCTestCase {
     
@@ -70,7 +70,7 @@ class BinaryProtocolVersionTests: XCTestCase {
     
     func testBinaryProtocolAcceptsVersion1() {
         // Create a valid version 1 packet
-        let packet = BitchatPacket(
+        let packet = KRTRPacket(
             type: MessageType.message.rawValue,
             senderID: Data("sender12".utf8),
             recipientID: nil,
@@ -87,7 +87,7 @@ class BinaryProtocolVersionTests: XCTestCase {
         }
         
         // Decode
-        guard let decoded = BitchatPacket.from(encoded) else {
+        guard let decoded = KRTRPacket.from(encoded) else {
             XCTFail("Failed to decode version 1 packet")
             return
         }
@@ -109,7 +109,7 @@ class BinaryProtocolVersionTests: XCTestCase {
             return
         }
         
-        let packet = BitchatPacket(
+        let packet = KRTRPacket(
             type: MessageType.versionHello.rawValue,
             ttl: 1,
             senderID: "testpeer",
@@ -132,7 +132,7 @@ class BinaryProtocolVersionTests: XCTestCase {
             return
         }
         
-        let packet = BitchatPacket(
+        let packet = KRTRPacket(
             type: MessageType.versionAck.rawValue,
             ttl: 1,
             senderID: "testpeer",
@@ -148,7 +148,7 @@ class BinaryProtocolVersionTests: XCTestCase {
     func testCompressedPacketWithVersion() {
         // Create a large payload that will trigger compression
         let largeContent = String(repeating: "Hello World! ", count: 100)
-        let packet = BitchatPacket(
+        let packet = KRTRPacket(
             type: MessageType.message.rawValue,
             senderID: Data("sender12".utf8),
             recipientID: nil,
@@ -165,7 +165,7 @@ class BinaryProtocolVersionTests: XCTestCase {
         }
         
         // Decode
-        guard let decoded = BitchatPacket.from(encoded) else {
+        guard let decoded = KRTRPacket.from(encoded) else {
             XCTFail("Failed to decode compressed packet")
             return
         }
@@ -212,7 +212,7 @@ class BinaryProtocolVersionTests: XCTestCase {
             return
         }
         
-        let packet = BitchatPacket(
+        let packet = KRTRPacket(
             type: MessageType.versionHello.rawValue,
             ttl: 1,
             senderID: "12345678",

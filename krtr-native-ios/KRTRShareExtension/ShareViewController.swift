@@ -1,6 +1,6 @@
 //
 // ShareViewController.swift
-// bitchatShareExtension
+// KRTRShareExtension
 //
 // This is free and unencumbered software released into the public domain.
 // For more information, see <https://unlicense.org>
@@ -15,7 +15,7 @@ class ShareViewController: SLComposeServiceViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Set placeholder text
-        placeholder = "Share to bitchat..."
+        placeholder = "Share to KRTR..."
         // Set character limit (optional)
         charactersRemaining = 500
     }
@@ -197,7 +197,7 @@ class ShareViewController: SLComposeServiceViewController {
         // The app will check for shared content when it becomes active
         // Show success feedback to user
         DispatchQueue.main.async {
-            self.textView.text = "✓ Shared to bitchat"
+            self.textView.text = "✓ Shared to KRTR"
             self.textView.isEditable = false
         }
     }

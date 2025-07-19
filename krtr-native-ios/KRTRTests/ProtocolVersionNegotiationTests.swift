@@ -1,13 +1,13 @@
 //
 // ProtocolVersionNegotiationTests.swift
-// bitchatTests
+// KRTRTests
 //
 // This is free and unencumbered software released into the public domain.
 // For more information, see <https://unlicense.org>
 //
 
 import XCTest
-@testable import bitchat
+@testable import KRTR
 
 class ProtocolVersionNegotiationTests: XCTestCase {
     
@@ -181,7 +181,7 @@ class ProtocolVersionNegotiationTests: XCTestCase {
             return
         }
         
-        let packet = BitchatPacket(
+        let packet = KRTRPacket(
             type: MessageType.versionHello.rawValue,
             ttl: 1,
             senderID: "testpeer",
@@ -193,7 +193,7 @@ class ProtocolVersionNegotiationTests: XCTestCase {
             return
         }
         
-        guard let decoded = BitchatPacket.from(encoded) else {
+        guard let decoded = KRTRPacket.from(encoded) else {
             XCTFail("Failed to decode packet")
             return
         }
@@ -223,7 +223,7 @@ class ProtocolVersionNegotiationTests: XCTestCase {
             return
         }
         
-        let packet = BitchatPacket(
+        let packet = KRTRPacket(
             type: MessageType.versionAck.rawValue,
             senderID: Data("sender".utf8),
             recipientID: Data("recipient".utf8),
@@ -238,7 +238,7 @@ class ProtocolVersionNegotiationTests: XCTestCase {
             return
         }
         
-        guard let decoded = BitchatPacket.from(encoded) else {
+        guard let decoded = KRTRPacket.from(encoded) else {
             XCTFail("Failed to decode packet")
             return
         }

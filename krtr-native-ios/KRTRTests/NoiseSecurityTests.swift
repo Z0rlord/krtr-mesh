@@ -1,6 +1,6 @@
 //
 // NoiseSecurityTests.swift
-// bitchatTests
+// KRTRTests
 //
 // This is free and unencumbered software released into the public domain.
 // For more information, see <https://unlicense.org>
@@ -8,7 +8,7 @@
 
 import XCTest
 import CryptoKit
-@testable import bitchat
+@testable import KRTR
 
 class NoiseSecurityTests: XCTestCase {
     
@@ -60,7 +60,7 @@ class NoiseSecurityTests: XCTestCase {
     
     func testMessagePaddingAppliedToAllPackets() throws {
         // Create a small packet
-        let packet = BitchatPacket(
+        let packet = KRTRPacket(
             type: MessageType.message.rawValue,
             senderID: Data("testuser".utf8),
             recipientID: nil,
@@ -82,7 +82,7 @@ class NoiseSecurityTests: XCTestCase {
                       "Encoded data size \(encodedData.count) doesn't match expected block sizes")
         
         // Decode should work correctly
-        guard let decodedPacket = BitchatPacket.from(encodedData) else {
+        guard let decodedPacket = KRTRPacket.from(encodedData) else {
             XCTFail("Failed to decode packet")
             return
         }
@@ -95,8 +95,8 @@ class NoiseSecurityTests: XCTestCase {
     
     func testPaddingConsistentAcrossMessages() {
         // Create multiple packets with same size payload
-        let packets: [BitchatPacket] = (0..<5).map { i in
-            BitchatPacket(
+        let packets: [KRTRPacket] = (0..<5).map { i in
+            KRTRPacket(
                 type: MessageType.message.rawValue,
                 senderID: Data("user\(i)".utf8),
                 recipientID: nil,
@@ -204,7 +204,7 @@ class NoiseSecurityTests: XCTestCase {
     func testPaddedMessageTransmission() throws {
         // Create a packet and encode it
         let originalMessage = "Test message for padding"
-        let packet = BitchatPacket(
+        let packet = KRTRPacket(
             type: MessageType.message.rawValue,
             senderID: Data("sender123".utf8),
             recipientID: Data("recipient".utf8),
@@ -224,7 +224,7 @@ class NoiseSecurityTests: XCTestCase {
         XCTAssertTrue(encoded.count >= originalMessage.count + 21) // Header + sender + payload
         
         // Decode (removes padding)
-        guard let decoded = BitchatPacket.from(encoded) else {
+        guard let decoded = KRTRPacket.from(encoded) else {
             XCTFail("Failed to decode")
             return
         }

@@ -1,6 +1,6 @@
 //
 // PasswordProtectedChannelTests.swift
-// bitchatTests
+// KRTRTests
 //
 // This is free and unencumbered software released into the public domain.
 // For more information, see <https://unlicense.org>
@@ -9,7 +9,7 @@
 import XCTest
 import CryptoKit
 import CommonCrypto
-@testable import bitchat
+@testable import KRTR
 
 class PasswordProtectedChannelTests: XCTestCase {
     var viewModel: ChatViewModel!
@@ -34,12 +34,12 @@ class PasswordProtectedChannelTests: XCTestCase {
     
     private func clearAllUserDefaults() {
         let defaults = UserDefaults.standard
-        defaults.removeObject(forKey: "bitchat_nickname")
-        defaults.removeObject(forKey: "bitchat_joined_channels")
-        defaults.removeObject(forKey: "bitchat_password_protected_channels")
-        defaults.removeObject(forKey: "bitchat_channel_creators")
-        defaults.removeObject(forKey: "bitchat_channel_passwords")
-        defaults.removeObject(forKey: "bitchat_favorite_peers")
+        defaults.removeObject(forKey: "KRTR_nickname")
+        defaults.removeObject(forKey: "KRTR_joined_channels")
+        defaults.removeObject(forKey: "KRTR_password_protected_channels")
+        defaults.removeObject(forKey: "KRTR_channel_creators")
+        defaults.removeObject(forKey: "KRTR_channel_passwords")
+        defaults.removeObject(forKey: "KRTR_favorite_peers")
         defaults.synchronize()
     }
     

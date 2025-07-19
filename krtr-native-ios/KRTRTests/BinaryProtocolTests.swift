@@ -1,19 +1,19 @@
 //
 // BinaryProtocolTests.swift
-// bitchatTests
+// KRTRTests
 //
 // This is free and unencumbered software released into the public domain.
 // For more information, see <https://unlicense.org>
 //
 
 import XCTest
-@testable import bitchat
+@testable import KRTR
 
 class BinaryProtocolTests: XCTestCase {
     
     func testPacketEncodingDecoding() {
         // Test basic packet
-        let packet = BitchatPacket(
+        let packet = KRTRPacket(
             type: MessageType.message.rawValue,
             senderID: Data("testuser".utf8),
             recipientID: Data("recipient".utf8),
@@ -30,7 +30,7 @@ class BinaryProtocolTests: XCTestCase {
         }
         
         // Decode
-        guard let decoded = BitchatPacket.from(encoded) else {
+        guard let decoded = KRTRPacket.from(encoded) else {
             XCTFail("Failed to decode packet")
             return
         }
@@ -44,7 +44,7 @@ class BinaryProtocolTests: XCTestCase {
     }
     
     func testBroadcastPacket() {
-        let packet = BitchatPacket(
+        let packet = KRTRPacket(
             type: MessageType.message.rawValue,
             senderID: Data("sender".utf8),
             recipientID: SpecialRecipients.broadcast,
@@ -59,7 +59,7 @@ class BinaryProtocolTests: XCTestCase {
             return
         }
         
-        guard let decoded = BitchatPacket.from(encoded) else {
+        guard let decoded = KRTRPacket.from(encoded) else {
             XCTFail("Failed to decode broadcast packet")
             return
         }
@@ -70,7 +70,7 @@ class BinaryProtocolTests: XCTestCase {
     
     func testPacketWithSignature() {
         let signature = Data(repeating: 0xAB, count: 64)
-        let packet = BitchatPacket(
+        let packet = KRTRPacket(
             type: MessageType.message.rawValue,
             senderID: Data("sender".utf8),
             recipientID: Data("recipient".utf8),
@@ -85,7 +85,7 @@ class BinaryProtocolTests: XCTestCase {
             return
         }
         
-        guard let decoded = BitchatPacket.from(encoded) else {
+        guard let decoded = KRTRPacket.from(encoded) else {
             XCTFail("Failed to decode signed packet")
             return
         }
@@ -96,15 +96,15 @@ class BinaryProtocolTests: XCTestCase {
     
     func testInvalidPacketHandling() {
         // Test empty data
-        XCTAssertNil(BitchatPacket.from(Data()))
+        XCTAssertNil(KRTRPacket.from(Data()))
         
         // Test truncated data
         let truncated = Data(repeating: 0, count: 10)
-        XCTAssertNil(BitchatPacket.from(truncated))
+        XCTAssertNil(KRTRPacket.from(truncated))
         
         // Test invalid version
         var invalidVersion = Data(repeating: 0, count: 100)
         invalidVersion[0] = 99 // Invalid version
-        XCTAssertNil(BitchatPacket.from(invalidVersion))
+        XCTAssertNil(KRTRPacket.from(invalidVersion))
     }
 }
