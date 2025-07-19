@@ -1,18 +1,16 @@
-name: EAS Build & Deploy
+name: EAS Production Build
 
 on:
   push:
-    branches: [main, develop]
-  pull_request:
     branches: [main]
   workflow_dispatch:
     # Allow manual triggering
 
 jobs:
   build:
-    name: EAS Build
+    name: EAS Production Build
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: 🏗 Setup repo
         uses: actions/checkout@v4
@@ -30,9 +28,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: 📦 Install dependencies
-        run: npm ci --legacy-peer-deps
+        run: npm ci --prefer-offline --no-audit
 
       - name: 🚀 Create production build
         run: eas build --platform ios --profile production --non-interactive
-
-

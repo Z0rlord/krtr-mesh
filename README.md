@@ -6,6 +6,8 @@
 
 ---
 
+<!-- Trigger EAS build with restored EXPO_TOKEN -->
+
 ## 🔥 Why Krtr?
 
 After witnessing the collapse of communications post-Hurricane Maria, and watching centralized platforms fail the privacy test again and again, Krtr Mesh is a protocol built to enable:
