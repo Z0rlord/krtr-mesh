@@ -6,6 +6,13 @@ struct MainTabView: View {
     
     var body: some View {
         TabView {
+            // Mesh Tab
+            MeshView(meshService: meshService)
+                .tabItem {
+                    Image(systemName: "network")
+                    Text("Mesh")
+                }
+
             // Chat Tab
             ContentView()
                 .environmentObject(chatViewModel)
@@ -13,7 +20,7 @@ struct MainTabView: View {
                     Image(systemName: "message.circle.fill")
                     Text("Chat")
                 }
-            
+
             // ZK Dashboard Tab
             ZKDashboardView(meshService: meshService)
                 .tabItem {

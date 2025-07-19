@@ -10,308 +10,7 @@ import SwiftUI
 import Foundation
 import CryptoKit
 
-// MARK: - ZK Service Protocol and Implementation
 
-protocol ZKServiceProtocol: ObservableObject {
-    var isAvailable: Bool { get }
-    func generateMembershipProof(membershipKey: Data, groupRoot: Data, pathElements: [Data], pathIndices: [Int]) async throws -> ZKProofResult
-    func generateReputationProof(reputationScore: Int, threshold: Int, nonce: Data) async throws -> ZKProofResult
-    func generateMessageAuthProof(message: Data, senderKey: Data, timestamp: UInt64) async throws -> ZKProofResult
-    func verifyProof(proof: Data, publicInputs: [Data], proofType: ZKProofType) async throws -> Bool
-    func getStats() -> ZKStats
-    func resetStats()
-}
-
-struct ZKProofResult {
-    let proof: Data
-    let publicInputs: [Data]
-    let proofType: ZKProofType
-    let timestamp: Date
-}
-
-enum ZKProofType: String, Codable {
-    case membership = "membership"
-    case reputation = "reputation"
-    case messageAuth = "message_auth"
-}
-
-// MARK: - Enhanced ZK Proof Structures for UX Features
-
-struct ZKProofContext {
-    // Membership proof context
-    var membershipKey: Data?
-    var groupRoot: Data?
-    var pathElements: [Data]?
-    var pathIndices: [Int]?
-
-    // Reputation proof context
-    var reputationScore: Int?
-    var threshold: Int?
-    var nonce: Data?
-
-    // Message auth proof context
-    var message: Data?
-    var senderKey: Data?
-    var timestamp: UInt64?
-
-    // Channel access context
-    var channelName: String?
-    var accessRequirement: ChannelAccessRequirement?
-
-    // Attendance/presence context
-    var location: String?
-    var attendanceCount: Int?
-    var timeWindow: TimeInterval?
-}
-
-struct ZKProofWithMetadata {
-    let proof: Data
-    let publicInputs: [Data]
-    let proofType: ZKProofType
-    let timestamp: Date
-    let context: ZKProofContext
-    let hash: String
-    let isValid: Bool
-    let generationDuration: TimeInterval
-}
-
-enum ChannelAccessRequirement {
-    case reputationThreshold(Int)
-    case proximityAttestations(Int)
-    case messageRelay(Int)
-    case lightningPayment
-}
-
-struct ChannelAccess {
-    let channelName: String
-    let requirement: ChannelAccessRequirement
-    let isUnlocked: Bool
-    let proofHash: String?
-    let unlockedAt: Date?
-}
-
-// MARK: - CryptoKit Extensions (using existing implementation below)
-
-struct ZKStats {
-    var totalProofs: Int = 0
-    var successfulProofs: Int = 0
-    var averageDuration: TimeInterval = 0
-
-    var successRate: Double {
-        return totalProofs > 0 ? Double(successfulProofs) / Double(totalProofs) : 0.0
-    }
-}
-
-class MockZKService: ZKServiceProtocol {
-    @Published var isAvailable: Bool = true
-    private var stats = ZKStats()
-
-    func generateMembershipProof(membershipKey: Data, groupRoot: Data, pathElements: [Data], pathIndices: [Int]) async throws -> ZKProofResult {
-        let startTime = Date()
-
-        // Simulate proof generation delay
-        try await Task.sleep(nanoseconds: UInt64.random(in: 100_000_000...500_000_000))
-
-        let proofId = "proof_membership_\(UUID().uuidString.prefix(8))"
-        let proof = Data(proofId.utf8)
-
-        let publicInputs = [
-            groupRoot,
-            Data("public_nullifier_\(UUID().uuidString.prefix(8))".utf8),
-            Data("merkle_root_\(UUID().uuidString.prefix(8))".utf8)
-        ]
-
-        updateStats(duration: Date().timeIntervalSince(startTime), success: true)
-
-        return ZKProofResult(
-            proof: proof,
-            publicInputs: publicInputs,
-            proofType: .membership,
-            timestamp: Date()
-        )
-    }
-
-    func generateReputationProof(reputationScore: Int, threshold: Int, nonce: Data) async throws -> ZKProofResult {
-        let startTime = Date()
-
-        guard reputationScore >= threshold else {
-            updateStats(duration: Date().timeIntervalSince(startTime), success: false)
-            throw ZKError.invalidInput("Reputation score below threshold")
-        }
-
-        // Simulate proof generation delay
-        try await Task.sleep(nanoseconds: UInt64.random(in: 100_000_000...500_000_000))
-
-        let proofId = "proof_reputation_\(UUID().uuidString.prefix(8))"
-        let proof = Data(proofId.utf8)
-
-        let publicInputs = [
-            Data(withUnsafeBytes(of: threshold.bigEndian) { Data($0) }),
-            nonce,
-            Data("commitment_\(UUID().uuidString.prefix(8))".utf8)
-        ]
-
-        updateStats(duration: Date().timeIntervalSince(startTime), success: true)
-
-        return ZKProofResult(
-            proof: proof,
-            publicInputs: publicInputs,
-            proofType: .reputation,
-            timestamp: Date()
-        )
-    }
-
-    func generateMessageAuthProof(message: Data, senderKey: Data, timestamp: UInt64) async throws -> ZKProofResult {
-        let startTime = Date()
-
-        // Simulate proof generation delay
-        try await Task.sleep(nanoseconds: UInt64.random(in: 100_000_000...500_000_000))
-
-        let proofId = "proof_message_\(UUID().uuidString.prefix(8))"
-        let proof = Data(proofId.utf8)
-
-        let publicInputs = [
-            Data(withUnsafeBytes(of: timestamp.bigEndian) { Data($0) }),
-            Data(message.sha256.prefix(16)),
-            Data("auth_commitment_\(UUID().uuidString.prefix(8))".utf8)
-        ]
-
-        updateStats(duration: Date().timeIntervalSince(startTime), success: true)
-
-        return ZKProofResult(
-            proof: proof,
-            publicInputs: publicInputs,
-            proofType: .messageAuth,
-            timestamp: Date()
-        )
-    }
-
-    func verifyProof(proof: Data, publicInputs: [Data], proofType: ZKProofType) async throws -> Bool {
-        // Simulate verification delay
-        try await Task.sleep(nanoseconds: UInt64.random(in: 50_000_000...200_000_000))
-
-        // Mock verification - always returns true for valid-looking proofs
-        return proof.count > 0 && !publicInputs.isEmpty
-    }
-
-    func getStats() -> ZKStats {
-        return stats
-    }
-
-    func resetStats() {
-        stats = ZKStats()
-    }
-
-    private func updateStats(duration: TimeInterval, success: Bool) {
-        stats.totalProofs += 1
-        if success {
-            stats.successfulProofs += 1
-        }
-
-        // Update average duration
-        let totalDuration = stats.averageDuration * Double(stats.totalProofs - 1) + duration
-        stats.averageDuration = totalDuration / Double(stats.totalProofs)
-    }
-
-    // MARK: - Enhanced ZK Proof Generation for UX Features
-
-    /// Generate ZK proof for specific use cases with metadata
-    func generateZKProof(for proofType: ZKProofType, context: ZKProofContext) async throws -> ZKProofWithMetadata {
-        let startTime = Date()
-
-        do {
-            let proofResult: ZKProofResult
-
-            switch proofType {
-            case .membership:
-                proofResult = try await generateMembershipProof(
-                    membershipKey: context.membershipKey ?? Data("default_key".utf8),
-                    groupRoot: context.groupRoot ?? Data("default_root".utf8),
-                    pathElements: context.pathElements ?? [Data("default_path".utf8)],
-                    pathIndices: context.pathIndices ?? [0]
-                )
-
-            case .reputation:
-                proofResult = try await generateReputationProof(
-                    reputationScore: context.reputationScore ?? 75,
-                    threshold: context.threshold ?? 50,
-                    nonce: context.nonce ?? Data("default_nonce".utf8)
-                )
-
-            case .messageAuth:
-                proofResult = try await generateMessageAuthProof(
-                    message: context.message ?? Data("default_message".utf8),
-                    senderKey: context.senderKey ?? Data("default_sender".utf8),
-                    timestamp: context.timestamp ?? UInt64(Date().timeIntervalSince1970)
-                )
-            }
-
-            let duration = Date().timeIntervalSince(startTime)
-            updateStats(duration: duration, success: true)
-
-            // Create enhanced proof with metadata
-            let proofWithMetadata = ZKProofWithMetadata(
-                proof: proofResult.proof,
-                publicInputs: proofResult.publicInputs,
-                proofType: proofResult.proofType,
-                timestamp: proofResult.timestamp,
-                context: context,
-                hash: generateProofHash(proofResult.proof),
-                isValid: true,
-                generationDuration: duration
-            )
-
-            return proofWithMetadata
-
-        } catch {
-            let duration = Date().timeIntervalSince(startTime)
-            updateStats(duration: duration, success: false)
-            throw error
-        }
-    }
-
-    private func generateProofHash(_ proof: Data) -> String {
-        // Simple hash for demonstration - in production use proper cryptographic hash
-        let hashData = proof.sha256
-        return hashData.map { String(format: "%02x", $0) }.joined().prefix(16).description
-    }
-}
-
-enum ZKError: Error, LocalizedError {
-    case invalidInput(String)
-    case proofGenerationFailed(String)
-    case verificationFailed(String)
-
-    var errorDescription: String? {
-        switch self {
-        case .invalidInput(let message):
-            return "Invalid input: \(message)"
-        case .proofGenerationFailed(let message):
-            return "Proof generation failed: \(message)"
-        case .verificationFailed(let message):
-            return "Verification failed: \(message)"
-        }
-    }
-}
-
-struct ZKServiceFactory {
-    static func createService() -> MockZKService {
-        return MockZKService()
-    }
-}
-
-extension Data {
-    var sha256: Data {
-        var hash = [UInt8](repeating: 0, count: 32)
-        self.withUnsafeBytes { bytes in
-            // Simple hash simulation - not cryptographically secure
-            for (index, byte) in bytes.enumerated() {
-                hash[index % 32] ^= byte
-            }
-        }
-        return Data(hash)
-    }
-}
 
 struct ContentView: View {
     @EnvironmentObject var viewModel: ChatViewModel
@@ -1953,7 +1652,7 @@ struct ZKDashboardSheet: View {
                     success: true,
                     duration: duration,
                     details: "Generated proof successfully",
-                    proofSize: proofResult.proof.count
+                    proofSize: proofResult.proofData.count
                 )
 
                 await MainActor.run {
@@ -1982,64 +1681,6 @@ struct ZKDashboardSheet: View {
 }
 
 // MARK: - ZK Supporting Views
-
-struct ZKStatusCard: View {
-    let title: String
-    let value: String
-    let icon: String
-    let color: Color
-
-    var body: some View {
-        VStack(spacing: 8) {
-            Image(systemName: icon)
-                .font(.title2)
-                .foregroundColor(color)
-
-            Text(value)
-                .font(.headline)
-                .fontWeight(.bold)
-
-            Text(title)
-                .font(.caption)
-                .foregroundColor(.secondary)
-        }
-        .frame(maxWidth: .infinity)
-        .padding()
-        .background(Color(.systemGray6))
-        .cornerRadius(12)
-    }
-}
-
-struct ZKActionButton: View {
-    let title: String
-    let subtitle: String
-    let icon: String
-    let color: Color
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            VStack(spacing: 8) {
-                Image(systemName: icon)
-                    .font(.title2)
-                    .foregroundColor(color)
-
-                Text(title)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-
-                Text(subtitle)
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-            }
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color(.systemGray6))
-            .cornerRadius(12)
-        }
-        .buttonStyle(PlainButtonStyle())
-    }
-}
 
 struct ZKTestResult: Identifiable {
     let id = UUID()
@@ -2178,7 +1819,7 @@ struct ZKTestSheet: View {
                 success: true,
                 duration: duration,
                 details: "Generated proof with \(proofResult.publicInputs.count) public inputs",
-                proofSize: proofResult.proof.count
+                proofSize: proofResult.proofData.count
             ))
 
         } catch {
@@ -2199,9 +1840,8 @@ struct ZKTestSheet: View {
 
         do {
             let proofResult = try await zkService.generateReputationProof(
-                reputationScore: 85,
-                threshold: 50,
-                nonce: Data("test_nonce".utf8)
+                score: 85,
+                threshold: 50
             )
 
             let duration = Date().timeIntervalSince(startTime)
@@ -2211,7 +1851,7 @@ struct ZKTestSheet: View {
                 success: true,
                 duration: duration,
                 details: "Proved score ≥ 50 without revealing actual score (85)",
-                proofSize: proofResult.proof.count
+                proofSize: proofResult.proofData.count
             ))
 
         } catch {

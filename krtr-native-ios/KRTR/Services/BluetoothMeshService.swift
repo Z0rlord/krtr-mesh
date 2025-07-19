@@ -61,7 +61,7 @@ enum VersionNegotiationState {
     case failed(reason: String)
 }
 
-class BluetoothMeshService: NSObject {
+class BluetoothMeshService: NSObject, ObservableObject {
     static let serviceUUID = CBUUID(string: "F47B5E2D-4A9E-4C5A-9B3F-8E1D2C3A4B5C")
     static let characteristicUUID = CBUUID(string: "A1B2C3D4-E5F6-4A5B-8C9D-0E1F2A3B4C5D")
     
@@ -80,7 +80,38 @@ class BluetoothMeshService: NSObject {
     private var peerRSSI: [String: NSNumber] = [:] // Track RSSI values for peers
     private var peripheralRSSI: [String: NSNumber] = [:] // Track RSSI by peripheral ID during discovery
     private var loggedCryptoErrors = Set<String>()  // Track which peers we've logged crypto errors for
-    
+
+    // MARK: - Published Properties for SwiftUI
+    @Published var isConnected: Bool = false
+    @Published var connectedPeers: [String] = []
+
+    // MARK: - Helper Methods for Published Properties
+    private func updatePublishedProperties() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+
+            // Update connection status
+            self.isConnected = !self.connectedPeripherals.isEmpty || !self.subscribedCentrals.isEmpty
+
+            // Update connected peers list
+            var peers: [String] = []
+
+            // Add peripheral connections
+            for (peerID, peripheral) in self.connectedPeripherals {
+                if peripheral.state == .connected {
+                    peers.append(peerID)
+                }
+            }
+
+            // Add central connections (when we're acting as peripheral)
+            for central in self.subscribedCentrals {
+                peers.append(central.identifier.uuidString)
+            }
+
+            self.connectedPeers = Array(Set(peers)) // Remove duplicates
+        }
+    }
+
     // MARK: - Peer Identity Rotation
     // Mappings between ephemeral peer IDs and permanent fingerprints
     private var peerIDToFingerprint: [String: String] = [:]  // PeerID -> Fingerprint
@@ -2781,7 +2812,10 @@ extension BluetoothMeshService: CBCentralManagerDelegate {
         // Store peripheral by its system ID temporarily until we get the real peer ID
         let tempID = peripheral.identifier.uuidString
         connectedPeripherals[tempID] = peripheral
-        
+
+        // Update published properties for SwiftUI
+        updatePublishedProperties()
+
         // Connected to peripheral
         
         // Don't show connected message yet - wait for key exchange
@@ -2866,8 +2900,11 @@ extension BluetoothMeshService: CBCentralManagerDelegate {
                 }
             }
             self.notifyPeerListUpdate()
+
+            // Update published properties for SwiftUI
+            self.updatePublishedProperties()
         }
-        
+
         // Keep in pool but remove from discovered list
         discoveredPeripherals.removeAll { $0 == peripheral }
         

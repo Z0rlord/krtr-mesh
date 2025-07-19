@@ -2,14 +2,14 @@ import SwiftUI
 
 struct ZKDashboardView: View {
     @StateObject private var zkMeshProtocol: ZKMeshProtocol
-    @StateObject private var zkService = ZKServiceFactory.createService()
+    @StateObject private var zkService: MockZKService = ZKServiceFactory.createService()
     @State private var showingTestView = false
     @State private var showingGroupJoin = false
     @State private var showingReputationProof = false
     @State private var showingMessageAuth = false
     
     init(meshService: BluetoothMeshService) {
-        let zkService = ZKServiceFactory.createService()
+        let zkService: MockZKService = ZKServiceFactory.createService()
         self._zkMeshProtocol = StateObject(wrappedValue: ZKMeshProtocol(zkService: zkService, meshService: meshService))
     }
     
@@ -91,7 +91,7 @@ struct ZKHeaderView: View {
 }
 
 struct ZKStatusCardsView: View {
-    let zkService: ZKServiceProtocol
+    let zkService: MockZKService
     let zkMeshProtocol: ZKMeshProtocol
     
     var body: some View {
@@ -245,7 +245,7 @@ struct ZKActionButton: View {
 }
 
 struct ZKStatisticsView: View {
-    let zkService: ZKServiceProtocol
+    let zkService: MockZKService
     let zkMeshProtocol: ZKMeshProtocol
     
     var body: some View {
@@ -256,15 +256,15 @@ struct ZKStatisticsView: View {
             
             VStack(spacing: 12) {
                 let zkStats = zkService.getStats()
-                let meshStats = zkMeshProtocol.getZKMeshStats()
-                
+                let (_, meshStats) = zkMeshProtocol.getZKMeshStats()
+
                 ZKStatRow(label: "Total Proofs", value: "\(zkStats.totalProofs)")
                 ZKStatRow(label: "Average Duration", value: String(format: "%.3fs", zkStats.averageDuration))
                 ZKStatRow(label: "Mesh Messages Sent", value: "\(meshStats.totalZKMessagesSent)")
                 ZKStatRow(label: "Mesh Messages Received", value: "\(meshStats.totalZKMessagesReceived)")
-                ZKStatRow(label: "Groups Joined", value: "\(meshStats.groupsJoined)")
-                ZKStatRow(label: "Reputation Proofs", value: "\(meshStats.reputationProofsShared)")
-                ZKStatRow(label: "Verification Success Rate", value: String(format: "%.1f%%", meshStats.successRate * 100))
+                ZKStatRow(label: "ZK Proofs Generated", value: "\(meshStats.totalZKProofsGenerated)")
+                ZKStatRow(label: "ZK Proofs Verified", value: "\(meshStats.totalZKProofsVerified)")
+                ZKStatRow(label: "Success Rate", value: String(format: "%.1f%%", zkStats.successRate * 100))
             }
             .padding()
             .background(Color(.systemGray6))
@@ -288,6 +288,122 @@ struct ZKStatRow: View {
             Text(value)
                 .font(.subheadline)
                 .fontWeight(.medium)
+        }
+    }
+}
+
+// MARK: - Missing View Components
+
+struct ZKTestView: View {
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 20) {
+                Text("ZK Test View")
+                    .font(.title)
+                    .fontWeight(.bold)
+
+                Text("Zero-Knowledge proof testing interface")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+
+                Spacer()
+
+                Text("Coming Soon...")
+                    .font(.headline)
+                    .foregroundColor(.gray)
+
+                Spacer()
+            }
+            .padding()
+            .navigationTitle("ZK Testing")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+}
+
+struct ZKGroupJoinView: View {
+    let zkMeshProtocol: ZKMeshProtocol
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 20) {
+                Text("Group Join")
+                    .font(.title)
+                    .fontWeight(.bold)
+
+                Text("Join groups with zero-knowledge membership proofs")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+
+                Spacer()
+
+                Text("Coming Soon...")
+                    .font(.headline)
+                    .foregroundColor(.gray)
+
+                Spacer()
+            }
+            .padding()
+            .navigationTitle("Group Join")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+}
+
+struct ZKReputationProofView: View {
+    let zkMeshProtocol: ZKMeshProtocol
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 20) {
+                Text("Reputation Proof")
+                    .font(.title)
+                    .fontWeight(.bold)
+
+                Text("Prove reputation without revealing exact score")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+
+                Spacer()
+
+                Text("Coming Soon...")
+                    .font(.headline)
+                    .foregroundColor(.gray)
+
+                Spacer()
+            }
+            .padding()
+            .navigationTitle("Reputation Proof")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+}
+
+struct ZKMessageAuthView: View {
+    let zkMeshProtocol: ZKMeshProtocol
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 20) {
+                Text("Message Authentication")
+                    .font(.title)
+                    .fontWeight(.bold)
+
+                Text("Authenticate messages with zero-knowledge proofs")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+
+                Spacer()
+
+                Text("Coming Soon...")
+                    .font(.headline)
+                    .foregroundColor(.gray)
+
+                Spacer()
+            }
+            .padding()
+            .navigationTitle("Message Auth")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

@@ -14,6 +14,7 @@ KRTR now includes advanced zero-knowledge capabilities that provide:
 ## 🏗️ **Architecture**
 
 ### **ZK Service Layer**
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                        KRTR App                             │
@@ -38,55 +39,67 @@ KRTR now includes advanced zero-knowledge capabilities that provide:
 ## 🔐 **Zero-Knowledge Circuits**
 
 ### **1. Membership Circuit** (`circuits/membership/`)
+
 Proves membership in an authorized group without revealing which member you are.
 
 **Private Inputs:**
+
 - `secret_key` - User's secret membership key
 - `path_elements` - Merkle tree path to prove membership
 - `path_indices` - Path directions in the tree
 
 **Public Inputs:**
+
 - `group_root` - Merkle root of authorized members
 - `nullifier_hash` - Prevents double-use of proofs
 - `signal_hash` - Unique challenge identifier
 
 **Use Cases:**
+
 - Join mesh networks anonymously
 - Access private channels without revealing identity
 - Participate in governance while maintaining privacy
 
 ### **2. Reputation Circuit** (`circuits/reputation/`)
+
 Proves good reputation without revealing interaction history.
 
 **Private Inputs:**
+
 - `message_count` - Total messages sent
 - `positive_ratings` - Positive feedback received
 - `negative_ratings` - Negative feedback received
 - `secret_salt` - Random salt for commitment
 
 **Public Inputs:**
+
 - `reputation_threshold` - Minimum reputation required
 - `commitment` - Cryptographic commitment to private data
 
 **Use Cases:**
+
 - Access high-trust channels
 - Establish credibility without revealing history
 - Moderate content with anonymous authority
 
 ### **3. Message Proof Circuit** (`circuits/message_proof/`)
+
 Proves message authenticity without revealing content.
 
 **Private Inputs:**
+
 - `message_content` - Actual message content
 - `sender_private_key` - Sender's private key
 - `nonce` - Random nonce for uniqueness
 
 **Public Inputs:**
+
 - `message_hash` - Hash of the message
 - `sender_public_key` - Sender's public key
 - `timestamp` - When message was sent
 
 **Use Cases:**
+
 - Dispute resolution without revealing messages
 - Prove delivery without exposing content
 - Content moderation with privacy preservation
@@ -94,6 +107,7 @@ Proves message authenticity without revealing content.
 ## 🚀 **Usage Examples**
 
 ### **Anonymous Authentication**
+
 ```javascript
 // Initiate authentication for a peer
 const challengeId = await zkAuthService.initiateAuthentication(peerID, 'trusted');
@@ -106,6 +120,7 @@ const isAuthorized = zkAuthService.isPeerAuthorized(peerID, 'trusted');
 ```
 
 ### **Reputation Proofs**
+
 ```javascript
 // Check if user can prove required reputation
 const canProve = await zkService.canProveReputation(100);
@@ -120,6 +135,7 @@ if (canProve) {
 ```
 
 ### **Message Authenticity**
+
 ```javascript
 // Generate proof of message authenticity
 const messageProof = await zkService.generateMessageProof(
@@ -137,6 +153,7 @@ const isAuthentic = await zkService.verifyMessageProof(
 ## 🛠️ **Setup and Installation**
 
 ### **1. Install Noir Toolchain**
+
 ```bash
 # Install Noir
 npm run setup:noir
@@ -147,6 +164,7 @@ noirup
 ```
 
 ### **2. Compile Circuits**
+
 ```bash
 # Build all ZK circuits
 npm run build:circuits
@@ -156,12 +174,14 @@ npm run build:circuits
 ```
 
 ### **3. Install Dependencies**
+
 ```bash
 # Install Noir JavaScript packages
 npm install
 ```
 
 ### **4. Test ZK Functionality**
+
 ```bash
 # Run ZK-specific tests
 npm run test:zk
@@ -170,16 +190,19 @@ npm run test:zk
 ## 📊 **Performance Characteristics**
 
 ### **Proof Generation Times** (estimated on mobile)
+
 - **Membership Proof**: 2-5 seconds
 - **Reputation Proof**: 1-3 seconds  
 - **Message Proof**: 1-2 seconds
 
 ### **Proof Sizes**
+
 - **Membership Proof**: ~2KB
 - **Reputation Proof**: ~1.5KB
 - **Message Proof**: ~1KB
 
 ### **Battery Impact**
+
 - **Performance Mode**: Full ZK features enabled
 - **Balanced Mode**: ZK proofs with longer generation times
 - **Power Saver**: Limited ZK functionality
@@ -188,12 +211,14 @@ npm run test:zk
 ## 🔒 **Security Model**
 
 ### **Privacy Guarantees**
+
 - **Zero-Knowledge**: Proofs reveal nothing beyond the statement being proven
 - **Unlinkability**: Multiple proofs from same user cannot be linked
 - **Forward Secrecy**: Compromised keys don't affect past proofs
 - **Soundness**: Invalid statements cannot be proven
 
 ### **Attack Resistance**
+
 - **Replay Attacks**: Prevented by nullifiers and timestamps
 - **Sybil Attacks**: Mitigated by reputation requirements
 - **Collusion**: Limited by cryptographic assumptions
@@ -202,6 +227,7 @@ npm run test:zk
 ## 🎛️ **Configuration**
 
 ### **Group Management**
+
 ```javascript
 // Add new authorization group
 zkAuthService.addGroup('vip', merkleRoot, 100); // Requires 100+ reputation
@@ -214,6 +240,7 @@ const groups = zkAuthService.getGroups();
 ```
 
 ### **Reputation Thresholds**
+
 - **Public Group**: 0 reputation (anyone can join)
 - **Trusted Group**: 10+ reputation
 - **VIP Group**: 100+ reputation
@@ -222,6 +249,7 @@ const groups = zkAuthService.getGroups();
 ## 📈 **Monitoring and Statistics**
 
 ### **ZK Service Stats**
+
 ```javascript
 const zkStats = zkService.getStats();
 // {
@@ -235,6 +263,7 @@ const zkStats = zkService.getStats();
 ```
 
 ### **Authentication Stats**
+
 ```javascript
 const authStats = zkAuthService.getStats();
 // {
@@ -248,6 +277,7 @@ const authStats = zkAuthService.getStats();
 ## 🚨 **Emergency Features**
 
 ### **ZK Identity Wipe**
+
 ```javascript
 // Clear all ZK identity and reputation data
 await zkService.emergencyWipe();
@@ -255,7 +285,9 @@ await zkAuthService.emergencyWipe();
 ```
 
 ### **Triple-Tap Emergency**
+
 The existing triple-tap logo emergency wipe now also clears:
+
 - ZK identity keys
 - Reputation data
 - Authorization states
@@ -264,6 +296,7 @@ The existing triple-tap logo emergency wipe now also clears:
 ## 🔧 **Development**
 
 ### **Adding New Circuits**
+
 1. Create circuit in `circuits/new_circuit/src/main.nr`
 2. Add `Nargo.toml` configuration
 3. Update build script
@@ -271,6 +304,7 @@ The existing triple-tap logo emergency wipe now also clears:
 5. Update ZKService with new proof methods
 
 ### **Testing ZK Features**
+
 ```bash
 # Test circuit compilation
 nargo test --package krtr_membership
@@ -285,16 +319,19 @@ npm run ios # or android
 ## 🎯 **Use Cases**
 
 ### **Anonymous Mesh Networks**
+
 - Join networks without revealing identity
 - Participate in discussions anonymously
 - Vote on network policies privately
 
 ### **Trust Without Identity**
+
 - Establish reputation without history exposure
 - Access privileged channels based on merit
 - Moderate content with anonymous authority
 
 ### **Privacy-Preserving Disputes**
+
 - Prove message delivery without revealing content
 - Resolve conflicts while maintaining privacy
 - Audit network behavior anonymously
@@ -302,11 +339,13 @@ npm run ios # or android
 ## 🚀 **Future Enhancements**
 
 ### **Advanced Circuits**
+
 - **Range Proofs**: Prove values within ranges without revealing exact amounts
 - **Set Membership**: Prove membership in dynamic sets
 - **Threshold Signatures**: Collaborative signing with privacy
 
 ### **Integration Opportunities**
+
 - **Decentralized Identity**: Integration with DID systems
 - **Blockchain Anchoring**: Anchor proofs to public blockchains
 - **Cross-Network**: ZK proofs across different mesh networks
