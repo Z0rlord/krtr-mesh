@@ -18,9 +18,16 @@ struct MainTabView: View {
             ZKDashboardView(meshService: meshService)
                 .tabItem {
                     Image(systemName: "lock.shield.fill")
-                    Text("Zero-Knowledge")
+                    Text("ZK Dashboard")
                 }
-            
+
+            // ZK Enhanced Features Tab
+            ZKEnhancedFeaturesView()
+                .tabItem {
+                    Image(systemName: "shield.checkered")
+                    Text("ZK Features")
+                }
+
             // Settings/Info Tab
             AppInfoView()
                 .tabItem {

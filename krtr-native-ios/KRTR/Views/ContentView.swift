@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Foundation
+import CryptoKit
 
 // MARK: - ZK Service Protocol and Implementation
 
@@ -33,6 +34,63 @@ enum ZKProofType: String, Codable {
     case reputation = "reputation"
     case messageAuth = "message_auth"
 }
+
+// MARK: - Enhanced ZK Proof Structures for UX Features
+
+struct ZKProofContext {
+    // Membership proof context
+    var membershipKey: Data?
+    var groupRoot: Data?
+    var pathElements: [Data]?
+    var pathIndices: [Int]?
+
+    // Reputation proof context
+    var reputationScore: Int?
+    var threshold: Int?
+    var nonce: Data?
+
+    // Message auth proof context
+    var message: Data?
+    var senderKey: Data?
+    var timestamp: UInt64?
+
+    // Channel access context
+    var channelName: String?
+    var accessRequirement: ChannelAccessRequirement?
+
+    // Attendance/presence context
+    var location: String?
+    var attendanceCount: Int?
+    var timeWindow: TimeInterval?
+}
+
+struct ZKProofWithMetadata {
+    let proof: Data
+    let publicInputs: [Data]
+    let proofType: ZKProofType
+    let timestamp: Date
+    let context: ZKProofContext
+    let hash: String
+    let isValid: Bool
+    let generationDuration: TimeInterval
+}
+
+enum ChannelAccessRequirement {
+    case reputationThreshold(Int)
+    case proximityAttestations(Int)
+    case messageRelay(Int)
+    case lightningPayment
+}
+
+struct ChannelAccess {
+    let channelName: String
+    let requirement: ChannelAccessRequirement
+    let isUnlocked: Bool
+    let proofHash: String?
+    let unlockedAt: Date?
+}
+
+// MARK: - CryptoKit Extensions (using existing implementation below)
 
 struct ZKStats {
     var totalProofs: Int = 0
@@ -153,6 +211,69 @@ class MockZKService: ZKServiceProtocol {
         // Update average duration
         let totalDuration = stats.averageDuration * Double(stats.totalProofs - 1) + duration
         stats.averageDuration = totalDuration / Double(stats.totalProofs)
+    }
+
+    // MARK: - Enhanced ZK Proof Generation for UX Features
+
+    /// Generate ZK proof for specific use cases with metadata
+    func generateZKProof(for proofType: ZKProofType, context: ZKProofContext) async throws -> ZKProofWithMetadata {
+        let startTime = Date()
+
+        do {
+            let proofResult: ZKProofResult
+
+            switch proofType {
+            case .membership:
+                proofResult = try await generateMembershipProof(
+                    membershipKey: context.membershipKey ?? Data("default_key".utf8),
+                    groupRoot: context.groupRoot ?? Data("default_root".utf8),
+                    pathElements: context.pathElements ?? [Data("default_path".utf8)],
+                    pathIndices: context.pathIndices ?? [0]
+                )
+
+            case .reputation:
+                proofResult = try await generateReputationProof(
+                    reputationScore: context.reputationScore ?? 75,
+                    threshold: context.threshold ?? 50,
+                    nonce: context.nonce ?? Data("default_nonce".utf8)
+                )
+
+            case .messageAuth:
+                proofResult = try await generateMessageAuthProof(
+                    message: context.message ?? Data("default_message".utf8),
+                    senderKey: context.senderKey ?? Data("default_sender".utf8),
+                    timestamp: context.timestamp ?? UInt64(Date().timeIntervalSince1970)
+                )
+            }
+
+            let duration = Date().timeIntervalSince(startTime)
+            updateStats(duration: duration, success: true)
+
+            // Create enhanced proof with metadata
+            let proofWithMetadata = ZKProofWithMetadata(
+                proof: proofResult.proof,
+                publicInputs: proofResult.publicInputs,
+                proofType: proofResult.proofType,
+                timestamp: proofResult.timestamp,
+                context: context,
+                hash: generateProofHash(proofResult.proof),
+                isValid: true,
+                generationDuration: duration
+            )
+
+            return proofWithMetadata
+
+        } catch {
+            let duration = Date().timeIntervalSince(startTime)
+            updateStats(duration: duration, success: false)
+            throw error
+        }
+    }
+
+    private func generateProofHash(_ proof: Data) -> String {
+        // Simple hash for demonstration - in production use proper cryptographic hash
+        let hashData = proof.sha256
+        return hashData.map { String(format: "%02x", $0) }.joined().prefix(16).description
     }
 }
 
