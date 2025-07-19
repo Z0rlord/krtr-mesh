@@ -115,3 +115,19 @@ docs/activity.md
 docs/activity-*.md
 *.activity.md
 **/activity.log
+
+# Swift Package Manager build artifacts and dependencies
+.build/
+.swiftpm/
+Package.resolved
+
+# Xcode project files (generated)
+*.xcodeproj/
+*.xcworkspace/
+
+# Embedded git repositories and external projects
+bitchat-base/
+krtr-mesh-swift/
+
+# Augment AI artifacts
+.augment/
