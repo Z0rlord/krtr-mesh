@@ -1,0 +1,1122 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		013364B6CCE502A7C5B38D18 /* NoiseEncryptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2444E2068235E5BC700B4F2D /* NoiseEncryptionService.swift */; };
+		013438B564CC3A8A2B82FDE1 /* KeychainIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2176C742F6C712F7F81F1C62 /* KeychainIntegrationTests.swift */; };
+		026C43249822AC983AF37508 /* SecureNoiseSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75941E3D9F37963D279A8039 /* SecureNoiseSessionTests.swift */; };
+		0295D4854EDFA2DB74A73082 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73894A09960D2D57B822598A /* KeychainManager.swift */; };
+		06748A4C49550081C50BD56E /* NoiseChannelEncryptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF70D9D3570FF46A34D89BF /* NoiseChannelEncryptionTests.swift */; };
+		0CDA5F5BD34A438EE02A278A /* NoiseProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633DA8AA4CFEE1CF11ED56F8 /* NoiseProtocolTests.swift */; };
+		0CFB57E3941D9334A1E1DB70 /* PasswordProtectedChannelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7284543183DEAC2986C94874 /* PasswordProtectedChannelTests.swift */; };
+		13F870E2D3A01707AFC5CA39 /* CompressionUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F6025C9802233D47FF1DC4 /* CompressionUtil.swift */; };
+		144E0975550D935C57962458 /* BluetoothMeshService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD4FEC2B429C6F7B4617E82 /* BluetoothMeshService.swift */; };
+		194B20D073AEDB633EAFEFCF /* NoisePostQuantum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95BD854F791D30FAD31BF8E0 /* NoisePostQuantum.swift */; };
+		1A3320AC7A556360C60A1613 /* OptimizedBloomFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114B006C7A9244634DEDB8ED /* OptimizedBloomFilter.swift */; };
+		1B596143592DC4D9839C066B /* BinaryProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC5DD2E4344A63A8B2DDC2C /* BinaryProtocolTests.swift */; };
+		222F8D49B8EAE07494BF98FB /* KRTRProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1672450F25D804ED83820081 /* KRTRProtocol.swift */; };
+		224EF06F4C6B5FB9AB7EE695 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3277CA305EDB8AF7D9E16C15 /* NotificationService.swift */; };
+		22FBA1E98BD73EAD9BA79C11 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CAB694B24A0AF300BBDC004D /* LaunchScreen.storyboard */; };
+		25A6E8AFB000404219A0767A /* NoiseSecurityValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9A92A93B52207E198366FA /* NoiseSecurityValidatorTests.swift */; };
+		28B04AE2848A53D989DEBFE4 /* KRTRShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A4736DC1CDE59DE738E3BEB9 /* KRTRShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		2C2EC996CC97A7FC0879E51A /* NoiseSecurityValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9A92A93B52207E198366FA /* NoiseSecurityValidatorTests.swift */; };
+		2E196ABB0D65AF1696F5E2F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A52913F5231BCBEF4551BF36 /* Assets.xcassets */; };
+		30D9022BC28D18D9CC1CFFCD /* VersionNegotiationScenarioTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A76CAC97173ADA02C4BFACE /* VersionNegotiationScenarioTests.swift */; };
+		313C0763B99552F08D55B70D /* BitchatMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F1509B097FE9553B9085A0B /* BitchatMessageTests.swift */; };
+		34CFF769C61C256B0FA574A2 /* ProtocolVersionNegotiationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D6BFB702DDB64038A55750 /* ProtocolVersionNegotiationTests.swift */; };
+		3658130375BBE4568648CFFB /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53170B6514CE72E6CD48BAD4 /* ChatViewModel.swift */; };
+		3A0E88861C0298881166368F /* MessageRetryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2724D8B8E4CB0E907F77D294 /* MessageRetryService.swift */; };
+		3BFDBBAEE09B2C0F5548811C /* NoiseTestingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46BAA1735BF532FA81BA5005 /* NoiseTestingHelper.swift */; };
+		3CD9A82CF44588ABEC8C6D67 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3277CA305EDB8AF7D9E16C15 /* NotificationService.swift */; };
+		3D5F3358FFD6BEBC35358EB1 /* BinaryProtocolVersionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40B3999BE912183845C151F /* BinaryProtocolVersionTests.swift */; };
+		3DB87DA16B7A887E5D555BD7 /* BinaryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD51E74A957FF3C7081E571C /* BinaryProtocol.swift */; };
+		42B2994DA88572793F9C1F12 /* FingerprintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB158BEE88675F1CCE37879B /* FingerprintView.swift */; };
+		4358243D66BCE062430D4CAE /* NoiseSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = F159F989F402B07E466C9D45 /* NoiseSession.swift */; };
+		45019188AA188F6AC5BB037A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962CB3593D0E53C1392BE968 /* ContentView.swift */; };
+		48838F1FBC5CCA64FCCF1C4F /* IdentityModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA41DF73BA0D911875FF14A1 /* IdentityModels.swift */; };
+		48A3E5CBDE37F65E538BC3E7 /* SecureIdentityStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE14ADA1AC298CAA3EDC7EB /* SecureIdentityStateManager.swift */; };
+		576AF1D9DE13669D16962BD2 /* NoiseRateLimiterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C0DD4B1270D5082BE45EBD /* NoiseRateLimiterTests.swift */; };
+		5E8F2C227DCB0B24B1C66183 /* BinaryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD51E74A957FF3C7081E571C /* BinaryProtocol.swift */; };
+		629B2AF16F0430E9D90D171E /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53170B6514CE72E6CD48BAD4 /* ChatViewModel.swift */; };
+		6A4D4E4067459650CF2BD6B1 /* NoiseSecurityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C090234E22CDC72598F99759 /* NoiseSecurityTests.swift */; };
+		6C0F84F1FDA2CB61F9F898FA /* BloomFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E073C027001688B7691D2441 /* BloomFilterTests.swift */; };
+		6C613EBE051F0F5D37282CE4 /* ProtocolVersionNegotiationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D6BFB702DDB64038A55750 /* ProtocolVersionNegotiationTests.swift */; };
+		6CD0E2298C068695E654FF59 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CAB694B24A0AF300BBDC004D /* LaunchScreen.storyboard */; };
+		6E85C56CC398C6A8CF191E21 /* BinaryProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC5DD2E4344A63A8B2DDC2C /* BinaryProtocolTests.swift */; };
+		737E6A0FB629854E75129319 /* NoiseSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = F159F989F402B07E466C9D45 /* NoiseSession.swift */; };
+		75540E5E1951636DDBAC981A /* ChannelVerificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4946C914D1D74C5EA37676 /* ChannelVerificationTests.swift */; };
+		755ECD4E7FE352639D9804EC /* AppInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927DD4EE0CAA1243E9CA6AAD /* AppInfoView.swift */; };
+		76B184970FDC8323DA0B7513 /* KRTRProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1672450F25D804ED83820081 /* KRTRProtocol.swift */; };
+		774FAD38B2CB326B8D429968 /* CompressionUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51F6025C9802233D47FF1DC4 /* CompressionUtil.swift */; };
+		7C7B98FD4C5478903823F0E6 /* MessageRetryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2724D8B8E4CB0E907F77D294 /* MessageRetryService.swift */; };
+		86299891A0655F57B02F509A /* ChannelVerificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A4946C914D1D74C5EA37676 /* ChannelVerificationTests.swift */; };
+		8769BD0349A036B8147C343C /* MessagePaddingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9748803B167BBBFCCDD024 /* MessagePaddingTests.swift */; };
+		87B944260507FBE7B07C3C88 /* NoiseTestingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC87F84E47CA93939BE16A1 /* NoiseTestingView.swift */; };
+		8A7FA7A05CA920E491D1A73E /* NoiseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDB7AAD666875BC85411819 /* NoiseProtocol.swift */; };
+		8F360D97ECDD58449681D1FB /* MessagePaddingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF9748803B167BBBFCCDD024 /* MessagePaddingTests.swift */; };
+		91420B460AEEFAF9FB055F2A /* VersionNegotiationIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C1D69E1937A90D64FFAEFA /* VersionNegotiationIntegrationTests.swift */; };
+		915C73E6D7C5D6127E3D4A2E /* BatteryOptimizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F427A95BE01FA31336BC97E /* BatteryOptimizer.swift */; };
+		91DD82F8323B92F94561D876 /* NoiseChannelEncryptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF70D9D3570FF46A34D89BF /* NoiseChannelEncryptionTests.swift */; };
+		92AD8A732007859F2FBF5ADF /* LRUCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC554C02B04F2759E336EFD /* LRUCache.swift */; };
+		93090B3FAAD4AA1E0A8B3516 /* BloomFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E073C027001688B7691D2441 /* BloomFilterTests.swift */; };
+		95D67B8DE2EA36785A1EC8B8 /* VersionNegotiationIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C1D69E1937A90D64FFAEFA /* VersionNegotiationIntegrationTests.swift */; };
+		95F7313074A77C247258F34A /* NoiseTestingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46BAA1735BF532FA81BA5005 /* NoiseTestingHelper.swift */; };
+		971B763B4AFB0B94DE260E16 /* NoiseIdentityPersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6689FA016C133D98DD49CA5E /* NoiseIdentityPersistenceTests.swift */; };
+		988A0636F1A7CD7AF0AD5413 /* NoiseProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633DA8AA4CFEE1CF11ED56F8 /* NoiseProtocolTests.swift */; };
+		9B8EFAA770F0CB3A6E23C4FC /* AppInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927DD4EE0CAA1243E9CA6AAD /* AppInfoView.swift */; };
+		9D4C10FB1EB58635F48BE9BB /* NoiseIdentityPersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6689FA016C133D98DD49CA5E /* NoiseIdentityPersistenceTests.swift */; };
+		A087711EFE0142D72CF128E7 /* VersionNegotiationScenarioTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A76CAC97173ADA02C4BFACE /* VersionNegotiationScenarioTests.swift */; };
+		A0EE4D134AA031095521EF64 /* NoiseTestingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC87F84E47CA93939BE16A1 /* NoiseTestingView.swift */; };
+		A3408DA752B6BEAF1DA46B05 /* SecureNoiseSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75941E3D9F37963D279A8039 /* SecureNoiseSessionTests.swift */; };
+		A3E734A1C93B527C05D410D4 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE61DC9BC6D07E5FE0BB2126 /* ShareViewController.swift */; };
+		AB53C6070C23739EFBB73FF2 /* SecurityLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADBBB51B64841CE8A7E2DD7 /* SecurityLogger.swift */; };
+		AC836C23537C8D5F276F732B /* LRUCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC554C02B04F2759E336EFD /* LRUCache.swift */; };
+		ADD6990E3CB8C981553C39B9 /* DeliveryTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E895A4DCD53CBFD83D73DA58 /* DeliveryTracker.swift */; };
+		AED5F5451D0BDFB4314E221C /* KeychainIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2176C742F6C712F7F81F1C62 /* KeychainIntegrationTests.swift */; };
+		B92DE32A59989B6A9503D479 /* KRTRApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66BA1E6DD2AE1B083F1FAD4 /* KRTRApp.swift */; };
+		BAB56A2E41842B1097C34A61 /* NoiseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDB7AAD666875BC85411819 /* NoiseProtocol.swift */; };
+		BAD4527A4F216AB2890AA197 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73894A09960D2D57B822598A /* KeychainManager.swift */; };
+		BBD565F5D416160995241C7C /* NoiseSecurityConsiderations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424FDCC2732F4D290B9590BB /* NoiseSecurityConsiderations.swift */; };
+		BD95763C597E517F53B0FACD /* BluetoothMeshService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD4FEC2B429C6F7B4617E82 /* BluetoothMeshService.swift */; };
+		BF6DEF0BF7360AF4B84D3204 /* BatteryOptimizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F427A95BE01FA31336BC97E /* BatteryOptimizer.swift */; };
+		C2B4D5F499A8386750E602ED /* BitchatMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F1509B097FE9553B9085A0B /* BitchatMessageTests.swift */; };
+		C710F9BE673B66F16708073B /* NoiseChannelEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D84279E8E5398E8ADC00EE /* NoiseChannelEncryption.swift */; };
+		C73CDC0F2D39494912DCFE28 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A52913F5231BCBEF4551BF36 /* Assets.xcassets */; };
+		C7AF318E9640EFB59781C7AE /* NoiseSecurityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C090234E22CDC72598F99759 /* NoiseSecurityTests.swift */; };
+		C9E47AD28296564854761263 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962CB3593D0E53C1392BE968 /* ContentView.swift */; };
+		C9F75F87FC6469BA4EFEDBBA /* KRTRApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E66BA1E6DD2AE1B083F1FAD4 /* KRTRApp.swift */; };
+		CD1DC820AE13ECA08DD03EF1 /* BinaryProtocolVersionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40B3999BE912183845C151F /* BinaryProtocolVersionTests.swift */; };
+		CDDEF396A10690E8C1BB65C4 /* FingerprintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB158BEE88675F1CCE37879B /* FingerprintView.swift */; };
+		CF6B9E08883DC09BBA231507 /* NoiseKeyRotationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA9443EA300EF8A33EDEA92 /* NoiseKeyRotationTests.swift */; };
+		D0AF7CC6A427361A9B8C84A8 /* NoiseChannelKeyRotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271735EBD38C58A5FA819EF7 /* NoiseChannelKeyRotation.swift */; };
+		D18BCBE65C0E8884B08AED44 /* LinkPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D587178AC217135ECDB725B /* LinkPreviewView.swift */; };
+		D191E91C0A34641761D7530D /* NoiseRateLimiterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C0DD4B1270D5082BE45EBD /* NoiseRateLimiterTests.swift */; };
+		D43DDF4503C3BA1B1DDFBB98 /* NoiseKeyRotationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA9443EA300EF8A33EDEA92 /* NoiseKeyRotationTests.swift */; };
+		D6F86E7008B466B7F6072F22 /* IdentityModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA41DF73BA0D911875FF14A1 /* IdentityModels.swift */; };
+		D7CF80D6E243C630DABD751D /* NoisePostQuantum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95BD854F791D30FAD31BF8E0 /* NoisePostQuantum.swift */; };
+		DEBC5CDAE9E60EB95D525E8E /* NoiseChannelEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D84279E8E5398E8ADC00EE /* NoiseChannelEncryption.swift */; };
+		DFD6EA9F479AD8C33C6D5CD0 /* DeliveryTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E895A4DCD53CBFD83D73DA58 /* DeliveryTracker.swift */; };
+		E2F068D1AA8ED6026E1206FC /* SecurityLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADBBB51B64841CE8A7E2DD7 /* SecurityLogger.swift */; };
+		E6FAD61A7B0AF3A8B76032BB /* PasswordProtectedChannelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7284543183DEAC2986C94874 /* PasswordProtectedChannelTests.swift */; };
+		E9AFF39C5414EDDC79C7776E /* NoiseSecurityConsiderations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424FDCC2732F4D290B9590BB /* NoiseSecurityConsiderations.swift */; };
+		EBC7A28446F744ECA434FBEB /* SecureIdentityStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE14ADA1AC298CAA3EDC7EB /* SecureIdentityStateManager.swift */; };
+		ECF773B4430F33AEE2EA4F27 /* OptimizedBloomFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 114B006C7A9244634DEDB8ED /* OptimizedBloomFilter.swift */; };
+		F0C0FAC406C4D26F348F2A0B /* NoiseChannelKeyRotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271735EBD38C58A5FA819EF7 /* NoiseChannelKeyRotation.swift */; };
+		F7821C4EFD83599DA0D5550E /* NoiseEncryptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2444E2068235E5BC700B4F2D /* NoiseEncryptionService.swift */; };
+		F9EEBB43206E8C00BCDB7FFE /* LinkPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D587178AC217135ECDB725B /* LinkPreviewView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2E6066A7C68B23C2C7711CDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 744BADA2957B53DD8B950B42 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E85FAD5E79E861306B98BBA4;
+			remoteInfo = KRTR_macOS;
+		};
+		817BC08AA9758121254D9EBD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 744BADA2957B53DD8B950B42 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9729E7899D19A07B0727C188;
+			remoteInfo = KRTR_iOS;
+		};
+		9C6B753D6F4E45F94A53227E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 744BADA2957B53DD8B950B42 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8076BA55082464BF68419B67;
+			remoteInfo = KRTRShareExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		0A53E521E817E46E866FFB1E /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				28B04AE2848A53D989DEBFE4 /* KRTRShareExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0677C1B88C445C57A4756B0A /* KRTR_iOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = KRTR_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		07EBCDE33F9DE53CA57DACDD /* KRTR.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KRTR.entitlements; sourceTree = "<group>"; };
+		0AA9443EA300EF8A33EDEA92 /* NoiseKeyRotationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseKeyRotationTests.swift; sourceTree = "<group>"; };
+		0FD4FEC2B429C6F7B4617E82 /* BluetoothMeshService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothMeshService.swift; sourceTree = "<group>"; };
+		114B006C7A9244634DEDB8ED /* OptimizedBloomFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptimizedBloomFilter.swift; sourceTree = "<group>"; };
+		1672450F25D804ED83820081 /* KRTRProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KRTRProtocol.swift; sourceTree = "<group>"; };
+		1A4946C914D1D74C5EA37676 /* ChannelVerificationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelVerificationTests.swift; sourceTree = "<group>"; };
+		1D587178AC217135ECDB725B /* LinkPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkPreviewView.swift; sourceTree = "<group>"; };
+		1E9A92A93B52207E198366FA /* NoiseSecurityValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseSecurityValidatorTests.swift; sourceTree = "<group>"; };
+		2176C742F6C712F7F81F1C62 /* KeychainIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainIntegrationTests.swift; sourceTree = "<group>"; };
+		2444E2068235E5BC700B4F2D /* NoiseEncryptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseEncryptionService.swift; sourceTree = "<group>"; };
+		271735EBD38C58A5FA819EF7 /* NoiseChannelKeyRotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseChannelKeyRotation.swift; sourceTree = "<group>"; };
+		2724D8B8E4CB0E907F77D294 /* MessageRetryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageRetryService.swift; sourceTree = "<group>"; };
+		3277CA305EDB8AF7D9E16C15 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		3ADBBB51B64841CE8A7E2DD7 /* SecurityLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityLogger.swift; sourceTree = "<group>"; };
+		424FDCC2732F4D290B9590BB /* NoiseSecurityConsiderations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseSecurityConsiderations.swift; sourceTree = "<group>"; };
+		46BAA1735BF532FA81BA5005 /* NoiseTestingHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseTestingHelper.swift; sourceTree = "<group>"; };
+		4A76CAC97173ADA02C4BFACE /* VersionNegotiationScenarioTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionNegotiationScenarioTests.swift; sourceTree = "<group>"; };
+		51F6025C9802233D47FF1DC4 /* CompressionUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompressionUtil.swift; sourceTree = "<group>"; };
+		53170B6514CE72E6CD48BAD4 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
+		5F427A95BE01FA31336BC97E /* BatteryOptimizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryOptimizer.swift; sourceTree = "<group>"; };
+		62D6BFB702DDB64038A55750 /* ProtocolVersionNegotiationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtocolVersionNegotiationTests.swift; sourceTree = "<group>"; };
+		633DA8AA4CFEE1CF11ED56F8 /* NoiseProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseProtocolTests.swift; sourceTree = "<group>"; };
+		6689FA016C133D98DD49CA5E /* NoiseIdentityPersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseIdentityPersistenceTests.swift; sourceTree = "<group>"; };
+		6F1509B097FE9553B9085A0B /* BitchatMessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitchatMessageTests.swift; sourceTree = "<group>"; };
+		7284543183DEAC2986C94874 /* PasswordProtectedChannelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordProtectedChannelTests.swift; sourceTree = "<group>"; };
+		72C802866DF10EFAC31D7CDD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		73894A09960D2D57B822598A /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		75941E3D9F37963D279A8039 /* SecureNoiseSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureNoiseSessionTests.swift; sourceTree = "<group>"; };
+		7BC554C02B04F2759E336EFD /* LRUCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LRUCache.swift; sourceTree = "<group>"; };
+		82F38741F9EE617F33BA8883 /* KRTR-macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "KRTR-macOS.entitlements"; sourceTree = "<group>"; };
+		83C1D69E1937A90D64FFAEFA /* VersionNegotiationIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionNegotiationIntegrationTests.swift; sourceTree = "<group>"; };
+		8C475B6DC0CCDC2C93DD5174 /* KRTRTests_iOS.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = KRTRTests_iOS.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8CF70D9D3570FF46A34D89BF /* NoiseChannelEncryptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseChannelEncryptionTests.swift; sourceTree = "<group>"; };
+		8DC5DD2E4344A63A8B2DDC2C /* BinaryProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryProtocolTests.swift; sourceTree = "<group>"; };
+		927DD4EE0CAA1243E9CA6AAD /* AppInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfoView.swift; sourceTree = "<group>"; };
+		95BD854F791D30FAD31BF8E0 /* NoisePostQuantum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoisePostQuantum.swift; sourceTree = "<group>"; };
+		962CB3593D0E53C1392BE968 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		9FE14ADA1AC298CAA3EDC7EB /* SecureIdentityStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureIdentityStateManager.swift; sourceTree = "<group>"; };
+		A40B3999BE912183845C151F /* BinaryProtocolVersionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryProtocolVersionTests.swift; sourceTree = "<group>"; };
+		A4736DC1CDE59DE738E3BEB9 /* KRTRShareExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = KRTRShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A52913F5231BCBEF4551BF36 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A8C0DD4B1270D5082BE45EBD /* NoiseRateLimiterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseRateLimiterTests.swift; sourceTree = "<group>"; };
+		AA4D98D38EBA96BD83A817CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		AD51E74A957FF3C7081E571C /* BinaryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryProtocol.swift; sourceTree = "<group>"; };
+		C090234E22CDC72598F99759 /* NoiseSecurityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseSecurityTests.swift; sourceTree = "<group>"; };
+		C8D34DD542C8420883E059C8 /* KRTRShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KRTRShareExtension.entitlements; sourceTree = "<group>"; };
+		CAB694B24A0AF300BBDC004D /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		CF9748803B167BBBFCCDD024 /* MessagePaddingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePaddingTests.swift; sourceTree = "<group>"; };
+		DA41DF73BA0D911875FF14A1 /* IdentityModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityModels.swift; sourceTree = "<group>"; };
+		E073C027001688B7691D2441 /* BloomFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloomFilterTests.swift; sourceTree = "<group>"; };
+		E66BA1E6DD2AE1B083F1FAD4 /* KRTRApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KRTRApp.swift; sourceTree = "<group>"; };
+		E895A4DCD53CBFD83D73DA58 /* DeliveryTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryTracker.swift; sourceTree = "<group>"; };
+		EBC87F84E47CA93939BE16A1 /* NoiseTestingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseTestingView.swift; sourceTree = "<group>"; };
+		EBDB7AAD666875BC85411819 /* NoiseProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseProtocol.swift; sourceTree = "<group>"; };
+		EE61DC9BC6D07E5FE0BB2126 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		F159F989F402B07E466C9D45 /* NoiseSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseSession.swift; sourceTree = "<group>"; };
+		F2BF16E6ABF910D17F3EE70A /* KRTRTests_macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KRTRTests_macOS.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3DC5F00049D52619BF96CBB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		F699FD1987F856CFBB79DC23 /* KRTR_macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KRTR_macOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F7D84279E8E5398E8ADC00EE /* NoiseChannelEncryption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseChannelEncryption.swift; sourceTree = "<group>"; };
+		FB158BEE88675F1CCE37879B /* FingerprintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FingerprintView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0C3753DEC10CC7FD300EA2B4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0677C1B88C445C57A4756B0A /* KRTR_iOS.app */,
+				F699FD1987F856CFBB79DC23 /* KRTR_macOS.app */,
+				A4736DC1CDE59DE738E3BEB9 /* KRTRShareExtension.appex */,
+				8C475B6DC0CCDC2C93DD5174 /* KRTRTests_iOS.xctest */,
+				F2BF16E6ABF910D17F3EE70A /* KRTRTests_macOS.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		30405E83200915C12630565D = {
+			isa = PBXGroup;
+			children = (
+				DB3C5D1E3C20404D7306EA7D /* KRTR */,
+				B74CB638A51E43EEC640F0C1 /* KRTRShareExtension */,
+				F2C43BC425388ACF957D51D5 /* KRTRTests */,
+				0C3753DEC10CC7FD300EA2B4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5EFA4D19BC75AD8227D45CDB /* Noise */ = {
+			isa = PBXGroup;
+			children = (
+				F7D84279E8E5398E8ADC00EE /* NoiseChannelEncryption.swift */,
+				271735EBD38C58A5FA819EF7 /* NoiseChannelKeyRotation.swift */,
+				95BD854F791D30FAD31BF8E0 /* NoisePostQuantum.swift */,
+				EBDB7AAD666875BC85411819 /* NoiseProtocol.swift */,
+				424FDCC2732F4D290B9590BB /* NoiseSecurityConsiderations.swift */,
+				F159F989F402B07E466C9D45 /* NoiseSession.swift */,
+			);
+			path = Noise;
+			sourceTree = "<group>";
+		};
+		5F759CD989A6A8E8B88447AD /* Identity */ = {
+			isa = PBXGroup;
+			children = (
+				DA41DF73BA0D911875FF14A1 /* IdentityModels.swift */,
+				9FE14ADA1AC298CAA3EDC7EB /* SecureIdentityStateManager.swift */,
+			);
+			path = Identity;
+			sourceTree = "<group>";
+		};
+		8176C91B4B97B5CDE085AF5C /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				AD51E74A957FF3C7081E571C /* BinaryProtocol.swift */,
+				1672450F25D804ED83820081 /* KRTRProtocol.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		8FE891DCFD6711F0614338ED /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				927DD4EE0CAA1243E9CA6AAD /* AppInfoView.swift */,
+				962CB3593D0E53C1392BE968 /* ContentView.swift */,
+				FB158BEE88675F1CCE37879B /* FingerprintView.swift */,
+				1D587178AC217135ECDB725B /* LinkPreviewView.swift */,
+				EBC87F84E47CA93939BE16A1 /* NoiseTestingView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A93815686E898558F97EB59F /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				0FD4FEC2B429C6F7B4617E82 /* BluetoothMeshService.swift */,
+				E895A4DCD53CBFD83D73DA58 /* DeliveryTracker.swift */,
+				73894A09960D2D57B822598A /* KeychainManager.swift */,
+				2724D8B8E4CB0E907F77D294 /* MessageRetryService.swift */,
+				2444E2068235E5BC700B4F2D /* NoiseEncryptionService.swift */,
+				3277CA305EDB8AF7D9E16C15 /* NotificationService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		B74CB638A51E43EEC640F0C1 /* KRTRShareExtension */ = {
+			isa = PBXGroup;
+			children = (
+				72C802866DF10EFAC31D7CDD /* Info.plist */,
+				C8D34DD542C8420883E059C8 /* KRTRShareExtension.entitlements */,
+				EE61DC9BC6D07E5FE0BB2126 /* ShareViewController.swift */,
+			);
+			path = KRTRShareExtension;
+			sourceTree = "<group>";
+		};
+		CCA16AEE3795DB1D5E379B49 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				5F427A95BE01FA31336BC97E /* BatteryOptimizer.swift */,
+				51F6025C9802233D47FF1DC4 /* CompressionUtil.swift */,
+				7BC554C02B04F2759E336EFD /* LRUCache.swift */,
+				46BAA1735BF532FA81BA5005 /* NoiseTestingHelper.swift */,
+				114B006C7A9244634DEDB8ED /* OptimizedBloomFilter.swift */,
+				3ADBBB51B64841CE8A7E2DD7 /* SecurityLogger.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		DB3C5D1E3C20404D7306EA7D /* KRTR */ = {
+			isa = PBXGroup;
+			children = (
+				A52913F5231BCBEF4551BF36 /* Assets.xcassets */,
+				F3DC5F00049D52619BF96CBB /* Info.plist */,
+				82F38741F9EE617F33BA8883 /* KRTR-macOS.entitlements */,
+				07EBCDE33F9DE53CA57DACDD /* KRTR.entitlements */,
+				E66BA1E6DD2AE1B083F1FAD4 /* KRTRApp.swift */,
+				CAB694B24A0AF300BBDC004D /* LaunchScreen.storyboard */,
+				5F759CD989A6A8E8B88447AD /* Identity */,
+				5EFA4D19BC75AD8227D45CDB /* Noise */,
+				8176C91B4B97B5CDE085AF5C /* Protocols */,
+				A93815686E898558F97EB59F /* Services */,
+				CCA16AEE3795DB1D5E379B49 /* Utils */,
+				E9B49702EA55913CF895664B /* ViewModels */,
+				8FE891DCFD6711F0614338ED /* Views */,
+			);
+			path = KRTR;
+			sourceTree = "<group>";
+		};
+		E9B49702EA55913CF895664B /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				53170B6514CE72E6CD48BAD4 /* ChatViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		F2C43BC425388ACF957D51D5 /* KRTRTests */ = {
+			isa = PBXGroup;
+			children = (
+				8DC5DD2E4344A63A8B2DDC2C /* BinaryProtocolTests.swift */,
+				A40B3999BE912183845C151F /* BinaryProtocolVersionTests.swift */,
+				6F1509B097FE9553B9085A0B /* BitchatMessageTests.swift */,
+				E073C027001688B7691D2441 /* BloomFilterTests.swift */,
+				1A4946C914D1D74C5EA37676 /* ChannelVerificationTests.swift */,
+				AA4D98D38EBA96BD83A817CB /* Info.plist */,
+				2176C742F6C712F7F81F1C62 /* KeychainIntegrationTests.swift */,
+				CF9748803B167BBBFCCDD024 /* MessagePaddingTests.swift */,
+				8CF70D9D3570FF46A34D89BF /* NoiseChannelEncryptionTests.swift */,
+				6689FA016C133D98DD49CA5E /* NoiseIdentityPersistenceTests.swift */,
+				0AA9443EA300EF8A33EDEA92 /* NoiseKeyRotationTests.swift */,
+				633DA8AA4CFEE1CF11ED56F8 /* NoiseProtocolTests.swift */,
+				A8C0DD4B1270D5082BE45EBD /* NoiseRateLimiterTests.swift */,
+				C090234E22CDC72598F99759 /* NoiseSecurityTests.swift */,
+				1E9A92A93B52207E198366FA /* NoiseSecurityValidatorTests.swift */,
+				7284543183DEAC2986C94874 /* PasswordProtectedChannelTests.swift */,
+				62D6BFB702DDB64038A55750 /* ProtocolVersionNegotiationTests.swift */,
+				75941E3D9F37963D279A8039 /* SecureNoiseSessionTests.swift */,
+				83C1D69E1937A90D64FFAEFA /* VersionNegotiationIntegrationTests.swift */,
+				4A76CAC97173ADA02C4BFACE /* VersionNegotiationScenarioTests.swift */,
+			);
+			path = KRTRTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		135EEC592D30C6B84A9AB191 /* KRTRTests_macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6F9331E4E343EDE877106E2B /* Build configuration list for PBXNativeTarget "KRTRTests_macOS" */;
+			buildPhases = (
+				89BFA171E16750CC41E66A0F /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				28921B5CA4D4A7468395064A /* PBXTargetDependency */,
+			);
+			name = KRTRTests_macOS;
+			packageProductDependencies = (
+			);
+			productName = KRTRTests_macOS;
+			productReference = F2BF16E6ABF910D17F3EE70A /* KRTRTests_macOS.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		2AB93B471CCB3B226AE4E2A2 /* KRTRTests_iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A06BC569956506797D5548FC /* Build configuration list for PBXNativeTarget "KRTRTests_iOS" */;
+			buildPhases = (
+				6F49839233754A5C9CCE002B /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				63EDBAE5CDD5919C9571E102 /* PBXTargetDependency */,
+			);
+			name = KRTRTests_iOS;
+			packageProductDependencies = (
+			);
+			productName = KRTRTests_iOS;
+			productReference = 8C475B6DC0CCDC2C93DD5174 /* KRTRTests_iOS.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		8076BA55082464BF68419B67 /* KRTRShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 964E30719D1822346E185C83 /* Build configuration list for PBXNativeTarget "KRTRShareExtension" */;
+			buildPhases = (
+				1EC73E4537D1721B68BF66BD /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KRTRShareExtension;
+			packageProductDependencies = (
+			);
+			productName = KRTRShareExtension;
+			productReference = A4736DC1CDE59DE738E3BEB9 /* KRTRShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		9729E7899D19A07B0727C188 /* KRTR_iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0602D406A3EDE954867B3995 /* Build configuration list for PBXNativeTarget "KRTR_iOS" */;
+			buildPhases = (
+				B6425BDEE2AEA3768A5E761B /* Sources */,
+				F6A9BC319DF2C3D6D8D5541E /* Resources */,
+				0A53E521E817E46E866FFB1E /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BC90CFD087FC5BD5E4DE6132 /* PBXTargetDependency */,
+			);
+			name = KRTR_iOS;
+			packageProductDependencies = (
+			);
+			productName = KRTR_iOS;
+			productReference = 0677C1B88C445C57A4756B0A /* KRTR_iOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E85FAD5E79E861306B98BBA4 /* KRTR_macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 29D516E345F2DE7F62A6A018 /* Build configuration list for PBXNativeTarget "KRTR_macOS" */;
+			buildPhases = (
+				2ABB5637131DEA12F46581B6 /* Sources */,
+				E8ACB385ADD78EB1B4979673 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KRTR_macOS;
+			packageProductDependencies = (
+			);
+			productName = KRTR_macOS;
+			productReference = F699FD1987F856CFBB79DC23 /* KRTR_macOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		744BADA2957B53DD8B950B42 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					135EEC592D30C6B84A9AB191 = {
+						DevelopmentTeam = 445WRT8WT6;
+						ProvisioningStyle = Automatic;
+					};
+					2AB93B471CCB3B226AE4E2A2 = {
+						DevelopmentTeam = 445WRT8WT6;
+						ProvisioningStyle = Automatic;
+					};
+					8076BA55082464BF68419B67 = {
+						DevelopmentTeam = 445WRT8WT6;
+						ProvisioningStyle = Automatic;
+					};
+					9729E7899D19A07B0727C188 = {
+						DevelopmentTeam = 445WRT8WT6;
+						ProvisioningStyle = Automatic;
+					};
+					E85FAD5E79E861306B98BBA4 = {
+						DevelopmentTeam = 445WRT8WT6;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 9443772A2FD2F42565AEB256 /* Build configuration list for PBXProject "KRTR" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 30405E83200915C12630565D;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 54;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8076BA55082464BF68419B67 /* KRTRShareExtension */,
+				2AB93B471CCB3B226AE4E2A2 /* KRTRTests_iOS */,
+				135EEC592D30C6B84A9AB191 /* KRTRTests_macOS */,
+				9729E7899D19A07B0727C188 /* KRTR_iOS */,
+				E85FAD5E79E861306B98BBA4 /* KRTR_macOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E8ACB385ADD78EB1B4979673 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C73CDC0F2D39494912DCFE28 /* Assets.xcassets in Resources */,
+				22FBA1E98BD73EAD9BA79C11 /* LaunchScreen.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F6A9BC319DF2C3D6D8D5541E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2E196ABB0D65AF1696F5E2F7 /* Assets.xcassets in Resources */,
+				6CD0E2298C068695E654FF59 /* LaunchScreen.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1EC73E4537D1721B68BF66BD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A3E734A1C93B527C05D410D4 /* ShareViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2ABB5637131DEA12F46581B6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				755ECD4E7FE352639D9804EC /* AppInfoView.swift in Sources */,
+				915C73E6D7C5D6127E3D4A2E /* BatteryOptimizer.swift in Sources */,
+				3DB87DA16B7A887E5D555BD7 /* BinaryProtocol.swift in Sources */,
+				BD95763C597E517F53B0FACD /* BluetoothMeshService.swift in Sources */,
+				629B2AF16F0430E9D90D171E /* ChatViewModel.swift in Sources */,
+				13F870E2D3A01707AFC5CA39 /* CompressionUtil.swift in Sources */,
+				45019188AA188F6AC5BB037A /* ContentView.swift in Sources */,
+				DFD6EA9F479AD8C33C6D5CD0 /* DeliveryTracker.swift in Sources */,
+				42B2994DA88572793F9C1F12 /* FingerprintView.swift in Sources */,
+				48838F1FBC5CCA64FCCF1C4F /* IdentityModels.swift in Sources */,
+				B92DE32A59989B6A9503D479 /* KRTRApp.swift in Sources */,
+				76B184970FDC8323DA0B7513 /* KRTRProtocol.swift in Sources */,
+				0295D4854EDFA2DB74A73082 /* KeychainManager.swift in Sources */,
+				AC836C23537C8D5F276F732B /* LRUCache.swift in Sources */,
+				F9EEBB43206E8C00BCDB7FFE /* LinkPreviewView.swift in Sources */,
+				3A0E88861C0298881166368F /* MessageRetryService.swift in Sources */,
+				DEBC5CDAE9E60EB95D525E8E /* NoiseChannelEncryption.swift in Sources */,
+				F0C0FAC406C4D26F348F2A0B /* NoiseChannelKeyRotation.swift in Sources */,
+				013364B6CCE502A7C5B38D18 /* NoiseEncryptionService.swift in Sources */,
+				194B20D073AEDB633EAFEFCF /* NoisePostQuantum.swift in Sources */,
+				BAB56A2E41842B1097C34A61 /* NoiseProtocol.swift in Sources */,
+				BBD565F5D416160995241C7C /* NoiseSecurityConsiderations.swift in Sources */,
+				4358243D66BCE062430D4CAE /* NoiseSession.swift in Sources */,
+				95F7313074A77C247258F34A /* NoiseTestingHelper.swift in Sources */,
+				87B944260507FBE7B07C3C88 /* NoiseTestingView.swift in Sources */,
+				3CD9A82CF44588ABEC8C6D67 /* NotificationService.swift in Sources */,
+				1A3320AC7A556360C60A1613 /* OptimizedBloomFilter.swift in Sources */,
+				EBC7A28446F744ECA434FBEB /* SecureIdentityStateManager.swift in Sources */,
+				AB53C6070C23739EFBB73FF2 /* SecurityLogger.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F49839233754A5C9CCE002B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1B596143592DC4D9839C066B /* BinaryProtocolTests.swift in Sources */,
+				CD1DC820AE13ECA08DD03EF1 /* BinaryProtocolVersionTests.swift in Sources */,
+				C2B4D5F499A8386750E602ED /* BitchatMessageTests.swift in Sources */,
+				93090B3FAAD4AA1E0A8B3516 /* BloomFilterTests.swift in Sources */,
+				86299891A0655F57B02F509A /* ChannelVerificationTests.swift in Sources */,
+				AED5F5451D0BDFB4314E221C /* KeychainIntegrationTests.swift in Sources */,
+				8F360D97ECDD58449681D1FB /* MessagePaddingTests.swift in Sources */,
+				06748A4C49550081C50BD56E /* NoiseChannelEncryptionTests.swift in Sources */,
+				9D4C10FB1EB58635F48BE9BB /* NoiseIdentityPersistenceTests.swift in Sources */,
+				D43DDF4503C3BA1B1DDFBB98 /* NoiseKeyRotationTests.swift in Sources */,
+				988A0636F1A7CD7AF0AD5413 /* NoiseProtocolTests.swift in Sources */,
+				D191E91C0A34641761D7530D /* NoiseRateLimiterTests.swift in Sources */,
+				C7AF318E9640EFB59781C7AE /* NoiseSecurityTests.swift in Sources */,
+				2C2EC996CC97A7FC0879E51A /* NoiseSecurityValidatorTests.swift in Sources */,
+				E6FAD61A7B0AF3A8B76032BB /* PasswordProtectedChannelTests.swift in Sources */,
+				6C613EBE051F0F5D37282CE4 /* ProtocolVersionNegotiationTests.swift in Sources */,
+				A3408DA752B6BEAF1DA46B05 /* SecureNoiseSessionTests.swift in Sources */,
+				91420B460AEEFAF9FB055F2A /* VersionNegotiationIntegrationTests.swift in Sources */,
+				A087711EFE0142D72CF128E7 /* VersionNegotiationScenarioTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89BFA171E16750CC41E66A0F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E85C56CC398C6A8CF191E21 /* BinaryProtocolTests.swift in Sources */,
+				3D5F3358FFD6BEBC35358EB1 /* BinaryProtocolVersionTests.swift in Sources */,
+				313C0763B99552F08D55B70D /* BitchatMessageTests.swift in Sources */,
+				6C0F84F1FDA2CB61F9F898FA /* BloomFilterTests.swift in Sources */,
+				75540E5E1951636DDBAC981A /* ChannelVerificationTests.swift in Sources */,
+				013438B564CC3A8A2B82FDE1 /* KeychainIntegrationTests.swift in Sources */,
+				8769BD0349A036B8147C343C /* MessagePaddingTests.swift in Sources */,
+				91DD82F8323B92F94561D876 /* NoiseChannelEncryptionTests.swift in Sources */,
+				971B763B4AFB0B94DE260E16 /* NoiseIdentityPersistenceTests.swift in Sources */,
+				CF6B9E08883DC09BBA231507 /* NoiseKeyRotationTests.swift in Sources */,
+				0CDA5F5BD34A438EE02A278A /* NoiseProtocolTests.swift in Sources */,
+				576AF1D9DE13669D16962BD2 /* NoiseRateLimiterTests.swift in Sources */,
+				6A4D4E4067459650CF2BD6B1 /* NoiseSecurityTests.swift in Sources */,
+				25A6E8AFB000404219A0767A /* NoiseSecurityValidatorTests.swift in Sources */,
+				0CFB57E3941D9334A1E1DB70 /* PasswordProtectedChannelTests.swift in Sources */,
+				34CFF769C61C256B0FA574A2 /* ProtocolVersionNegotiationTests.swift in Sources */,
+				026C43249822AC983AF37508 /* SecureNoiseSessionTests.swift in Sources */,
+				95D67B8DE2EA36785A1EC8B8 /* VersionNegotiationIntegrationTests.swift in Sources */,
+				30D9022BC28D18D9CC1CFFCD /* VersionNegotiationScenarioTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B6425BDEE2AEA3768A5E761B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9B8EFAA770F0CB3A6E23C4FC /* AppInfoView.swift in Sources */,
+				BF6DEF0BF7360AF4B84D3204 /* BatteryOptimizer.swift in Sources */,
+				5E8F2C227DCB0B24B1C66183 /* BinaryProtocol.swift in Sources */,
+				144E0975550D935C57962458 /* BluetoothMeshService.swift in Sources */,
+				3658130375BBE4568648CFFB /* ChatViewModel.swift in Sources */,
+				774FAD38B2CB326B8D429968 /* CompressionUtil.swift in Sources */,
+				C9E47AD28296564854761263 /* ContentView.swift in Sources */,
+				ADD6990E3CB8C981553C39B9 /* DeliveryTracker.swift in Sources */,
+				CDDEF396A10690E8C1BB65C4 /* FingerprintView.swift in Sources */,
+				D6F86E7008B466B7F6072F22 /* IdentityModels.swift in Sources */,
+				C9F75F87FC6469BA4EFEDBBA /* KRTRApp.swift in Sources */,
+				222F8D49B8EAE07494BF98FB /* KRTRProtocol.swift in Sources */,
+				BAD4527A4F216AB2890AA197 /* KeychainManager.swift in Sources */,
+				92AD8A732007859F2FBF5ADF /* LRUCache.swift in Sources */,
+				D18BCBE65C0E8884B08AED44 /* LinkPreviewView.swift in Sources */,
+				7C7B98FD4C5478903823F0E6 /* MessageRetryService.swift in Sources */,
+				C710F9BE673B66F16708073B /* NoiseChannelEncryption.swift in Sources */,
+				D0AF7CC6A427361A9B8C84A8 /* NoiseChannelKeyRotation.swift in Sources */,
+				F7821C4EFD83599DA0D5550E /* NoiseEncryptionService.swift in Sources */,
+				D7CF80D6E243C630DABD751D /* NoisePostQuantum.swift in Sources */,
+				8A7FA7A05CA920E491D1A73E /* NoiseProtocol.swift in Sources */,
+				E9AFF39C5414EDDC79C7776E /* NoiseSecurityConsiderations.swift in Sources */,
+				737E6A0FB629854E75129319 /* NoiseSession.swift in Sources */,
+				3BFDBBAEE09B2C0F5548811C /* NoiseTestingHelper.swift in Sources */,
+				A0EE4D134AA031095521EF64 /* NoiseTestingView.swift in Sources */,
+				224EF06F4C6B5FB9AB7EE695 /* NotificationService.swift in Sources */,
+				ECF773B4430F33AEE2EA4F27 /* OptimizedBloomFilter.swift in Sources */,
+				48A3E5CBDE37F65E538BC3E7 /* SecureIdentityStateManager.swift in Sources */,
+				E2F068D1AA8ED6026E1206FC /* SecurityLogger.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		28921B5CA4D4A7468395064A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E85FAD5E79E861306B98BBA4 /* KRTR_macOS */;
+			targetProxy = 2E6066A7C68B23C2C7711CDD /* PBXContainerItemProxy */;
+		};
+		63EDBAE5CDD5919C9571E102 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9729E7899D19A07B0727C188 /* KRTR_iOS */;
+			targetProxy = 817BC08AA9758121254D9EBD /* PBXContainerItemProxy */;
+		};
+		BC90CFD087FC5BD5E4DE6132 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8076BA55082464BF68419B67 /* KRTRShareExtension */;
+			targetProxy = 9C6B753D6F4E45F94A53227E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		265470CFA5821D7FC76933FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 445WRT8WT6;
+				INFOPLIST_FILE = KRTRTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.krtr.mesh.tests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KRTR.app/Contents/MacOS/KRTR";
+			};
+			name = Release;
+		};
+		336E025F41AF5C55F1859F76 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
+				CODE_SIGN_ENTITLEMENTS = KRTRShareExtension/KRTRShareExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 445WRT8WT6;
+				INFOPLIST_FILE = KRTRShareExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.krtr.mesh.ShareExtension;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		366652364B0F5AC7E85A3CE5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		3F3D4C5E2EF89FC62F1CA893 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_ENTITLEMENTS = KRTR/KRTR.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 445WRT8WT6;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = KRTR/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.krtr.mesh;
+				PRODUCT_NAME = KRTR;
+				SDKROOT = iphoneos;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		648A0847B9C68CDCE5EBC582 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_ENTITLEMENTS = "KRTR/KRTR-macOS.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 445WRT8WT6;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = KRTR/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.krtr.mesh;
+				PRODUCT_NAME = KRTR;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		9957E3212E69D8947459F052 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 445WRT8WT6;
+				INFOPLIST_FILE = KRTRTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.krtr.mesh.tests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KRTR.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KRTR";
+			};
+			name = Release;
+		};
+		AC3B7B15B08CA14A9363B227 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_ENTITLEMENTS = "KRTR/KRTR-macOS.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 445WRT8WT6;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = KRTR/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.krtr.mesh;
+				PRODUCT_NAME = KRTR;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		C1365EDCD3C8109453A1C1FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
+				CODE_SIGN_ENTITLEMENTS = KRTRShareExtension/KRTRShareExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 445WRT8WT6;
+				INFOPLIST_FILE = KRTRShareExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.krtr.mesh.ShareExtension;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D2B82152A566C2CAA1AFCBBE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_ENTITLEMENTS = KRTR/KRTR.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 445WRT8WT6;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = KRTR/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.krtr.mesh;
+				PRODUCT_NAME = KRTR;
+				SDKROOT = iphoneos;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		EFA8E17B5382EEF64D4B9660 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 445WRT8WT6;
+				INFOPLIST_FILE = KRTRTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.krtr.mesh.tests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KRTR.app/Contents/MacOS/KRTR";
+			};
+			name = Debug;
+		};
+		F37BDD63F398D020D0833C97 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		F5CE0CC155D0C79CDB97495D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 445WRT8WT6;
+				INFOPLIST_FILE = KRTRTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.krtr.mesh.tests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KRTR.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KRTR";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0602D406A3EDE954867B3995 /* Build configuration list for PBXNativeTarget "KRTR_iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3F3D4C5E2EF89FC62F1CA893 /* Debug */,
+				D2B82152A566C2CAA1AFCBBE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		29D516E345F2DE7F62A6A018 /* Build configuration list for PBXNativeTarget "KRTR_macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC3B7B15B08CA14A9363B227 /* Debug */,
+				648A0847B9C68CDCE5EBC582 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6F9331E4E343EDE877106E2B /* Build configuration list for PBXNativeTarget "KRTRTests_macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EFA8E17B5382EEF64D4B9660 /* Debug */,
+				265470CFA5821D7FC76933FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9443772A2FD2F42565AEB256 /* Build configuration list for PBXProject "KRTR" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				366652364B0F5AC7E85A3CE5 /* Debug */,
+				F37BDD63F398D020D0833C97 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		964E30719D1822346E185C83 /* Build configuration list for PBXNativeTarget "KRTRShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C1365EDCD3C8109453A1C1FD /* Debug */,
+				336E025F41AF5C55F1859F76 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A06BC569956506797D5548FC /* Build configuration list for PBXNativeTarget "KRTRTests_iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F5CE0CC155D0C79CDB97495D /* Debug */,
+				9957E3212E69D8947459F052 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 744BADA2957B53DD8B950B42 /* Project object */;
+}
